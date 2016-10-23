@@ -1,5 +1,14 @@
-# CS 201 Student Repository
+# CS 201 Final Projet: Herminia Skelton
 
-- **Name**: Tommy Trojan
+- **Names**:
+    + Nikica Trajkovski
+    + Matthew Giles
+    + Jailin Marks
+    + Juntao Shen
+    + Andrew Maney
+
+
+
+
 - **USC ID**: 1234567890
 - **Email**: ttrojan@usc.edu
