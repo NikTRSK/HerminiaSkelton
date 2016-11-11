@@ -21,10 +21,7 @@ public class ServerClientCommunicator {
 	private ObjectInputStream ois;
 	private BufferedReader br;
 	private ServerListener serverListener;
-	private Queue<String> playerQueue;
-	private Vector<GameInstance> gameInstances;
-	
-	private DatabaseLogic db;
+
 	
 	public ServerClientCommunicator(Socket socket, ServerListener serverListener) throws IOException {
 		this.socket = socket;
@@ -32,11 +29,8 @@ public class ServerClientCommunicator {
 		this.oos = new ObjectOutputStream(socket.getOutputStream());
 		this.ois = new ObjectInputStream(socket.getInputStream());
 		this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		this.playerQueue = new LinkedList<String>();
-		this.gameInstances = new Vector<GameInstance>();
-		this.db = new DatabaseLogic();
 	}
-	
+		
 	public void startGame(GameInstance gameInstance) {
 		try {
 			oos.writeObject(new DataPacket<GameInstance>(utilities.Commands.START_GAME, gameInstance));
@@ -61,32 +55,6 @@ public class ServerClientCommunicator {
 		}
 	}
 	
-	public void sendGameInstance() {
-		//
-	}
-	
-	public void loginUser(User userInfo) {
-		try {
-			// check if user is valid
-			if (db.loginUser(userInfo.getUsername(), userInfo.getPassword())) {
-				// add player to the queue
-				playerQueue.add(userInfo.getUsername());
-				// if queue has 2 players start game instance
-				if (playerQueue.size() == Constants.GAME_SIZE) {
-					String p1 = playerQueue.peek(); playerQueue.remove();
-					String p2 = playerQueue.peek(); playerQueue.remove();
-					GameInstance gi = new GameInstance(p1, p2);
-					gameInstances.add(gi);
-					startGame(gi);
-				}
-			}
-			else {
-			// if invalid return a message
-			}
-		} catch (SQLException e) { e.printStackTrace(); }
-
-	}
-	
 	public void run() {
     boolean listenForConnections = true;
     while (listenForConnections) {
@@ -96,7 +64,7 @@ public class ServerClientCommunicator {
         	case utilities.Commands.LOGIN_USER :
         		System.out.println("Logging in user");
         		User userInfo = (User)input.getData();
-        		loginUser(userInfo);
+        		serverListener.loginUser(userInfo);
         		break;
         	case utilities.Commands.LOGOUT_USER :
         		break;

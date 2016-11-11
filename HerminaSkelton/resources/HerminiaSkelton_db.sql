@@ -24,3 +24,10 @@ CREATE TABLE User (
   'scoreID' INT NOT NULL,
   PRIMARY KEY('userID', 'scoreID')
 );
+
+SELECT u.*, s.*
+FROM UserAccount u
+INNER JOIN User user
+ON user.userID = u.userID
+INNER JOIN UserScores s
+ON s.scoreID = user.scoreID
