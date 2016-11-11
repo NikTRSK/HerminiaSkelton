@@ -15,12 +15,14 @@ import utilities.DataPacket;
 import utilities.GameInstance;
 import utilities.User;
 
-public class ServerClientCommunicator {
-	private Socket socket;
-	private ObjectOutputStream oos;
-	private ObjectInputStream ois;
+public class ServerClientCommunicator extends Thread {
+	protected Socket socket;
+	protected ObjectOutputStream oos;
+	protected ObjectInputStream ois;
 	private BufferedReader br;
 	private ServerListener serverListener;
+	
+	String userName;;
 
 	
 	public ServerClientCommunicator(Socket socket, ServerListener serverListener) throws IOException {
@@ -31,7 +33,7 @@ public class ServerClientCommunicator {
 		this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	}
 		
-	public void startGame(GameInstance gameInstance) {
+	protected void startGame(GameInstance gameInstance) {
 		try {
 			oos.writeObject(new DataPacket<GameInstance>(utilities.Commands.START_GAME, gameInstance));
 			oos.flush();
@@ -40,11 +42,17 @@ public class ServerClientCommunicator {
 		}
 	}
 	
-	public void endGame() {
+	protected void endGame() {
 		
 	}
 	
+	protected void setUserName(String userName) {
+		this.userName = userName;
+	}
 	
+	protected String getUserName() {
+		return userName;
+	}
 	
 	public void sendScores(Integer [] scores) {
 		try {
@@ -67,9 +75,10 @@ public class ServerClientCommunicator {
         		serverListener.loginUser(userInfo);
         		break;
         	case utilities.Commands.LOGOUT_USER :
+        		serverListener.logOutUser((String)userName);
         		break;
-        	case utilities.Commands.START_GAME :
-        		break;
+//        	case utilities.Commands.START_GAME :
+//        		break;
         	case utilities.Commands.END_GAME :
         		break;
         }

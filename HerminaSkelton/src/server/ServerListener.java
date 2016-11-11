@@ -2,6 +2,7 @@ package server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -20,6 +21,8 @@ public class ServerListener {
 	private Queue<String> playerQueue;
 	private Vector<GameInstance> gameInstances;
 	
+	boolean listenForConnections;
+	
 	public ServerListener(ServerSocket serverSocket) {
 		this.serverSocket = serverSocket;
 		this.playerThreads = new Vector<ServerClientCommunicator>();
@@ -29,6 +32,7 @@ public class ServerListener {
 		new Thread().start();
 	}
 	
+	// FIGURE OUT HOW TO ADD THE USERNAME
 	public void loginUser(User userInfo) {
 		try {
 			// check if user is valid
@@ -48,12 +52,61 @@ public class ServerListener {
 			// if invalid return a message
 			}
 		} catch (SQLException e) { e.printStackTrace(); }
-
+	}
+	
+	public void logOutUser(String userName) {
+		
+	}
+	
+	public void startGame(GameInstance gameInstance) {
+		for (ServerClientCommunicator player : playerThreads) {
+			player.startGame(gameInstance);
+		}
 	}
 	
 	public void sendGameInstance() {
 		//
 	}
 	
-	public
+	public void start() {
+		listenForConnections = true;
+		System.out.println("Server listening on Port: " + serverSocket.getLocalSocketAddress() + ":" + serverSocket.getLocalPort());
+		
+		while (listenForConnections) {
+			try {
+				// Accept incomming connections
+				Socket socket = serverSocket.accept();
+				
+				// Stop server
+				if (!listenForConnections) break;
+				// Add the player to the list
+				ServerClientCommunicator player = new ServerClientCommunicator(socket, this);
+				playerThreads.add(player);
+				player.start();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+    // If stop requested, close all the client connections
+    try {
+      serverSocket.close();
+      for (ServerClientCommunicator pt : playerThreads) {
+        try {
+          pt.ois.close();
+          pt.oos.close();
+          pt.socket.close();
+        } catch(IOException ioe) {
+          ioe.printStackTrace();
+        }
+      }
+    }
+    catch (IOException e) {
+    	System.out.println("Exception in server: " + e.getMessage());
+    }
+    catch (Exception e) {
+      System.out.println("Exception closing the server and clients: " + e.getMessage());
+    }
+  }
 }
