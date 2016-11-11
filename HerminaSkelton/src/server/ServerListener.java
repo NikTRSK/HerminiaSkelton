@@ -6,7 +6,7 @@ import java.util.Vector;
 public class ServerListener {
 	private ServerSocket serverSocket;
 	private Vector<ServerClientCommunicator> playerThreads;
-	private Game game;
+//	private Game game;
 	
 	public ServerListener(ServerSocket serverSocket) {
 		this.serverSocket = serverSocket;

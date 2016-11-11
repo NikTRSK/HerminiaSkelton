@@ -1,6 +1,9 @@
 package utilities;
 
-public class DataPacket<V> {
+import java.io.Serializable;
+
+public class DataPacket<V> implements Serializable {
+	private static final long serialVersionUID = -5314880493109698625L;
 	private String command; // key
 	private V data;	// the actual data
 	

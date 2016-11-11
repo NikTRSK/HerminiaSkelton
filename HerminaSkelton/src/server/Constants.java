@@ -17,7 +17,7 @@ public class Constants {
 	public static final int DEFAULT_PORT = 6880;
 	public static final int MIN_PORT_VAL = 0;
 	public static final int MAX_PORT_VAL = 65535;
-	
+	public static final int GAME_SIZE = 2;
 	
 	
 	// STRINGS
