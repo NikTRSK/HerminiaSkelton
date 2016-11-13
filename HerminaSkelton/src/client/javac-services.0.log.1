@@ -1,0 +1,98 @@
+INFO	?	main	2016-11-08T06:17:30.731Z	org.javacs.Main#connectToNode	Connected to parent using socket on port 55282
+INFO	?	main	2016-11-08T06:17:30.849Z	org.javacs.JavaLanguageServer#doLint	Lint /Users/juntaosh/Documents/csci201FP/fp_team_23/HerminaSkelton/src/client/backgroundMusic.java
+SEVERE	?	main	2016-11-08T06:17:30.852Z	org.javacs.Main$4#onError	Can't find configuration file for /Users/juntaosh/Documents/csci201FP/fp_team_23/HerminaSkelton/src/client/backgroundMusic.java
+org.javacs.ShowMessageException: Can't find configuration file for /Users/juntaosh/Documents/csci201FP/fp_team_23/HerminaSkelton/src/client/backgroundMusic.java
+	at org.javacs.ShowMessageException.create(ShowMessageException.java:30)
+	at org.javacs.ShowMessageException.warning(ShowMessageException.java:21)
+	at org.javacs.JavaLanguageServer$1.didOpen(JavaLanguageServer.java:203)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint._doAccept(LanguageServerEndpoint.xtend:198)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint.doAccept(LanguageServerEndpoint.xtend:194)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint.accept(LanguageServerEndpoint.xtend:114)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint.accept(LanguageServerEndpoint.xtend)
+	at io.typefox.lsapi.services.transport.AbstractLanguageEndpoint.handleMessage(LanguageEndpoint.xtend:67)
+	at io.typefox.lsapi.services.transport.AbstractLanguageEndpoint.lambda$connect$4(LanguageEndpoint.xtend:61)
+	at io.typefox.lsapi.services.json.StreamMessageReader$1.apply(StreamMessageReader.java:45)
+	at io.typefox.lsapi.services.json.StreamMessageReader$1.apply(StreamMessageReader.java:43)
+	at io.typefox.lsapi.services.json.StreamMessageReader.handleMessage(StreamMessageReader.xtend:128)
+	at io.typefox.lsapi.services.json.StreamMessageReader.listen(StreamMessageReader.xtend:61)
+	at io.typefox.lsapi.services.transport.AbstractLanguageEndpoint.connect(LanguageEndpoint.xtend:60)
+	at org.javacs.Main.run(Main.java:150)
+	at org.javacs.Main.main(Main.java:69)
+Caused by: org.javacs.NoJavaConfigException: Can't find configuration file for /Users/juntaosh/Documents/csci201FP/fp_team_23/HerminaSkelton/src/client/backgroundMusic.java
+	at org.javacs.JavaLanguageServer.lambda$findCompiler$22(JavaLanguageServer.java:462)
+	at java.util.Optional.orElseThrow(Optional.java:290)
+	at org.javacs.JavaLanguageServer.findCompiler(JavaLanguageServer.java:462)
+	at org.javacs.JavaLanguageServer.doLint(JavaLanguageServer.java:310)
+	at org.javacs.JavaLanguageServer.access$400(JavaLanguageServer.java:31)
+	at org.javacs.JavaLanguageServer$1.didOpen(JavaLanguageServer.java:200)
+	... 13 more
+
+INFO	?	main	2016-11-08T06:18:15.886Z	org.javacs.JavaLanguageServer#doLint	Lint /Users/juntaosh/Documents/csci201FP/fp_team_23/HerminaSkelton/src/client/backgroundMusic.java
+SEVERE	?	main	2016-11-08T06:18:15.886Z	org.javacs.Main$4#onError	Can't find configuration file for /Users/juntaosh/Documents/csci201FP/fp_team_23/HerminaSkelton/src/client/backgroundMusic.java
+org.javacs.NoJavaConfigException: Can't find configuration file for /Users/juntaosh/Documents/csci201FP/fp_team_23/HerminaSkelton/src/client/backgroundMusic.java
+	at org.javacs.JavaLanguageServer.lambda$findCompiler$22(JavaLanguageServer.java:462)
+	at java.util.Optional.orElseThrow(Optional.java:290)
+	at org.javacs.JavaLanguageServer.findCompiler(JavaLanguageServer.java:462)
+	at org.javacs.JavaLanguageServer.doLint(JavaLanguageServer.java:310)
+	at org.javacs.JavaLanguageServer.access$400(JavaLanguageServer.java:31)
+	at org.javacs.JavaLanguageServer$1.didSave(JavaLanguageServer.java:250)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint._doAccept(LanguageServerEndpoint.xtend:204)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint.doAccept(LanguageServerEndpoint.xtend:194)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint.accept(LanguageServerEndpoint.xtend:114)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint.accept(LanguageServerEndpoint.xtend)
+	at io.typefox.lsapi.services.transport.AbstractLanguageEndpoint.handleMessage(LanguageEndpoint.xtend:67)
+	at io.typefox.lsapi.services.transport.AbstractLanguageEndpoint.lambda$connect$4(LanguageEndpoint.xtend:61)
+	at io.typefox.lsapi.services.json.StreamMessageReader$1.apply(StreamMessageReader.java:45)
+	at io.typefox.lsapi.services.json.StreamMessageReader$1.apply(StreamMessageReader.java:43)
+	at io.typefox.lsapi.services.json.StreamMessageReader.handleMessage(StreamMessageReader.xtend:128)
+	at io.typefox.lsapi.services.json.StreamMessageReader.listen(StreamMessageReader.xtend:61)
+	at io.typefox.lsapi.services.transport.AbstractLanguageEndpoint.connect(LanguageEndpoint.xtend:60)
+	at org.javacs.Main.run(Main.java:150)
+	at org.javacs.Main.main(Main.java:69)
+
+SEVERE	?	main	2016-11-08T06:18:17.217Z	org.javacs.Main$4#onError	Can't find configuration file for /Users/juntaosh/Documents/csci201FP/fp_team_23/HerminaSkelton/src/client/backgroundMusic.java
+org.javacs.NoJavaConfigException: Can't find configuration file for /Users/juntaosh/Documents/csci201FP/fp_team_23/HerminaSkelton/src/client/backgroundMusic.java
+	at org.javacs.JavaLanguageServer.lambda$findCompiler$22(JavaLanguageServer.java:462)
+	at java.util.Optional.orElseThrow(Optional.java:290)
+	at org.javacs.JavaLanguageServer.findCompiler(JavaLanguageServer.java:462)
+	at org.javacs.JavaLanguageServer.doHover(JavaLanguageServer.java:875)
+	at org.javacs.JavaLanguageServer$1.hover(JavaLanguageServer.java:125)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint._doAccept(LanguageServerEndpoint.xtend:130)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint.doAccept(LanguageServerEndpoint.xtend:117)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint.accept(LanguageServerEndpoint.xtend:114)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint.accept(LanguageServerEndpoint.xtend)
+	at io.typefox.lsapi.services.transport.AbstractLanguageEndpoint.handleMessage(LanguageEndpoint.xtend:67)
+	at io.typefox.lsapi.services.transport.AbstractLanguageEndpoint.lambda$connect$4(LanguageEndpoint.xtend:61)
+	at io.typefox.lsapi.services.json.StreamMessageReader$1.apply(StreamMessageReader.java:45)
+	at io.typefox.lsapi.services.json.StreamMessageReader$1.apply(StreamMessageReader.java:43)
+	at io.typefox.lsapi.services.json.StreamMessageReader.handleMessage(StreamMessageReader.xtend:128)
+	at io.typefox.lsapi.services.json.StreamMessageReader.listen(StreamMessageReader.xtend:61)
+	at io.typefox.lsapi.services.transport.AbstractLanguageEndpoint.connect(LanguageEndpoint.xtend:60)
+	at org.javacs.Main.run(Main.java:150)
+	at org.javacs.Main.main(Main.java:69)
+
+SEVERE	?	main	2016-11-08T06:18:17.455Z	org.javacs.Main$4#onError	Can't find configuration file for /Users/juntaosh/Documents/csci201FP/fp_team_23/HerminaSkelton/src/client/backgroundMusic.java
+org.javacs.NoJavaConfigException: Can't find configuration file for /Users/juntaosh/Documents/csci201FP/fp_team_23/HerminaSkelton/src/client/backgroundMusic.java
+	at org.javacs.JavaLanguageServer.lambda$findCompiler$22(JavaLanguageServer.java:462)
+	at java.util.Optional.orElseThrow(Optional.java:290)
+	at org.javacs.JavaLanguageServer.findCompiler(JavaLanguageServer.java:462)
+	at org.javacs.JavaLanguageServer.lambda$findSymbol$29(JavaLanguageServer.java:726)
+	at java.util.Optional.flatMap(Optional.java:241)
+	at org.javacs.JavaLanguageServer.findSymbol(JavaLanguageServer.java:724)
+	at org.javacs.JavaLanguageServer.gotoDefinition(JavaLanguageServer.java:752)
+	at org.javacs.JavaLanguageServer$1.definition(JavaLanguageServer.java:135)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint._doAccept(LanguageServerEndpoint.xtend:134)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint.doAccept(LanguageServerEndpoint.xtend:117)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint.accept(LanguageServerEndpoint.xtend:114)
+	at io.typefox.lsapi.services.transport.server.LanguageServerEndpoint.accept(LanguageServerEndpoint.xtend)
+	at io.typefox.lsapi.services.transport.AbstractLanguageEndpoint.handleMessage(LanguageEndpoint.xtend:67)
+	at io.typefox.lsapi.services.transport.AbstractLanguageEndpoint.lambda$connect$4(LanguageEndpoint.xtend:61)
+	at io.typefox.lsapi.services.json.StreamMessageReader$1.apply(StreamMessageReader.java:45)
+	at io.typefox.lsapi.services.json.StreamMessageReader$1.apply(StreamMessageReader.java:43)
+	at io.typefox.lsapi.services.json.StreamMessageReader.handleMessage(StreamMessageReader.xtend:128)
+	at io.typefox.lsapi.services.json.StreamMessageReader.listen(StreamMessageReader.xtend:61)
+	at io.typefox.lsapi.services.transport.AbstractLanguageEndpoint.connect(LanguageEndpoint.xtend:60)
+	at org.javacs.Main.run(Main.java:150)
+	at org.javacs.Main.main(Main.java:69)
+
+INFO	?	main	2016-11-08T07:31:08.660Z	org.javacs.Main#run	Connection closed
