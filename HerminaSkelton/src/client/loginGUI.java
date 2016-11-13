@@ -6,6 +6,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -15,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import utilities.User;
 
 public class loginGUI extends JFrame{
 
@@ -27,15 +33,16 @@ public class loginGUI extends JFrame{
 	private JLabel error;
 	private JTextField username;
 	private JTextField userpassword;
-	private JButton login, createAccount, settings, guest;
+	private JButton login, createAccount, guest;
 	private GridBagConstraints mGridBagConst;
+	private boolean checkUsername, checkPassword;
 
 	public loginGUI(){
 		
 		initializeComponents();
 		createGUI();
 		addEvents();
-//		music.gamestart();
+		music.gamestart();
 	}
 	
 	private void initializeComponents(){
@@ -64,16 +71,13 @@ public class loginGUI extends JFrame{
 		createAccount.setContentAreaFilled(false);
 		createAccount.setOpaque(true);
 		createAccount.setEnabled(false);
-		settings = new JButton("Settings");
-		settings.setFont(new Font("Serif", Font.BOLD, 15));
-		settings.setBorderPainted(false);
-		settings.setContentAreaFilled(false);
-		settings.setOpaque(true);
 		guest = new JButton("Guest Login");
 		guest.setFont(new Font("Serif", Font.BOLD, 15));
 		guest.setBorderPainted(false);
 		guest.setContentAreaFilled(false);
 		guest.setOpaque(true);
+		checkUsername = false;
+		checkPassword = false;
 	}
 	
 	private void createGUI(){
@@ -114,9 +118,6 @@ public class loginGUI extends JFrame{
 		add(createAccount,mGridBagConst);
 		
 		mGridBagConst.gridy = 6;
-		add(settings,mGridBagConst);
-		
-		mGridBagConst.gridy = 7;
 		add(guest,mGridBagConst);
 	}
 	
@@ -141,9 +142,105 @@ public class loginGUI extends JFrame{
 	
 	private void addEvents(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		username.setFocusable(true);
+		username.addFocusListener(new FocusListener(){
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(username.getText().equals("username")){
+					username.setText("");
+					username.setForeground(Color.black);
+					checkUsername = false;
+				}
+				else{
+					checkUsername = true;
+				}
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(username.getText().equals("")){
+					username.setText("username");
+					username.setForeground(Color.gray);
+					checkUsername = false;
+					login.setEnabled(false);
+					createAccount.setEnabled(false);
+				}
+				else{
+					if(checkPassword){
+						login.setEnabled(true);
+						createAccount.setEnabled(true);
+					}
+					checkUsername = true;
+				}
+			}
+		});
+		userpassword.setFocusable(true);
+		userpassword.addFocusListener(new FocusListener(){
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(userpassword.getText().equals("password")){
+					userpassword.setText("");
+					userpassword.setForeground(Color.black);
+					checkPassword = false;
+					login.setEnabled(false);
+					createAccount.setEnabled(false);
+				}
+				else{
+					checkPassword = true;
+				}
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(userpassword.getText().equals("")){
+					userpassword.setText("password");
+					userpassword.setForeground(Color.gray);
+					checkPassword = false;
+					login.setEnabled(false);
+					createAccount.setEnabled(false);
+				}
+				else{
+					if(checkUsername){
+						login.setEnabled(true);
+						createAccount.setEnabled(true);
+					}
+					checkPassword = true;
+				}
+			}
+			
+		});
+		login.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String name = username.getText().trim();
+				String password = userpassword.getText().trim();
+				User loginUser = new User(name, password);
+			}
+		});
+		createAccount.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String name = username.getText().trim();
+				String password = userpassword.getText().trim();
+				User loginUser = new User(name, password);
+			}
+			
+		});
+		guest.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 	}
-	public static void main(String [] args) {
-		new loginGUI().setVisible(true);
-	}
+//	public static void main(String args[]){
+//		new loginGUI().setVisible(true);
+//	}
 }
 
