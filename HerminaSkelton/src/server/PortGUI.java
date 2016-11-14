@@ -87,7 +87,7 @@ public class PortGUI extends JFrame {
 			try {
 				portCondition.await();
 			} catch (InterruptedException ie) {
-				Util.PrintExceptionToCommand(ie);
+				Util.printExceptionToCommand(ie);
 			}
 			portLock.unlock();
 		}

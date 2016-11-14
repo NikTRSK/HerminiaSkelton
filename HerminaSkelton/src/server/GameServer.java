@@ -10,15 +10,17 @@ public class GameServer {
 	
 	public GameServer() {
 		PortGUI portGUI = new PortGUI();
-//		serverSocket = portGUI.getServerSocket();
+		serverSocket = portGUI.getServerSocket();
 		new GameServerGUI();
 		listenForConnections();
+		
+		new GameServerGUI();
 	}
 	
 	public void listenForConnections() {
 		// Start the server
-//		serverListener = new ServerListener(serverSocket);
-//		serverListener.start();
+		serverListener = new ServerListener(serverSocket);
+		serverListener.start();
 	}
 //	
 //	public static void startGame(Game game) {

@@ -33,25 +33,28 @@ public class ServerListener {
 	}
 	
 	// FIGURE OUT HOW TO ADD THE USERNAME
-	public void loginUser(User userInfo) {
+	public boolean loginUser(User userInfo) {
 		try {
 			// check if user is valid
 			if (db.loginUser(userInfo.getUsername(), userInfo.getPassword())) {
 				// add player to the queue
 				playerQueue.add(userInfo.getUsername());
-				// if queue has 2 players start game instance
-				if (playerQueue.size() == Constants.GAME_SIZE) {
-					String p1 = playerQueue.peek(); playerQueue.remove();
-					String p2 = playerQueue.peek(); playerQueue.remove();
-					GameInstance gi = new GameInstance(p1, p2);
-					gameInstances.add(gi);
-//					startGame(gi);
-				}
+				return true;
 			}
-			else {
-			// if invalid return a message
-			}
-		} catch (SQLException e) { e.printStackTrace(); }
+			else
+				return false;
+		} catch (SQLException e) { e.printStackTrace(); return false; }
+	}
+	
+	public void checkQueue() {
+		// if queue has 2 players start game instance
+		if (playerQueue.size() == Constants.GAME_SIZE) {
+			String p1 = playerQueue.peek(); playerQueue.remove();
+			String p2 = playerQueue.peek(); playerQueue.remove();
+			GameInstance gi = new GameInstance(p1, p2);
+			gameInstances.add(gi);
+			startGame(gi);
+		}
 	}
 	
 	public void logOutUser(String userName) {
@@ -79,10 +82,13 @@ public class ServerListener {
 				
 				// Stop server
 				if (!listenForConnections) break;
+				
 				// Add the player to the list
 				ServerClientCommunicator player = new ServerClientCommunicator(socket, this);
 				playerThreads.add(player);
 				player.start();
+				
+				checkQueue();
 				
 			} catch (IOException e) {
 				e.printStackTrace();

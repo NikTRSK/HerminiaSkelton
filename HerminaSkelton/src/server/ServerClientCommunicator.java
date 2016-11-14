@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
 
+import utilities.Commands;
 import utilities.DataPacket;
 import utilities.GameInstance;
 import utilities.User;
@@ -22,7 +23,7 @@ public class ServerClientCommunicator extends Thread {
 	private BufferedReader br;
 	private ServerListener serverListener;
 	
-	String userName;;
+	String userName;
 
 	
 	public ServerClientCommunicator(Socket socket, ServerListener serverListener) throws IOException {
@@ -63,6 +64,21 @@ public class ServerClientCommunicator extends Thread {
 		}
 	}
 	
+	public void loginUser(User userInfo) {
+		boolean validUser = serverListener.loginUser(userInfo);
+		if (validUser)
+			userName = userInfo.getUsername();
+		else {
+			DataPacket<String> error = new DataPacket<String>(Commands.ERROR_MESSAGE, "Invalid Login!!!");
+			try {
+				oos.writeObject(error);
+				oos.flush();
+			} catch (IOException ioe) {
+				utilities.Util.printExceptionToCommand(ioe);
+			}
+		}
+	}
+	
 	public void run() {
     boolean listenForConnections = true;
     while (listenForConnections) {
@@ -71,8 +87,9 @@ public class ServerClientCommunicator extends Thread {
         switch (input.getCommand()) {
         	case utilities.Commands.LOGIN_USER :
         		System.out.println("Logging in user");
-        		User userInfo = (User)input.getData();
-        		serverListener.loginUser(userInfo);
+//        		User userInfo = (User)input.getData();
+//        		serverListener.loginUser(userInfo);
+        		loginUser((User)input.getData());
         		break;
         	case utilities.Commands.LOGOUT_USER :
         		serverListener.logOutUser((String)userName);
