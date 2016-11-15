@@ -1,7 +1,7 @@
 package AllMoves;
 
 import AllCPs.CP;
-import Client.Constants;
+import client.Constants;
 
 public abstract class AttackMove {
 	protected String name;
@@ -14,6 +14,7 @@ public abstract class AttackMove {
 		if(type==attacker.getType())damage*=1.5;
 		
 		defender.changeHealth((int)damage*(-1));
+		System.out.println(attacker.getName()+" used "+this.name+" for "+damage+" damage");
 	}
 	
 	//Determines the effectiveness of the move used
