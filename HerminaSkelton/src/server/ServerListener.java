@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
 
-import utilities.DataPacket;
 import utilities.GameInstance;
 import utilities.User;
 
@@ -48,7 +47,7 @@ public class ServerListener {
 	
 	public void checkQueue() {
 		// if queue has 2 players start game instance
-		if (playerQueue.size() == Constants.GAME_SIZE) {
+		if (playerQueue.size() == utilities.Constants.GAME_SIZE) {
 			String p1 = playerQueue.peek(); playerQueue.remove();
 			String p2 = playerQueue.peek(); playerQueue.remove();
 			GameInstance gi = new GameInstance(p1, p2);
@@ -79,7 +78,7 @@ public class ServerListener {
 			try {
 				// Accept incomming connections
 				Socket socket = serverSocket.accept();
-				
+				System.out.println("Client connected");
 				// Stop server
 				if (!listenForConnections) break;
 				
