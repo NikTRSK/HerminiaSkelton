@@ -45,11 +45,11 @@ public class PortGUI extends JFrame {
 	}
 	
 	private void initializeVariables() {
-		descriptionLabel = new JLabel(Constants.PORT_DESCRIPTION_STRING);
-		portLbl = new JLabel(Constants.PORT_LABEL_STRING);
+		descriptionLabel = new JLabel(utilities.Constants.PORT_DESCRIPTION_STRING);
+		portLbl = new JLabel(utilities.Constants.PORT_LABEL_STRING);
 		errorLbl = new JLabel();
 		portInput = new JTextField(20);
-		portInput.setText("" + Constants.DEFAULT_PORT);
+		portInput.setText("" + utilities.Constants.DEFAULT_PORT);
 		connectBtn = new JButton("Connect");
 		portLock = new ReentrantLock();
 		portCondition = portLock.newCondition();
@@ -87,7 +87,7 @@ public class PortGUI extends JFrame {
 			try {
 				portCondition.await();
 			} catch (InterruptedException ie) {
-				Util.PrintExceptionToCommand(ie);
+				Util.printExceptionToCommand(ie);
 			}
 			portLock.unlock();
 		}
@@ -102,10 +102,10 @@ public class PortGUI extends JFrame {
 			try {
 				portNumber = Integer.parseInt(portStr);
 			} catch (Exception e) {
-				errorLbl.setText(Constants.PORT_ERROR_MESSAGE);
+				errorLbl.setText(utilities.Constants.PORT_ERROR_MESSAGE);
 				return;
 			}
-			if (portNumber > Constants.MIN_PORT_VAL && portNumber < Constants.MAX_PORT_VAL) {
+			if (portNumber > utilities.Constants.MIN_PORT_VAL && portNumber < utilities.Constants.MAX_PORT_VAL) {
 				try {
 					ServerSocket tempss = new ServerSocket(portNumber);
 					portLock.lock();
@@ -115,11 +115,11 @@ public class PortGUI extends JFrame {
 					PortGUI.this.setVisible(false);
 				} catch (IOException ioe) {
 					// Thrown if there is an issue with port binding
-					errorLbl.setText(Constants.PORT_IN_USE_MESSAGE);
+					errorLbl.setText(utilities.Constants.PORT_IN_USE_MESSAGE);
 				}
 			}
 			else {
-				errorLbl.setText(Constants.PORT_ERROR_MESSAGE);
+				errorLbl.setText(utilities.Constants.PORT_ERROR_MESSAGE);
 				return;
 			}
 		}

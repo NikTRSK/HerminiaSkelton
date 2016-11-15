@@ -15,7 +15,7 @@ public class DatabaseLogic {
 	PreparedStatement createStatement = null;
 	ResultSet rs = null;
 	
-	DatabaseLogic() {
+	public DatabaseLogic() {
 		initDB();
 	}
 	

@@ -11,16 +11,19 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
 
+import utilities.Commands;
 import utilities.DataPacket;
 import utilities.GameInstance;
 import utilities.User;
 
-public class ServerClientCommunicator {
-	private Socket socket;
-	private ObjectOutputStream oos;
-	private ObjectInputStream ois;
+public class ServerClientCommunicator extends Thread {
+	protected Socket socket;
+	protected ObjectOutputStream oos;
+	protected ObjectInputStream ois;
 	private BufferedReader br;
 	private ServerListener serverListener;
+	
+	String userName;
 
 	
 	public ServerClientCommunicator(Socket socket, ServerListener serverListener) throws IOException {
@@ -31,7 +34,7 @@ public class ServerClientCommunicator {
 		this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	}
 		
-	public void startGame(GameInstance gameInstance) {
+	protected void startGame(GameInstance gameInstance) {
 		try {
 			oos.writeObject(new DataPacket<GameInstance>(utilities.Commands.START_GAME, gameInstance));
 			oos.flush();
@@ -40,11 +43,17 @@ public class ServerClientCommunicator {
 		}
 	}
 	
-	public void endGame() {
+	protected void endGame() {
 		
 	}
 	
+	protected void setUserName(String userName) {
+		this.userName = userName;
+	}
 	
+	protected String getUserName() {
+		return userName;
+	}
 	
 	public void sendScores(Integer [] scores) {
 		try {
@@ -52,6 +61,21 @@ public class ServerClientCommunicator {
 			oos.flush();
 		} catch (IOException ioe) {
 			utilities.Util.printExceptionToCommand(ioe);
+		}
+	}
+	
+	public void loginUser(User userInfo) {
+		boolean validUser = serverListener.loginUser(userInfo);
+		if (validUser)
+			userName = userInfo.getUsername();
+		else {
+			DataPacket<String> error = new DataPacket<String>(Commands.ERROR_MESSAGE, "Invalid Login!!!");
+			try {
+				oos.writeObject(error);
+				oos.flush();
+			} catch (IOException ioe) {
+				utilities.Util.printExceptionToCommand(ioe);
+			}
 		}
 	}
 	
@@ -63,13 +87,15 @@ public class ServerClientCommunicator {
         switch (input.getCommand()) {
         	case utilities.Commands.LOGIN_USER :
         		System.out.println("Logging in user");
-        		User userInfo = (User)input.getData();
-        		serverListener.loginUser(userInfo);
+//        		User userInfo = (User)input.getData();
+//        		serverListener.loginUser(userInfo);
+        		loginUser((User)input.getData());
         		break;
         	case utilities.Commands.LOGOUT_USER :
+        		serverListener.logOutUser((String)userName);
         		break;
-        	case utilities.Commands.START_GAME :
-        		break;
+//        	case utilities.Commands.START_GAME :
+//        		break;
         	case utilities.Commands.END_GAME :
         		break;
         }
