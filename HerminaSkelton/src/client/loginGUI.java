@@ -1,3 +1,4 @@
+package client;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -20,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import utilities.Constants;
 import utilities.User;
 
 public class loginGUI extends JFrame{
@@ -50,9 +52,9 @@ public class loginGUI extends JFrame{
 		loginLable = new JLabel("Please Login");
 		loginLable.setFont(new Font("Serif", Font.BOLD, 25));
 		error = new JLabel("");
-		error.setFont(new Font("Serif", Font.BOLD, 15));
+		error.setFont(new Font("Serif", Font.BOLD, 18));
+		error.setForeground(Color.red);
 		error.setVisible(false);
-		error.setFont(new Font("Serif", Font.BOLD, 25));
 		username = new JTextField("username");
 		username.setFont(new Font("Serif", Font.BOLD, 15));
 		username.setForeground(Color.gray);
@@ -94,7 +96,7 @@ public class loginGUI extends JFrame{
 		add(loginLable,mGridBagConst);
 		
 		mGridBagConst.gridy = 1;
-		mGridBagConst.insets = new Insets(0,500,30,80);
+		mGridBagConst.insets = new Insets(0,450,30,80);
 		error.setVisible(true);
 		add(error,mGridBagConst);
 		
@@ -151,8 +153,10 @@ public class loginGUI extends JFrame{
 					username.setText("");
 					username.setForeground(Color.black);
 					checkUsername = false;
+					error.setVisible(false);
 				}
 				else{
+					error.setVisible(false);
 					checkUsername = true;
 				}
 			}
@@ -167,6 +171,7 @@ public class loginGUI extends JFrame{
 					createAccount.setEnabled(false);
 				}
 				else{
+
 					if(checkPassword){
 						login.setEnabled(true);
 						createAccount.setEnabled(true);
@@ -186,8 +191,10 @@ public class loginGUI extends JFrame{
 					checkPassword = false;
 					login.setEnabled(false);
 					createAccount.setEnabled(false);
+					error.setVisible(false);
 				}
 				else{
+					error.setVisible(false);
 					checkPassword = true;
 				}
 			}
@@ -217,6 +224,10 @@ public class loginGUI extends JFrame{
 				String name = username.getText().trim();
 				String password = userpassword.getText().trim();
 				User loginUser = new User(name, password);
+//				if(!gameclient.sendPacket(loginUser)){
+//					error.setVisible(true);
+//					error.setText("Username or password incorrect");
+//				}
 			}
 		});
 		createAccount.addActionListener(new ActionListener(){
@@ -226,6 +237,10 @@ public class loginGUI extends JFrame{
 				String name = username.getText().trim();
 				String password = userpassword.getText().trim();
 				User loginUser = new User(name, password);
+//				if(!gameclient.sendPacket(loginUser)){
+//					error.setVisible(true);
+//					error.setText("User name already in the system");
+//				}
 			}
 			
 		});
@@ -233,13 +248,12 @@ public class loginGUI extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				//gameclient.setGuest(true);
 			}
 			
 		});
 	}
-//	public static void main(String args[]){
+//	public static void main(String[] args){
 //		new loginGUI().setVisible(true);
 //	}
 }
