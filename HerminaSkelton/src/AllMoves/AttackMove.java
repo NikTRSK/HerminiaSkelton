@@ -1,5 +1,7 @@
 package AllMoves;
 
+import javax.swing.JTextArea;
+
 import AllCPs.CP;
 import client.Constants;
 
@@ -8,13 +10,13 @@ public abstract class AttackMove {
 	protected int type;
 	
 	//Executes an attack on the enemy pokemon
-	public void move(CP attacker, CP defender){
+	public void move(CP attacker, CP defender, JTextArea text){
 		double damage = attacker.getAttack()*Constants.attackMultiplier;
 		damage*=effectiveness(defender.getType());
 		if(type==attacker.getType())damage*=1.5;
 		
 		defender.changeHealth((int)damage*(-1));
-		System.out.println(attacker.getName()+" used "+this.name+" for "+damage+" damage");
+		text.append("\n"+attacker.getName()+" used "+this.name+" for "+damage+" damage");
 	}
 	
 	//Determines the effectiveness of the move used
