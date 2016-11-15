@@ -24,7 +24,7 @@ public class ServerClientCommunicator extends Thread {
 	private ServerListener serverListener;
 	
 	String userName;
-
+	Integer connectionID;
 	
 	public ServerClientCommunicator(Socket socket, ServerListener serverListener) throws IOException {
 		this.socket = socket;
@@ -77,6 +77,10 @@ public class ServerClientCommunicator extends Thread {
 				utilities.Util.printExceptionToCommand(ioe);
 			}
 		}
+	}
+	
+	protected void setID(int threadID) {
+		this.connectionID = threadID;
 	}
 	
 	public void run() {

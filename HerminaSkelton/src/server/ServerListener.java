@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
@@ -13,7 +14,8 @@ import utilities.User;
 
 public class ServerListener {
 	private ServerSocket serverSocket;
-	private Vector<ServerClientCommunicator> playerThreads;
+//	private Vector<ServerClientCommunicator> playerThreads;
+	private HashMap<Integer, ServerClientCommunicator> playerThreads;
 //	private Game game;
 	
 	private DatabaseLogic db;
@@ -24,7 +26,8 @@ public class ServerListener {
 	
 	public ServerListener(ServerSocket serverSocket) {
 		this.serverSocket = serverSocket;
-		this.playerThreads = new Vector<ServerClientCommunicator>();
+//		this.playerThreads = new Vector<ServerClientCommunicator>();
+		this.playerThreads = new HashMap<Integer, ServerClientCommunicator>();
 		this.db = new DatabaseLogic();
 		this.playerQueue = new LinkedList<String>();
 		this.gameInstances = new Vector<GameInstance>();
@@ -61,7 +64,8 @@ public class ServerListener {
 	}
 	
 	public void startGame(GameInstance gameInstance) {
-		for (ServerClientCommunicator player : playerThreads) {
+//  for (ServerClientCommunicator pt : playerThreads) {
+		for (ServerClientCommunicator player : playerThreads.values()) {
 			player.startGame(gameInstance);
 		}
 	}
@@ -72,7 +76,7 @@ public class ServerListener {
 	
 	public void start() {
 		listenForConnections = true;
-		System.out.println("Server listening on Port: " + serverSocket.getLocalSocketAddress() + ":" + serverSocket.getLocalPort());
+		System.out.println("Server listening on Port: " + serverSocket.getLocalSocketAddress());
 		
 		while (listenForConnections) {
 			try {
@@ -83,8 +87,11 @@ public class ServerListener {
 				if (!listenForConnections) break;
 				
 				// Add the player to the list
+//				System.out.println("Client port local: " + socket.getLocalPort() + " remote: " + socket.getPort());
+				int clientID = socket.getPort();
 				ServerClientCommunicator player = new ServerClientCommunicator(socket, this);
-				playerThreads.add(player);
+				player.setID(clientID); // Set the client ID. Used to identify clients.
+				playerThreads.put(clientID, player);
 				player.start();
 				
 				checkQueue();
@@ -97,7 +104,8 @@ public class ServerListener {
     // If stop requested, close all the client connections
     try {
       serverSocket.close();
-      for (ServerClientCommunicator pt : playerThreads) {
+//      for (ServerClientCommunicator pt : playerThreads) {
+      for (ServerClientCommunicator pt : playerThreads.values()) {
         try {
           pt.ois.close();
           pt.oos.close();
