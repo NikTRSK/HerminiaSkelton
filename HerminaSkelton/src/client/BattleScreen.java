@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import AllCPs.CP;
 
@@ -48,6 +49,9 @@ public class BattleScreen extends JPanel{
 	private JLabel imageLabel2;
 	private JPanel CP1;
 	private JPanel CP2;
+	
+	private JTextArea CPUpdates1;
+	private JTextArea CPUpdates2;
 	
 	
 	public BattleScreen(Player currPlayer){
@@ -96,6 +100,7 @@ public class BattleScreen extends JPanel{
 		sprite1 = new ImageIcon(newimg);
 		imageLabel1 = new JLabel(sprite1);
 		
+		CPUpdates1 = new JTextArea("");
 		CP1 = new JPanel();
 		CP1.setLayout(new BoxLayout(CP1, BoxLayout.Y_AXIS));
 		CP1.setBackground(Constants.TYPE_COLOR[activeCP.getType()]);
@@ -112,15 +117,16 @@ public class BattleScreen extends JPanel{
 		sprite2 = new ImageIcon(newimg);
 		imageLabel2 = new JLabel(sprite2);
 		
-		
+		CPUpdates2 = new JTextArea("dbd");
 		CP2 = new JPanel();
-		CP2.setLayout(new BoxLayout(CP2, BoxLayout.Y_AXIS));
+		//CP2.setLayout(new BoxLayout(CP2, BoxLayout.Y_AXIS));
+		CP2.setLayout(new BorderLayout());
 		CP2.setBackground(Constants.TYPE_COLOR[wildCP.getType()]);
 		CP2.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR2, 5));
-		CP2.add(imageLabel2);
-		CP2.add(healthLabel2);
-		//JLabel CP1 = new JLabel(sprite1);
-		//JLabel CP2 = new JLabel(sprite2);
+		CP2.add(imageLabel2, BorderLayout.CENTER);
+		CP2.add(healthLabel2, BorderLayout.SOUTH);
+		CP2.add(CPUpdates2, BorderLayout.EAST);
+		
 		//battlePanel.add(Box.createGlue());
 		battlePanel.add(CP1);
 		//battlePanel.add(Box.createGlue());
@@ -237,9 +243,6 @@ public class BattleScreen extends JPanel{
 			chooseSwitch.removeAll();
 		}
 		
-		chooseSwitch = new JPanel();
-		chooseSwitch.setLayout(new FlowLayout());
-		chooseSwitch.setBackground(Constants.BACKGROUND_COLOR);
 		JButton backButton = new JButton("<< Back");
 		backButton.setBackground(Constants.BACKGROUND_COLOR2);
 		backButton.setForeground(Constants.FONT_COLOR);
@@ -254,8 +257,9 @@ public class BattleScreen extends JPanel{
 			}
 			
 		});
-		chooseSwitch.add(backButton);
-		JButton CPs[] = new JButton[playerCPs.size()];
+		
+		switchOption = new JButton[playerCPs.size()];
+		
 		for(int i = 0; i < playerCPs.size(); i++){
 			int a = i;
 			JButton CP = new JButton(playerCPs.get(i).getName()+" lvl "+playerCPs.get(i).getLevel());
@@ -265,8 +269,10 @@ public class BattleScreen extends JPanel{
 			CP.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					for(int i = 0; i < CPs.length; i++){
-						CPs[i].setEnabled(true);
+					for(int i = 0; i < switchOption.length; i++){
+						if(playerCPs.get(i).getHealth()>0){
+							switchOption[i].setEnabled(true);
+						}
 					}
 					CP.setEnabled(false);
 					executeSwitch(playerCPs.get(a));
@@ -274,9 +280,17 @@ public class BattleScreen extends JPanel{
 					layout.show(cardHolder, "card 1");
 				}
 			});
-			CPs[i] = CP;
-			chooseSwitch.add(CP);
+			switchOption[i] = CP;
 		}
+		
+		chooseSwitch = new JPanel();
+		chooseSwitch.setLayout(new FlowLayout());
+		chooseSwitch.setBackground(Constants.BACKGROUND_COLOR);
+		chooseSwitch.add(backButton);
+		for(int i = 0; i< switchOption.length; i++){
+			chooseSwitch.add(switchOption[i]);
+		}
+		
 	}
 	
 	private void initializeCardHolder(){
@@ -304,16 +318,15 @@ public class BattleScreen extends JPanel{
 	private void executeSwitch(CP switchTo){
 		activeCP = switchTo;
 		redraw();
-		Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(1)]].move(wildCP, activeCP);
+		Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(1)]].move(wildCP, activeCP, CPUpdates2);
 		redraw();
 	}
 	
-	
 	private void executeMove(int move){
-		Constants.attackMoves[activeCP.getAttackMoves()[move]].move(activeCP, wildCP);
+		Constants.attackMoves[activeCP.getAttackMoves()[move]].move(activeCP, wildCP, CPUpdates1);
 		redraw();
 		if(wildCP.getHealth()<=0)battleOver();
-		Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(1)]].move(wildCP, activeCP);
+		Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(2)]].move(wildCP, activeCP, CPUpdates2);
 		redraw();
 	}
 	
@@ -332,8 +345,14 @@ public class BattleScreen extends JPanel{
 		imageLabel1.setIcon(sprite1);
 		
 		CP1.setBackground(Constants.TYPE_COLOR[activeCP.getType()]);
+		
+		for(int i = 0; i<switchOption.length; i++){
+			if(playerCPs.get(i).getHealth()<=0){
+				switchOption[i].setEnabled(false);
+				switchOption[i].setText(switchOption[i].getText()+" (fainted)");
+			}
+		}
 	}
-	
 	
 	private boolean executeCatch(){
 		player.deductAssignment();
@@ -344,7 +363,7 @@ public class BattleScreen extends JPanel{
 			return true;
 		}
 		else{
-			Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(2)-1]].move(wildCP, activeCP);
+			Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(2)-1]].move(wildCP, activeCP, CPUpdates2);
 			return false;
 		}	
 	}
