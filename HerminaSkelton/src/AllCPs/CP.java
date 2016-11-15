@@ -2,7 +2,7 @@ package AllCPs;
 
 import javax.swing.ImageIcon;
 
-import Client.Constants;
+import client.Constants;
 
 public abstract class CP {
 	protected String name;
@@ -20,6 +20,9 @@ public abstract class CP {
 	public CP(int level){
 		this.experience = Constants.levelThresholds[level];
 		this.level = level;
+		this.moves = new int[2];
+		this.moves[0] = 0;
+		this.moves[1] = Constants.rand.nextInt(Constants.NUM_MOVES)+1;
 	}
 	
 	//Getter Functions
