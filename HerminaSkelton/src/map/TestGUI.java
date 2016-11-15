@@ -3,6 +3,8 @@ package map;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
@@ -21,9 +23,7 @@ public class TestGUI extends JFrame {
 		
 		setVisible(true);
 		
-		MapZone mz = new MapZone();
-		
-		map = new MapScreen(screenSize, mz);
+		map = new MapScreen(screenSize);
 		add(map, BorderLayout.CENTER);
 		map.render();
 		map.paint();
@@ -33,5 +33,10 @@ public class TestGUI extends JFrame {
 	public static void main(String[] args) {
 		TestGUI test = new TestGUI();
 		test.setVisible(true);
+//		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+//		test.setUndecorated(true);
+//		gd.setFullScreenWindow(test);
+		com.apple.eawt.FullScreenUtilities.setWindowCanFullScreen(test,true);
+		com.apple.eawt.Application.getApplication().requestToggleFullScreen(test);
 	}
 }

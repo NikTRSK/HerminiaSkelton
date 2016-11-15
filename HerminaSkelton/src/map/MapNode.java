@@ -1,6 +1,7 @@
 package map;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -9,15 +10,15 @@ public abstract class MapNode {
 	
 	protected Image mImage = null;
 	
-	protected MapNode(Rectangle inDimensions) {
-		x = inDimensions.getX();
-		y = inDimensions.getY();
-		width = inDimensions.width;
-		height = inDimensions.height;
+	protected MapNode(int inY, int inX, int inWidth, int inHeight) {
+		width = inWidth;
+		height = inHeight;
+		x = inX * width;
+		y = inY * height;
 	}
 	
 	//The "true" location and size of the object use this for updating
-	private double x = 0, y = 0;
+	private int x = 0, y = 0;
 	private int width = 0, height = 0;
 	
 	private double mXScale;
@@ -29,7 +30,7 @@ public abstract class MapNode {
 	
 	public void draw(Graphics g) {
 		g.setColor(Color.black);
-		g.drawImage(mImage, renderBounds.x, renderBounds.y, renderBounds.width, renderBounds.height, null);
+		g.drawImage(mImage, x, y, width, height, null);
 	}
 	
 	//Scale the object for rendering

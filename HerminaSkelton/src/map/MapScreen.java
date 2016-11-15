@@ -17,14 +17,21 @@ public class MapScreen extends JPanel {
 	private Graphics mGraphics;
 	private Image mImage = null;
 	
-	public MapScreen(Dimension fullScreenDimensions, MapZone startingZone) {
+	private MapZone[][] zones;
+	
+	public MapScreen(Dimension fullScreenDimensions) {
 		super();
 		mWidth = (int)(2 * fullScreenDimensions.getWidth() / 3); // map is 2/3 or fullscreen
 		mHeight = (int)(fullScreenDimensions.getHeight());       // map is full height
 //		System.out.println(mWidth + " " + mHeight);
 //		mImage = createImage(mWidth, mHeight);
 //		if(mImage == null) System.out.println("NULL");
-		currZone = startingZone; // choose where player starts		
+		System.out.println(mHeight);
+		currZone = new MapZone(MapConstants.A1, mWidth, mHeight); // choose where player starts
+		
+		// TODO initialize map zones
+//		zones = new MapZone[4][3];
+//		for(int i = 0; i < )
 	}
 	
 	public void render() {
@@ -45,6 +52,13 @@ public class MapScreen extends JPanel {
 		//clear the entire panel
 		mGraphics.setColor(Color.WHITE);
 		mGraphics.fillRect(0, 0, mWidth, mHeight);
+		
+		//draw nodes
+		for(MapNode[] nodes : currZone.getNodes()) {
+			for(MapNode node : nodes) {
+				node.draw(mGraphics);
+			}
+		}
 	}
 	
 	public void paint() {
