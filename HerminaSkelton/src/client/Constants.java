@@ -26,8 +26,8 @@ public class Constants {
 	public static String[] CPImage = {"resources/images/edgar_lugo.jpg", "resources/images/emma_lautz.jpg", 
 									  "resources/images/priyanka_shah.jpg", "resources/images/keerthan_harish.jpg",
 									  "resources/images/jimmy_chen.jpg"};
-	
-	
+	public static String POKEBALL = "resources/images/pokeball.png";
+		
 	//Moves and types
 	public static String[] basicMoveNames = {
 			"Pound", "Smash", "Beat Up", "Scratch", "Slash"

@@ -30,7 +30,7 @@ public class FinalBattleScreen extends JPanel{
 	private JLabel img3;
 	private JLabel img4;
 
-	public FinalBattleScreen(/*ClientListener cl*/Miller profMiller){
+	public FinalBattleScreen(/*GameClientListener cl*/Miller profMiller){
 		//this.cl = cl;
 		this.miller = profMiller;
 		
@@ -57,6 +57,10 @@ public class FinalBattleScreen extends JPanel{
 		}else if(command.equals("")){
 			
 		}
+	}
+	
+	private void sendMessage(DataPacket dp){
+		
 	}
 	
 	
