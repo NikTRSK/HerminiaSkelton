@@ -21,8 +21,7 @@ public class Constants {
 	public static final String PORT_LABEL_STRING = "Port";
 	public static final String PORT_ERROR_MESSAGE = "<html><font color=\"red\">Please enter a valid port<br />between " + MIN_PORT_VAL + " and " + MAX_PORT_VAL + "</font></html>";
 	public static final String PORT_IN_USE_MESSAGE = "<html><font color=\"red\">Port already in use.  Select another port<br />between " + MIN_PORT_VAL + " and " + MAX_PORT_VAL + "</font></html>";
-			
-
+	
 	
 	// DATA RESOURCES
   public static final String resourceFolderbgm = "resources/bgm/";
