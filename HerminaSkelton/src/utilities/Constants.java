@@ -30,4 +30,8 @@ public class Constants {
   public static final String casualmusic = "casualstart.mp3";
   public static final String startmusic = "gamestart.mp3";
   public static final String finalmusic = "finalstart.mp3";
+  
+  //
+  public static final String win = " did a great job and found true friendships with your CPs. Good luck on the final exam";
+  public static final String lose = " did a terrible job, make sure to try it again";
 }
