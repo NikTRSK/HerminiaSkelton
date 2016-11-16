@@ -56,7 +56,7 @@ public class DatabaseLogic {
 	private void initDB() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/HerminiaSkeltonDB?user=root&password=root&useSSL=false");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/HerminiaSkelton_DB?user=root&password=root&useSSL=false");
 			loginStatement = conn.prepareStatement("SELECT * FROM users WHERE username=?");
 			createStatement = conn.prepareStatement("INSERT INTO users (username, password) VALUES (?, ?)");
 		} catch (SQLException sql) {
