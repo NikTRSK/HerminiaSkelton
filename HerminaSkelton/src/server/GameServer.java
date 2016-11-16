@@ -8,17 +8,21 @@ public class GameServer {
 	private ServerSocket serverSocket;
 	private static ServerListener serverListener;
 	
+	private GameServerGUI gameServerGUI;
+	
 	public GameServer() {
 		PortGUI portGUI = new PortGUI();
-//		serverSocket = portGUI.getServerSocket();
-		new GameServerGUI();
+		serverSocket = portGUI.getServerSocket();
+		gameServerGUI = new GameServerGUI();
 		listenForConnections();
+		
+//		new GameServerGUI();
 	}
 	
 	public void listenForConnections() {
 		// Start the server
-//		serverListener = new ServerListener(serverSocket);
-//		serverListener.start();
+		serverListener = new ServerListener(serverSocket);
+		serverListener.start();
 	}
 //	
 //	public static void startGame(Game game) {

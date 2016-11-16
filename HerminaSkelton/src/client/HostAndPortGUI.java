@@ -6,9 +6,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,6 +22,8 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import utilities.Util;
 
 
 public class HostAndPortGUI extends JFrame{
@@ -74,6 +78,10 @@ public class HostAndPortGUI extends JFrame{
 		connectButton = new JButton("Connect");
 		cancelButton = new JButton("Cancel");
 		
+		// Socket settings
+		socket = null;
+		hostAndPortLock = new ReentrantLock();
+		hostAndPortCondition = hostAndPortLock.newCondition();
 	}
 	
 	private void createGUI(){
@@ -157,8 +165,35 @@ public class HostAndPortGUI extends JFrame{
 		connectButton.addActionListener(new ActionListener(){
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
+			public void actionPerformed(ActionEvent ae) {
+				String portInput = portTextField.getText();
+				int portInt = -1;
+				try {
+					portInt = Integer.parseInt(portInput);
+				} catch (Exception e) {
+					warningTextPane.setText(utilities.Constants.PORT_ERROR_MESSAGE);
+					return;
+				}
+				if (portInt > utilities.Constants.MIN_PORT_VAL && portInt < utilities.Constants.MAX_PORT_VAL) {
+					// try to connect
+					String hostnameStr = hostnameTextField.getText();
+					try {
+						System.out.println("Trying to connect: " + hostnameStr + ", " + portInt);
+						socket = new Socket(hostnameStr, portInt);
+						hostAndPortLock.lock();
+						hostAndPortCondition.signal();
+						hostAndPortLock.unlock();
+						HostAndPortGUI.this.setVisible(false);
+					} catch (IOException ioe) {
+						warningTextPane.setText(utilities.Constants.PORT_ERROR_MESSAGE);
+						Util.printExceptionToCommand(ioe);
+						return;
+					}
+				}
+				else { // port value out of range
+					warningTextPane.setText(utilities.Constants.PORT_IN_USE_MESSAGE);
+					return;
+				}
 				
 			}
 			
@@ -187,12 +222,16 @@ public class HostAndPortGUI extends JFrame{
 		
 	}
 	
-		/*public static void main(String[] args){
-			new HostAndPortGUI();
-			new GameGUI();
-			
-			
-			
-		}*/
-
+	public Socket getSocket() {
+		while (socket == null) {
+			hostAndPortLock.lock();
+			try {
+				hostAndPortCondition.await();
+			} catch (InterruptedException ie) {
+				Util.printExceptionToCommand(ie);
+			}
+			hostAndPortLock.unlock();
+		}
+		return socket;
+	}
 }

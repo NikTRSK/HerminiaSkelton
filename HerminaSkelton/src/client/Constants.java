@@ -1,5 +1,7 @@
-package Client;
+package client;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.util.Random;
 
 import AllCPs.CP;
@@ -9,6 +11,7 @@ import AllCPs.JimmyChen;
 import AllCPs.KeerthanHarish;
 import AllCPs.PriyankaShah;
 import AllMoves.AttackMove;
+import AllMoves.BasicMove;
 import AllMoves.FireMove;
 import AllMoves.GrassMove;
 import AllMoves.WaterMove;
@@ -18,19 +21,25 @@ public class Constants {
 	public static Random rand = new Random(System.currentTimeMillis());
 	
 	//Image Files
-	public static String[] avatar;
+	public static String[] avatar = {"resources/mario.svg"};
 	public static String millerImage;
+	public static String[] CPImage = {"resources/images/edgar_lugo.jpg", "resources/images/emma_lautz.jpg", 
+									  "resources/images/priyanka_shah.jpg", "resources/images/keerthan_harish.jpg",
+									  "resources/images/jimmy_chen.jpg"};
+	
 	
 	//Moves and types
+	public static String[] basicMoveNames = {
+			"Pound", "Smash", "Beat Up", "Scratch", "Slash"
+	};
+	public static int NUM_MOVES = 3;
 	public static AttackMove[] attackMoves = {
-			new FireMove(), new GrassMove(), new WaterMove()
+			new BasicMove(), new FireMove(), new GrassMove(), new WaterMove()
 	};
 	public static String[] type = {
 			"Normal", "Water", "Fire", "Grass"
 	};
-	public static String[] basicMoveNames = {
-			"Pound", "Smash", "Beat Up", "Scratch", "Slash"
-	};
+
 
 	//Constants for CP growth rate
 	public static int levelThresholds[] = {1,3,6,10,15,21,28,36,45,55};
@@ -56,6 +65,15 @@ public class Constants {
 	
 	//Miscellaneous Constants
 	public static int StartingAssignments = 5;
-	public static double attackMultiplier = 0.5;
+	public static double attackMultiplier = 0.2;
 	public static String guestName = "Friend";
+	
+	//Colors
+	public static final Font GAMEFONT = new Font("Courier", Font.BOLD, 14);
+	public static final Color BACKGROUND_COLOR = Color.MAGENTA;
+	public static final Color FONT_COLOR = Color.WHITE;
+	public static final Color BACKGROUND_COLOR2 = Color.DARK_GRAY;
+	public static final Color[] TYPE_COLOR= {
+			Color.GRAY, Color.BLUE, Color.RED, Color.GREEN
+	};
 }

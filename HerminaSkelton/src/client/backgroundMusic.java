@@ -1,12 +1,10 @@
+package client;
 import java.io.File;
-import java.net.URL;
-
-import javafx.application.Application;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.Stage;
 import javafx.util.Duration;
+import utilities.Constants;
 
 public class BackGroundMusic{
 	private Media battlemusic, casualmusic, startmusic, finalmusic;
