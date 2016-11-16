@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -20,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import AllCPs.CP;
+import utilities.BackGroundPanel;
 
 public class BattleScreen extends JPanel{
 	private static final long serialVersionUID = 538889179893602549L;
@@ -86,52 +86,56 @@ public class BattleScreen extends JPanel{
 		initializeCardHolder();
 	}
 	
-	private void initializeBattlePanel(){
-		battlePanel = new JPanel();
-		//battlePanel.setLayout(new BoxLayout(battlePanel, BoxLayout.X_AXIS));
-		battlePanel.setLayout(new GridLayout(1, 2));
-		
+	private void initializeBattlePanel(){		
 		healthLabel1 = new JLabel(activeCP.getHealth()+"/"+activeCP.getMaxHealth());
 		healthLabel1.setFont(new Font("Courier", Font.BOLD, 35));
 		healthLabel1.setHorizontalTextPosition(JLabel.CENTER);
-		//ImageIcon imageIcon = sprite1; // load the image to a imageIcon
-		Image image = sprite1.getImage(); // transform it 
-		Image newimg = image.getScaledInstance(250, 250,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		JPanel healthPanel1 = new JPanel();
+		
+		Image image = sprite1.getImage();
+		Image newimg = image.getScaledInstance(250, 250,  java.awt.Image.SCALE_SMOOTH);
 		sprite1 = new ImageIcon(newimg);
 		imageLabel1 = new JLabel(sprite1);
 		
 		CPUpdates1 = new JTextArea("");
+		JPanel holder1 = new BackGroundPanel(Constants.POKEBALL);
+		holder1.setLayout(new BorderLayout());
+		holder1.add(imageLabel1, BorderLayout.CENTER);
+		holder1.add(healthLabel1, BorderLayout.SOUTH);
+		
 		CP1 = new JPanel();
-		CP1.setLayout(new BoxLayout(CP1, BoxLayout.Y_AXIS));
-		CP1.setBackground(Constants.TYPE_COLOR[activeCP.getType()]);
+		CP1.setLayout(new BorderLayout());
+		CP1.setBackground(Constants.TYPE_COLOR[wildCP.getType()]);
 		CP1.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR2, 5));
-		CP1.add(imageLabel1);
-		CP1.add(healthLabel1);
+		CP1.add(holder1, BorderLayout.CENTER);
 		
 		healthLabel2 = new JLabel(wildCP.getHealth()+"/"+wildCP.getMaxHealth());
 		healthLabel2.setFont(new Font("Courier", Font.BOLD, 35));
 		healthLabel2.setHorizontalTextPosition(JLabel.CENTER);
-		//imageIcon = sprite2; // load the image to a imageIcon
-		image = sprite2.getImage(); // transform it 
-		newimg = image.getScaledInstance(250, 250,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		JPanel healthPanel2 = new JPanel();
+		
+		image = sprite2.getImage();
+		newimg = image.getScaledInstance(250, 250,  java.awt.Image.SCALE_SMOOTH);
 		sprite2 = new ImageIcon(newimg);
 		imageLabel2 = new JLabel(sprite2);
 		
 		CPUpdates2 = new JTextArea("dbd");
+		JPanel holder2 = new BackGroundPanel(Constants.POKEBALL);
+		holder2.setLayout(new BorderLayout());
+		holder2.add(imageLabel2, BorderLayout.CENTER);
+		holder2.add(healthLabel2, BorderLayout.SOUTH);
+		
+		
 		CP2 = new JPanel();
-		//CP2.setLayout(new BoxLayout(CP2, BoxLayout.Y_AXIS));
 		CP2.setLayout(new BorderLayout());
 		CP2.setBackground(Constants.TYPE_COLOR[wildCP.getType()]);
 		CP2.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR2, 5));
-		CP2.add(imageLabel2, BorderLayout.CENTER);
-		CP2.add(healthLabel2, BorderLayout.SOUTH);
-		CP2.add(CPUpdates2, BorderLayout.EAST);
+		CP2.add(holder2, BorderLayout.CENTER);
 		
-		//battlePanel.add(Box.createGlue());
+		battlePanel = new JPanel();
+		battlePanel.setLayout(new GridLayout(1, 2));
 		battlePanel.add(CP1);
-		//battlePanel.add(Box.createGlue());
 		battlePanel.add(CP2);
-		//battlePanel.add(Box.createGlue());
 	}
 	
 	private void initializeChooseAction(){
