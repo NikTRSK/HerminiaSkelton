@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import utilities.GameInstance;
 import utilities.User;
+import utilities.Util;
 
 public class ServerListener {
 	private ServerSocket serverSocket;
@@ -35,7 +36,7 @@ public class ServerListener {
 	}
 	
 	// FIGURE OUT HOW TO ADD THE USERNAME
-	public boolean loginUser(User userInfo) {
+	protected boolean loginUser(User userInfo) {
 		try {
 			// check if user is valid
 			if (db.loginUser(userInfo.getUsername(), userInfo.getPassword())) {
@@ -46,6 +47,13 @@ public class ServerListener {
 			else
 				return false;
 		} catch (SQLException e) { e.printStackTrace(); return false; }
+	}
+	
+	protected boolean createUser(User userInfo) {
+			// try to create a user
+			try {
+				return db.createUser(userInfo.getUsername(), userInfo.getPassword());
+			} catch (SQLException sqle) { Util.printExceptionToCommand(sqle); return false; }
 	}
 	
 	public void checkQueue() {
@@ -87,7 +95,7 @@ public class ServerListener {
 				if (!listenForConnections) break;
 				
 				// Add the player to the list
-//				System.out.println("Client port local: " + socket.getLocalPort() + " remote: " + socket.getPort());
+				System.out.println("Client port local: " + socket.getLocalPort() + " remote: " + socket.getPort());
 				int clientID = socket.getPort();
 				ServerClientCommunicator player = new ServerClientCommunicator(socket, this);
 				player.setID(clientID); // Set the client ID. Used to identify clients.

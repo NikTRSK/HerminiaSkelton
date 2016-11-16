@@ -90,16 +90,23 @@ public class ServerClientCommunicator extends Thread {
         DataPacket<?> input = (DataPacket<?>)ois.readObject();
         switch (input.getCommand()) {
         	case utilities.Commands.LOGIN_USER :
-        		System.out.println("Logging in user");
-//        		User userInfo = (User)input.getData();
-//        		serverListener.loginUser(userInfo);
-        		loginUser((User)input.getData());
+        		System.out.println("Logging in user id" + socket.getPort());
+        		User userInfo = (User)input.getData();
+        		if (serverListener.loginUser(userInfo)) {
+        			// Send a response to user
+        			userName = userInfo.getUsername();
+        			oos.writeObject(new DataPacket<Boolean>(utilities.Commands.AUTH_RESPONSE, true));
+        		} else oos.writeObject(new DataPacket<Boolean>(utilities.Commands.AUTH_RESPONSE, false));
         		break;
         	case utilities.Commands.LOGOUT_USER :
         		serverListener.logOutUser((String)userName);
         		break;
 //        	case utilities.Commands.START_GAME :
 //        		break;
+        	case utilities.Commands.CREATE_USER :
+        		User createUserInfo = (User)input.getData();
+        		Boolean createUserResponse = (serverListener.createUser(createUserInfo));
+        		oos.writeObject(new DataPacket<Boolean>(utilities.Commands.CREATE_RESPONSE, createUserResponse));
         	case utilities.Commands.END_GAME :
         		break;
         }
