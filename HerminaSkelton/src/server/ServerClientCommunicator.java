@@ -1,16 +1,11 @@
 package server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Vector;
 
+import utilities.ChatMessage;
 import utilities.Commands;
 import utilities.DataPacket;
 import utilities.GameInstance;
@@ -20,7 +15,7 @@ public class ServerClientCommunicator extends Thread {
 	protected Socket socket;
 	protected ObjectOutputStream oos;
 	protected ObjectInputStream ois;
-	private BufferedReader br;
+//	private BufferedReader br;
 	private ServerListener serverListener;
 	
 	String userName;
@@ -31,16 +26,18 @@ public class ServerClientCommunicator extends Thread {
 		this.serverListener = serverListener;
 		this.oos = new ObjectOutputStream(socket.getOutputStream());
 		this.ois = new ObjectInputStream(socket.getInputStream());
-		this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//		this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	}
-		
-	protected void startGame(GameInstance gameInstance) {
+	
+	private void sendData(DataPacket<?> dp) {
 		try {
-			oos.writeObject(new DataPacket<GameInstance>(utilities.Commands.START_GAME, gameInstance));
+			oos.writeObject(dp);
 			oos.flush();
-		} catch (IOException ioe) {
-			utilities.Util.printExceptionToCommand(ioe);
-		}
+		} catch (IOException ioe) { utilities.Util.printExceptionToCommand(ioe); }
+	}
+	
+	protected void startGame(GameInstance gameInstance) {
+		sendData(new DataPacket<GameInstance>(utilities.Commands.START_GAME, gameInstance));
 	}
 	
 	protected void endGame() {
@@ -80,7 +77,7 @@ public class ServerClientCommunicator extends Thread {
 	}
 	
 	protected void sendMove(Integer move) {
-		DataPacket 
+		sendData(new DataPacket<Integer>(utilities.Commands.OTHER_MOVE, move)); 
 	}
 	
 	protected void setID(int threadID) {
@@ -99,8 +96,8 @@ public class ServerClientCommunicator extends Thread {
         		if (serverListener.loginUser(userInfo)) {
         			// Send a response to user
         			userName = userInfo.getUsername();
-        			oos.writeObject(new DataPacket<Boolean>(utilities.Commands.AUTH_RESPONSE, true));
-        		} else oos.writeObject(new DataPacket<Boolean>(utilities.Commands.AUTH_RESPONSE, false));
+        			sendData(new DataPacket<Boolean>(utilities.Commands.AUTH_RESPONSE, true));
+        		} else sendData(new DataPacket<Boolean>(utilities.Commands.AUTH_RESPONSE, false));
         		break;
         	case utilities.Commands.LOGOUT_USER :
         		serverListener.logOutUser((String)userName);
@@ -110,7 +107,10 @@ public class ServerClientCommunicator extends Thread {
         	case utilities.Commands.CREATE_USER :
         		User createUserInfo = (User)input.getData();
         		Boolean createUserResponse = (serverListener.createUser(createUserInfo));
-        		oos.writeObject(new DataPacket<Boolean>(utilities.Commands.CREATE_RESPONSE, createUserResponse));
+        		sendData(new DataPacket<Boolean>(utilities.Commands.CREATE_RESPONSE, createUserResponse));
+        	case utilities.Commands.CHAT_MESSAGE :
+        		ChatMessage cm = (ChatMessage)input.getData();
+        		sendData(new DataPacket<ChatMessage>(utilities.Commands.CHAT_MESSAGE, cm));
         	case utilities.Commands.END_GAME :
         		break;
         }

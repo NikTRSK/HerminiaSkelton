@@ -104,7 +104,7 @@ public class ServerListener {
 //			if (player.getUserName().equalsIgnoreCase(anotherString)
 			if (playersInInstance.contains(player.getUserName())) {
 				Integer move = gi.getOtherPlayersMove(player.getUserName());
-				player.sendMove(Integer move);
+				player.sendMove(move);
 			}
 		}
 	}
