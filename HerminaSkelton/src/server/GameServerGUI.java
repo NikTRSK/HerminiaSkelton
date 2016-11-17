@@ -19,7 +19,6 @@ public class GameServerGUI extends JFrame {
 		initializeVariables();
 		createGUI();
 		addEvents();
-		
 		// test
 		updateGamesTable();
 		

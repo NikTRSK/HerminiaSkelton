@@ -79,6 +79,10 @@ public class ServerClientCommunicator extends Thread {
 		}
 	}
 	
+	protected void sendMove(Integer move) {
+		DataPacket 
+	}
+	
 	protected void setID(int threadID) {
 		this.connectionID = threadID;
 	}
