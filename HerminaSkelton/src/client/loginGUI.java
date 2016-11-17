@@ -38,7 +38,7 @@ public class loginGUI extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private BackGroundMusic music;
+	private BackgroundMusic music;
 	private JLabel loginLable;
 	private JLabel error;
 	private JTextField username;
@@ -72,7 +72,7 @@ public class loginGUI extends JFrame{
 		//appearance settings
 		connectionicon = new ImageIcon(Constants.resourceFolderbg + Constants.connected);
 		disconnectionicon = new ImageIcon(Constants.resourceFolderbg + Constants.disconnected);
-		music = new BackGroundMusic();
+		music = new BackgroundMusic();
 		loginLable = new JLabel("Please Login");
 		loginLable.setFont(new Font("Serif", Font.BOLD, 20));
 		error = new JLabel("");
