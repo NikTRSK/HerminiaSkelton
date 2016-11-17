@@ -24,7 +24,7 @@ public class test extends JFrame{
 		for(int i = 0; i<3; i++){
 			testPlayer.addCP(Constants.generateCP(Constants.rand.nextInt(3)));
 		}
-		add(new BattleScreen(testPlayer));
+		add(new BattleScreen(testPlayer, new GameGUI()));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		/*super("test");
