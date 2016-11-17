@@ -393,7 +393,7 @@ public class loginGUI extends JFrame{
 						userpassword.setEditable(true);
 						port.setEditable(false);
 						host.setEditable(false);
-						connectionIcon = new JLabel(connectionicon);
+						connectionIcon.setIcon(connectionicon);
 					} catch (IOException ioe) {
 						error.setText(utilities.Constants.PORT_ERROR_MESSAGE);
 						Util.printExceptionToCommand(ioe);
