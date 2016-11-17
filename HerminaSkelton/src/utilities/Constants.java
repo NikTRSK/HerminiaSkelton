@@ -27,12 +27,14 @@ public class Constants {
     // DATA RESOURCES
     public static final String resourceFolderbgm = "resources/bgm/";
     public static final String resourceFolderbg = "resources/img/";
+    public static final String connectedimag = "connected.png";
+    public static final String disconnectedimag = "disconnected.png";
     public static final String battlemusic = "battlestart.mp3";
     public static final String casualmusic = "casualstart.mp3";
     public static final String startmusic = "gamestart.mp3";
     public static final String finalmusic = "finalstart.mp3";
-    public static final String connected = "connected.jpg";
-    public static final String disconnected  = "disconnected.jpg";
+    public static final String connected = "connected.png";
+    public static final String disconnected  = "disconnected.png";
     
     //
     public static final String win = " did a great job and found true friendships with your CPs. Good luck on the final exam";
