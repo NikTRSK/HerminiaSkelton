@@ -13,4 +13,5 @@ public class Commands {
 	public static final String END_GAME = "END_GAME"; // Most likely a string
 	public static final String ERROR_MESSAGE = "ERROR_MESSAGE"; // String
 	public static final String CHAT_MESSAGE = "CHAT_MESSAGE"; // Chat Message
+	public static final String GAME_SCORES = "GAME_SCORES"; // prob. ArrayList<Integer>
 }
