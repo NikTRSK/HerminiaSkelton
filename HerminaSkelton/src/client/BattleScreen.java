@@ -67,7 +67,9 @@ public class BattleScreen extends JPanel{
 		player = p;
 		initializeVariables();
 		initializeChooseSwitch();
+		cardHolder.add(chooseSwitch, "card 3");
 		throwAssignment.setEnabled(true);
+		redraw();
 	}
 	
 	private void initializeVariables(){
@@ -267,6 +269,7 @@ public class BattleScreen extends JPanel{
 		for(int i = 0; i < playerCPs.size(); i++){
 			int a = i;
 			JButton CP = new JButton(playerCPs.get(i).getName()+" lvl "+playerCPs.get(i).getLevel());
+			if(playerCPs.get(i).equals(activeCP))CP.setEnabled(false);
 			CP.setBackground(Constants.BACKGROUND_COLOR2);
 			CP.setForeground(Constants.FONT_COLOR);
 			CP.setFont(Constants.GAMEFONT);
@@ -329,6 +332,7 @@ public class BattleScreen extends JPanel{
 	private void executeMove(int move){
 		Constants.attackMoves[activeCP.getAttackMoves()[move]].move(activeCP, wildCP, CPUpdates1);
 		redraw();
+		System.out.println(wildCP.getHealth());
 		if(wildCP.getHealth()<=0)battleOver();
 		Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(2)]].move(wildCP, activeCP, CPUpdates2);
 		redraw();
@@ -341,6 +345,7 @@ public class BattleScreen extends JPanel{
 		
 		healthLabel1.setText(activeCP.getHealth()+"/"+activeCP.getMaxHealth());
 		healthLabel2.setText(wildCP.getHealth()+"/"+wildCP.getMaxHealth());
+		System.out.println(wildCP.getHealth());
 		
 		sprite1 = activeCP.getSprite();
 		Image image = sprite1.getImage();
@@ -358,9 +363,17 @@ public class BattleScreen extends JPanel{
 		}
 	}
 	
+	private void deadCP(){
+		
+	}
+	
 	private boolean executeCatch(){
 		player.deductAssignment();
 		int roll = Constants.rand.nextInt(100);
+		if(wildCP.getHealth()==0){
+			//TODO
+			return true;
+		}
 		int threshold = 70-2*(wildCP.getHealth()/wildCP.getMaxHealth());
 		if(roll>=threshold){
 			throwAssignment.setEnabled(false);
@@ -374,6 +387,7 @@ public class BattleScreen extends JPanel{
 
 	private void battleOver(){
 		if(wildCP.getHealth()==0){
+			System.out.println("1");
 			activeCP.addXP(1);
 			if(activeCP.levelUp()){
 				//MainGUI.addToChat(activeCP.getName() + " grew to level "+activeCP.getLevel());
@@ -383,6 +397,7 @@ public class BattleScreen extends JPanel{
 				//MainGUI.switchToMap();
 			}
 		}else if(activeCP.getHealth()==0){
+			System.out.println("2");
 			//MainGUI.addToChat("All your CPs died!");
 			int runner = Constants.rand.nextInt(playerCPs.size());
 			//MainGUI.addToChat(playerCPs.get(runner).getName()+" decided he didn't trust you and ran away!");
@@ -392,11 +407,15 @@ public class BattleScreen extends JPanel{
 			//Player.setZone(Constants.HealthCenterZone);
 			//MainGUI.switchToMap();
 		}else{
+			System.out.println("3");
 			//MainGUI.addToChat(player.getName() + " caught the "+wildCP.getName());
 			wildCP.heal();
 			player.addCP(wildCP);
 			//MainGUI.switchToMap();
 		}
+		System.out.println("4");
+		newBattle(player);
+		System.out.println("5");
 	}
 
 }
