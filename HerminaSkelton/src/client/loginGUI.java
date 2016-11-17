@@ -30,7 +30,7 @@ public class loginGUI extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private BackgroundMusic music;
+	private BackGroundMusic music;
 	private JLabel loginLable;
 	private JLabel error;
 	private JTextField username;
@@ -48,7 +48,7 @@ public class loginGUI extends JFrame{
 	}
 	
 	private void initializeComponents(){
-		music = new BackgroundMusic();
+		music = new BackGroundMusic();
 		loginLable = new JLabel("Please Login");
 		loginLable.setFont(new Font("Serif", Font.BOLD, 25));
 		error = new JLabel("");
