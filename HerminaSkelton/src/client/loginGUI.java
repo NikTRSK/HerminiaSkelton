@@ -390,7 +390,7 @@ public class loginGUI extends JFrame{
 						hostAndPortCondition.signal();
 						hostAndPortLock.unlock();
 						username.setEditable(true);
-						userpassword.setEnabled(true);
+						userpassword.setEditable(true);
 						port.setEditable(false);
 						host.setEditable(false);
 						connectionIcon = new JLabel(connectionicon);
