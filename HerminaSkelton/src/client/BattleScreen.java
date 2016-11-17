@@ -2,6 +2,7 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -12,8 +13,10 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -23,6 +26,8 @@ import utilities.BackGroundPanel;
 
 public class BattleScreen extends JPanel{
 	private static final long serialVersionUID = 538889179893602549L;
+	
+	private GameGUI mainGUI;
 	
 	private Player player;
 	private Vector<CP> playerCPs;
@@ -54,7 +59,8 @@ public class BattleScreen extends JPanel{
 	private JTextArea CPUpdates2;
 	
 	
-	public BattleScreen(Player currPlayer){
+	public BattleScreen(Player currPlayer, GameGUI mainGUI){
+		this.mainGUI = mainGUI;
 		player = currPlayer;
 		
 		initializeVariables();
@@ -335,6 +341,7 @@ public class BattleScreen extends JPanel{
 		System.out.println(wildCP.getHealth());
 		if(wildCP.getHealth()<=0)battleOver();
 		Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(2)]].move(wildCP, activeCP, CPUpdates2);
+		if(activeCP.getHealth()<=0)deadCP();
 		redraw();
 	}
 	
@@ -364,7 +371,30 @@ public class BattleScreen extends JPanel{
 	}
 	
 	private void deadCP(){
-		
+		  
+		  JPanel CPHolder = new JPanel();
+		  CPHolder.setLayout(new BoxLayout(CPHolder, BoxLayout.X_AXIS));
+		  
+		  for(int i = 0; i < playerCPs.size(); i++){
+			  if(playerCPs.get(i).getHealth()<=0)continue;
+			  JPanel CP = new JPanel();
+			  CP.setLayout(new BorderLayout());
+			  CP.add(new JButton(playerCPs.get(i).getSprite()), BorderLayout.CENTER);
+			  CP.add(new JLabel(playerCPs.get(i).getName()+" lvl "+playerCPs.get(i).getLevel()));
+			  CPHolder.add(CP);
+		  }
+		  
+		  
+		  JPanel dialogPanel = new JPanel();
+		  dialogPanel.setLayout(new BorderLayout());
+		  dialogPanel.setBackground(Constants.BACKGROUND_COLOR);
+		  dialogPanel.add(CPHolder, BorderLayout.CENTER);
+		  dialogPanel.add(new JLabel("Your CP fainted, choose another!"));
+		  
+		  JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL);
+		  dialog.add(dialogPanel);
+		  dialog.pack();
+		  dialog.setVisible(true);
 	}
 	
 	private boolean executeCatch(){
