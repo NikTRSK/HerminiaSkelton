@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
 
 import utilities.GameInstance;
+import utilities.PlayerInstance;
 import utilities.User;
 import utilities.Util;
 
@@ -59,10 +61,15 @@ public class ServerListener {
 	public void checkQueue() {
 		// if queue has 2 players start game instance
 		if (playerQueue.size() == utilities.Constants.GAME_SIZE) {
+			// get usernames
 			String p1 = playerQueue.peek(); playerQueue.remove();
 			String p2 = playerQueue.peek(); playerQueue.remove();
-			GameInstance gi = new GameInstance(p1, p2);
+			// create palyer instances
+			PlayerInstance P1 = new PlayerInstance(p1);
+			PlayerInstance P2 = new PlayerInstance(p2);
+			GameInstance gi = new GameInstance(P1, P2);
 			gameInstances.add(gi);
+			// signal players to start the game
 			startGame(gi);
 		}
 	}
@@ -80,6 +87,26 @@ public class ServerListener {
 	
 	public void sendGameInstance() {
 		//
+	}
+	
+	private void checkAllInstances() {
+		for (GameInstance gi : gameInstances) {
+			if (gi.allPlayersMadeAMove()) {
+				updateGameInstance(gi);
+			}
+		}
+	}
+	
+	private void updateGameInstance (GameInstance gi) {
+		// get both players
+		ArrayList<String> playersInInstance = gi.getPlayerUsernames();
+		for (ServerClientCommunicator player : playerThreads.values()) {
+//			if (player.getUserName().equalsIgnoreCase(anotherString)
+			if (playersInInstance.contains(player.getUserName())) {
+				Integer move = gi.getOtherPlayersMove(player.getUserName());
+				player.sendMove(Integer move);
+			}
+		}
 	}
 	
 	public void start() {
