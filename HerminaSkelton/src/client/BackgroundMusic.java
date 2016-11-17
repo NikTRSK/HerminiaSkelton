@@ -6,13 +6,13 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import utilities.Constants;
 
-public class BackGroundMusic{
+public class BackgroundMusic{
 	private Media battlemusic, casualmusic, startmusic, finalmusic;
 	private boolean musicFound;
 	private static MediaPlayer myBGM;
 	private JFXPanel fxPanel;
 	
-	public BackGroundMusic(){
+	public BackgroundMusic(){
 		musicFound = true;
 		fxPanel = new JFXPanel();
 		findLocalFiles();
