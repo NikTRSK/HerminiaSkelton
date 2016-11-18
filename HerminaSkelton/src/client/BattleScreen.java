@@ -83,6 +83,9 @@ public class BattleScreen extends JPanel{
 	private void initializeVariables(){
 		playerCPs = player.getCP();
 		activeCP = playerCPs.get(Constants.rand.nextInt(playerCPs.size()));
+		while(activeCP.getHealth()<=0){
+			activeCP = playerCPs.get(Constants.rand.nextInt(playerCPs.size()));
+		}
 		wildCP = Constants.generateCP(Constants.rand.nextInt(Constants.numCPs));
 		sprite1 = activeCP.getSprite();
 		sprite2 = wildCP.getSprite();
