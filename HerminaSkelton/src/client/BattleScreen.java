@@ -65,7 +65,6 @@ public class BattleScreen extends JPanel{
 		
 		initializeVariables();
 		initializeComponents();
-		updateListeners();
 		createGUI();
 	}
 	
@@ -98,6 +97,7 @@ public class BattleScreen extends JPanel{
 		healthLabel1 = new JLabel(activeCP.getHealth()+"/"+activeCP.getMaxHealth());
 		healthLabel1.setFont(new Font("Courier", Font.BOLD, 35));
 		healthLabel1.setHorizontalTextPosition(JLabel.CENTER);
+		//TODO: green-red health panels
 		JPanel healthPanel1 = new JPanel();
 		
 		Image image = sprite1.getImage();
@@ -120,6 +120,7 @@ public class BattleScreen extends JPanel{
 		healthLabel2 = new JLabel(wildCP.getHealth()+"/"+wildCP.getMaxHealth());
 		healthLabel2.setFont(new Font("Courier", Font.BOLD, 35));
 		healthLabel2.setHorizontalTextPosition(JLabel.CENTER);
+		//TODO: green-red health panels
 		JPanel healthPanel2 = new JPanel();
 		
 		image = sprite2.getImage();
@@ -161,7 +162,6 @@ public class BattleScreen extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				CardLayout layout = (CardLayout)cardHolder.getLayout();
 				layout.show(cardHolder, "card 2");
-				
 			}
 			
 		});
@@ -192,7 +192,7 @@ public class BattleScreen extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(executeCatch()){
-					battleOver();
+					caughtCP();
 				}				
 			}
 			
@@ -202,7 +202,6 @@ public class BattleScreen extends JPanel{
 		chooseAction.add(attack, BorderLayout.WEST);
 		chooseAction.add(switchCP, BorderLayout.CENTER);
 		chooseAction.add(throwAssignment, BorderLayout.EAST);
-		//TODO: Formatting
 	}
 	
 	private void initializeChooseAttack(){
@@ -241,6 +240,14 @@ public class BattleScreen extends JPanel{
 					CardLayout layout = (CardLayout)cardHolder.getLayout();
 					layout.show(cardHolder, "card 1");
 					executeMove(b);
+					if(activeCP.getHealth()<=0){
+						boolean allDead = true;
+						for(int i = 0; i < playerCPs.size(); i++){
+							if(playerCPs.get(i).getHealth()>0)allDead=false;
+						}
+						if(allDead)lostBattle();
+						else deadCP();
+					}	
 				}
 				
 			});
@@ -265,7 +272,6 @@ public class BattleScreen extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				CardLayout layout = (CardLayout)cardHolder.getLayout();
 				layout.show(cardHolder, "card 1");
-				
 			}
 			
 		});
@@ -285,12 +291,15 @@ public class BattleScreen extends JPanel{
 					for(int i = 0; i < switchOption.length; i++){
 						if(playerCPs.get(i).getHealth()>0){
 							switchOption[i].setEnabled(true);
+						}else{
+							switchOption[i].setEnabled(false);
 						}
 					}
 					CP.setEnabled(false);
 					executeSwitch(playerCPs.get(a));
 					CardLayout layout = (CardLayout)cardHolder.getLayout();
 					layout.show(cardHolder, "card 1");
+					if(activeCP.getHealth()<=0)deadCP();
 				}
 			});
 			switchOption[i] = CP;
@@ -324,24 +333,32 @@ public class BattleScreen extends JPanel{
 		layout.show(cardHolder, "card 1");
 	}
 	
-	private void updateListeners(){
-		//TODO
-	}
-	
 	private void executeSwitch(CP switchTo){
 		activeCP = switchTo;
-		redraw();
 		Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(1)]].move(wildCP, activeCP, CPUpdates2);
 		redraw();
 	}
 	
 	private void executeMove(int move){
-		Constants.attackMoves[activeCP.getAttackMoves()[move]].move(activeCP, wildCP, CPUpdates1);
-		redraw();
-		if(wildCP.getHealth()<=0)battleOver();
-		Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(2)]].move(wildCP, activeCP, CPUpdates2);
-		redraw();
-		if(activeCP.getHealth()<=0)deadCP();
+		if(wildCP.getSpeed()<activeCP.getSpeed()){
+			Constants.attackMoves[activeCP.getAttackMoves()[move]].move(activeCP, wildCP, CPUpdates1);
+			if(wildCP.getHealth()<=0){
+				redraw();
+				wonBattle();
+				return;
+			}
+			Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(2)]].move(wildCP, activeCP, CPUpdates2);
+			redraw();
+		}else{
+			Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(2)]].move(wildCP, activeCP, CPUpdates2);
+			if(activeCP.getHealth()<=0){
+				redraw();
+				return;
+			}
+			Constants.attackMoves[activeCP.getAttackMoves()[move]].move(activeCP, wildCP, CPUpdates1);
+			redraw();
+		}
+		
 	}
 	
 	private void redraw(){
@@ -351,7 +368,6 @@ public class BattleScreen extends JPanel{
 		
 		healthLabel1.setText(activeCP.getHealth()+"/"+activeCP.getMaxHealth());
 		healthLabel2.setText(wildCP.getHealth()+"/"+wildCP.getMaxHealth());
-		System.out.println(wildCP.getHealth());
 		
 		sprite1 = activeCP.getSprite();
 		Image image = sprite1.getImage();
@@ -360,6 +376,14 @@ public class BattleScreen extends JPanel{
 		imageLabel1.setIcon(sprite1);
 		
 		CP1.setBackground(Constants.TYPE_COLOR[activeCP.getType()]);
+		
+		sprite2 = wildCP.getSprite();
+		image = sprite1.getImage();
+		newImg = image.getScaledInstance(250, 250,  java.awt.Image.SCALE_SMOOTH);
+		sprite2 = new ImageIcon(newImg);
+		imageLabel2.setIcon(sprite2);
+		
+		CP2.setBackground(Constants.TYPE_COLOR[wildCP.getType()]);
 		
 		for(int i = 0; i<switchOption.length; i++){
 			if(playerCPs.get(i).getHealth()<=0){
@@ -466,6 +490,9 @@ public class BattleScreen extends JPanel{
 				playerCPs.remove(runner);
 				battleOver();
 				//TODO: teleport player to health center
+				//Player.setx(Constants.HealthCenterX);
+				//Player.sety(Constants.HealthCenterY);
+				//Player.setZone(Constants.HealthCenterZone);
 			}
 			
 		});
@@ -522,11 +549,11 @@ public class BattleScreen extends JPanel{
 	private boolean executeCatch(){
 		player.deductAssignment();
 		int roll = Constants.rand.nextInt(100);
-		if(wildCP.getHealth()==0){
-			//TODO
-			return true;
-		}
 		int threshold = 70-2*(wildCP.getHealth()/wildCP.getMaxHealth());
+		
+		if(wildCP.getHealth()==0){
+			return true;
+		}		
 		if(roll>=threshold){
 			throwAssignment.setEnabled(false);
 			return true;
@@ -540,34 +567,43 @@ public class BattleScreen extends JPanel{
 	}
 
 	private void battleOver(){
-		if(wildCP.getHealth()==0){
-			System.out.println("1");
-			activeCP.addXP(1);
-			if(activeCP.levelUp()){
-				//MainGUI.addToChat(activeCP.getName() + " grew to level "+activeCP.getLevel());
-				//MainGUI.addToChat("Current Stats: HP = " + activeCP.getMaxHealth() + 
-				//					", Attack = " +activeCP.getAttack() + ", Speed = " +
-				//					activeCP.getSpeed()";
-				//MainGUI.switchToMap();
-			}
-		}else if(activeCP.getHealth()==0){
-			System.out.println("2");
-			//MainGUI.addToChat("All your CPs died!");
+		if(activeCP.levelUp()){
+			JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL);
 			
-			//Player.setx(Constants.HealthCenterX);
-			//Player.sety(Constants.HealthCenterY);
-			//Player.setZone(Constants.HealthCenterZone);
-			//MainGUI.switchToMap();
-		}else{
-			System.out.println("3");
-			//MainGUI.addToChat(player.getName() + " caught the "+wildCP.getName());
-			wildCP.heal();
-			player.addCP(wildCP);
-			//MainGUI.switchToMap();
+			JLabel info = new JLabel(activeCP.getName()+" grew to level "+activeCP.getLevel()+"!");
+			info.setFont(Constants.GAMEFONT);
+			info.setForeground(Constants.FONT_COLOR);
+			info.setHorizontalTextPosition(JLabel.CENTER);
+			
+			JButton okay = new JButton("Sweet!");
+			okay.setBackground(Constants.BACKGROUND_COLOR2);
+			okay.setForeground(Constants.FONT_COLOR);
+			okay.setFont(Constants.GAMEFONT);
+			okay.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dialog.dispose();					
+				}
+				
+			});
+			
+			JPanel levelUpPanel = new JPanel();
+			levelUpPanel.setLayout(new BoxLayout(levelUpPanel, BoxLayout.Y_AXIS));
+			levelUpPanel.setBackground(Constants.BACKGROUND_COLOR);
+			levelUpPanel.add(info);
+			levelUpPanel.add(okay);
+			
+			dialog.add(levelUpPanel);
+			dialog.pack();
+			dialog.setVisible(true);
+			//MainGUI.addToChat(activeCP.getName() + " grew to level "+activeCP.getLevel());
+			//MainGUI.addToChat("Current Stats: HP = " + activeCP.getMaxHealth() + 
+			//					", Attack = " +activeCP.getAttack() + ", Speed = " +
+			//					activeCP.getSpeed()";
 		}
-		System.out.println("4");
+		//MainGUI.switchToMap();
 		newBattle(player);
-		System.out.println("5");
 	}
 
 }
