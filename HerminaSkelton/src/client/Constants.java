@@ -27,7 +27,9 @@ public class Constants {
 									  "resources/images/priyanka_shah.jpg", "resources/images/keerthan_harish.jpg",
 									  "resources/images/jimmy_chen.jpg"};
 	public static String POKEBALL = "resources/images/pokeball.png";
-		
+	public static String[] TYPE_BACKGROUNDS = {"resources/images/water_background.png", "resources/images/fire_background.jpg",
+											   "resources/images/grass_background.jpg"};
+	
 	//Moves and types
 	public static String[] basicMoveNames = {
 			"Pound", "Smash", "Beat Up", "Scratch", "Slash"
@@ -70,7 +72,7 @@ public class Constants {
 	
 	//Colors
 	public static final Font GAMEFONT = new Font("Courier", Font.BOLD, 14);
-	public static final Color BACKGROUND_COLOR = Color.MAGENTA;
+	public static final Color BACKGROUND_COLOR = new Color(15, 15, 15);
 	public static final Color FONT_COLOR = Color.WHITE;
 	public static final Color BACKGROUND_COLOR2 = Color.DARK_GRAY;
 	public static final Color[] TYPE_COLOR= {

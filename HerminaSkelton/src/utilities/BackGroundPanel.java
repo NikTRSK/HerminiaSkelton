@@ -35,6 +35,15 @@ public class BackGroundPanel extends JPanel {
 	    }
 	}
 	
+	public void setImage(String path){
+		ImageIcon imgIcon = new ImageIcon(path);
+	    this.image = imgIcon.getImage();
+	    //this.image = this.image.getScaledInstance(this.getWidth(), this.getHeight(), java.awt.Image.SCALE_SMOOTH);
+	    this.iWidth2 = image.getWidth(this)/2;
+	    this.iHeight2 = image.getHeight(this)/2;
+	    this.repaint();
+	}
+	
 	/*private static final long serialVersionUID = 289210130126374451L;
 	private String filename;
 
