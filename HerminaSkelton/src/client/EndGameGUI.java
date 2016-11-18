@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import AllCPs.CP;
 import utilities.Constants;
 
 public class EndGameGUI extends JFrame{
@@ -31,7 +32,7 @@ public class EndGameGUI extends JFrame{
 	private GameClientListener mlistener;
 	private Vector<Integer> topFiveScores;
 	private GridBagConstraints mGridBagConst;
-	public EndGameGUI(int gamemode, String name1, String name2, int score1, int score2, boolean win, GameClientListener mlistener){
+	public EndGameGUI(int gamemode, String name1, String name2, CP bestfriend, int score1, int score2, boolean win, GameClientListener mlistener){
 		//gamemode 0 as guest, gamemmode 1 as singleplayer, gameode 2 as multiplayer
 		this.gamemode = gamemode;
 		this.mlistener = mlistener;
@@ -42,7 +43,7 @@ public class EndGameGUI extends JFrame{
 		username2 = name2;
 		topFiveScores = new Vector<Integer>(5);
 		for(int i = 0; i < 5; i++){
-			topFiveScores.add(null);
+			topFiveScores.add(i*1000);
 		}
 		addNames();
 		setBackground();
@@ -120,22 +121,22 @@ public class EndGameGUI extends JFrame{
 		setLayout(new GridBagLayout());
 		mGridBagConst = new GridBagConstraints();
 		mGridBagConst.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+		mGridBagConst.fill = GridBagConstraints.BOTH;
 		
 		mGridBagConst.gridx = 0;
 		mGridBagConst.gridy = 0;
-		mGridBagConst.ipadx = 20;
-		mGridBagConst.ipady = 20;
-		mGridBagConst.anchor = GridBagConstraints.NORTHWEST;
-		mGridBagConst.insets = new Insets(0,0,0,0);
+		mGridBagConst.anchor = GridBagConstraints.FIRST_LINE_START;
 		add(name1,mGridBagConst);
 		mGridBagConst.gridx = 1;
+		mGridBagConst.insets = new Insets(0,0,0,900);
 		add(name2,mGridBagConst);
 		
+		mGridBagConst.insets = new Insets(0,0,0,0);
 		mGridBagConst.gridx = 0;
 		mGridBagConst.gridy = 1;
-		mGridBagConst.insets = new Insets(0,0,0,0);
 		add(score1_,mGridBagConst);
 		mGridBagConst.gridx = 1;
+		mGridBagConst.insets = new Insets(0,0,0,900);
 		add(score2_,mGridBagConst);
 		
 		for(int i = 0 ; i < 5; i++){
@@ -144,9 +145,17 @@ public class EndGameGUI extends JFrame{
 			if(topFiveScores.get(i) != null){
 				namLabel.setText(Integer.toString(topFiveScores.get(i)));
 			}
+			mGridBagConst.insets = new Insets(0,0,0,0);
+			if(i == 4){
+				mGridBagConst.insets = new Insets(0,0,400,0);
+			}
 			mGridBagConst.gridx = 0;
 			mGridBagConst.gridy = i+2;
 			add(numLabel,mGridBagConst);
+			mGridBagConst.insets = new Insets(0,0,0,900);
+			if(i == 4){
+				mGridBagConst.insets = new Insets(0,0,400,900);
+			}
 			mGridBagConst.gridx = 1;
 			add(namLabel,mGridBagConst);
 		}
@@ -157,6 +166,6 @@ public class EndGameGUI extends JFrame{
 	}
 	
 	public static void main(String[] args){
-		new EndGameGUI(2,"Nick","Matt",2000,3000,true, null).setVisible(true);
+		new EndGameGUI(2,"Nick","Matt", null, 2000,3000,true, null).setVisible(true);
 	}
 }
