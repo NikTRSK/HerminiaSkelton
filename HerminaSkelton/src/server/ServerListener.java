@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
 
+import utilities.DataPacket;
 import utilities.GameInstance;
 import utilities.PlayerInstance;
 import utilities.User;
@@ -35,6 +36,11 @@ public class ServerListener {
 		this.playerQueue = new LinkedList<String>();
 		this.gameInstances = new Vector<GameInstance>();
 		new Thread().start();
+	}
+	
+	protected void sendToAllClients(DataPacket<?> dp) {
+		for (ServerClientCommunicator playerThread : playerThreads.values())
+			playerThread.sendData(dp);
 	}
 	
 	// FIGURE OUT HOW TO ADD THE USERNAME
@@ -107,6 +113,14 @@ public class ServerListener {
 				player.sendMove(move);
 			}
 		}
+	}
+	
+	protected ArrayList<Integer> updateScores(String username, Integer playerScore) {
+		// calculate score
+		
+		// pass into the database and return the top five scores
+		
+		return null;
 	}
 	
 	public void start() {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import utilities.ChatMessage;
 import utilities.Commands;
@@ -29,7 +30,7 @@ public class ServerClientCommunicator extends Thread {
 //		this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	}
 	
-	private void sendData(DataPacket<?> dp) {
+	protected void sendData(DataPacket<?> dp) {
 		try {
 			oos.writeObject(dp);
 			oos.flush();
@@ -84,6 +85,13 @@ public class ServerClientCommunicator extends Thread {
 		this.connectionID = threadID;
 	}
 	
+	// takes in the current score from the player and returns the top 5 scores
+	public ArrayList<Integer> getTopScores(Integer playerScore) {
+		ArrayList<Integer> scores = serverListener.updateScores(userName, playerScore);
+		
+		return scores;
+	}
+	
 	public void run() {
     boolean listenForConnections = true;
     while (listenForConnections) {
@@ -110,7 +118,8 @@ public class ServerClientCommunicator extends Thread {
         		sendData(new DataPacket<Boolean>(utilities.Commands.CREATE_RESPONSE, createUserResponse));
         	case utilities.Commands.CHAT_MESSAGE :
         		ChatMessage cm = (ChatMessage)input.getData();
-        		sendData(new DataPacket<ChatMessage>(utilities.Commands.CHAT_MESSAGE, cm));
+        		cm.setUsername(userName);
+        		serverListener.sendToAllClients(new DataPacket<ChatMessage>(utilities.Commands.CHAT_MESSAGE, cm));
         	case utilities.Commands.END_GAME :
         		break;
         }
