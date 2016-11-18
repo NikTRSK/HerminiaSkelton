@@ -47,6 +47,10 @@ public class GameClientListener extends Thread{
 		}	
 	}
 	
+	public void sendAction(){
+		
+	}
+	
 	//send msg to clientListener, doesn't send data that requires/expects a response from server
 	public void sendMessage(DataPacket<?> data){
 		try{
@@ -87,19 +91,19 @@ public class GameClientListener extends Thread{
 				}
 				else if(streamContent == utilities.Commands.LOGIN_USER){
 					User user = (User)input.getData();
-					oos.writeObject(new DataPacket<User>(utilities.Commands.LOGIN_USER, user));
+					//oos.writeObject(new DataPacket<User>(utilities.Commands.LOGIN_USER, user));
 				}
 				else if(streamContent == utilities.Commands.LOGOUT_USER){
 					//send user to server to be logged out
 					User user  = (User)input.getData();
-					oos.writeObject(new DataPacket<User>(utilities.Commands.LOGOUT_USER, user));
+					//oos.writeObject(new DataPacket<User>(utilities.Commands.LOGOUT_USER, user));
 					//or take command and update gameGUI accordingly
 					//String logoutMsg = (String)input.getData();
 					//mGameGUI.updateGameGUI();
 				}
 				else if (streamContent == utilities.Commands.CREATE_USER){
 					User user = (User)input.getData();
-					oos.writeObject(new DataPacket<User>(utilities.Commands.CREATE_USER, user));
+					//oos.writeObject(new DataPacket<User>(utilities.Commands.CREATE_USER, user));
 				}
 				else if(streamContent == utilities.Commands.AUTH_RESPONSE){
 					boolean authenticate = (boolean)input.getData();
