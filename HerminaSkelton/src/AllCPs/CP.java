@@ -57,6 +57,7 @@ public abstract class CP {
 	//Health Modifiers
 	public void changeHealth(int change){
 		currHealth+=change;
+		if(currHealth<0)currHealth = 0;
 	}
 	public void heal(){
 		currHealth = healthPoints;
