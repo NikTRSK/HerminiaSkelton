@@ -103,6 +103,14 @@ public class GameGUI extends JFrame{
 		return MapScreen;
 	}
 	
+	private void switchToBattle(){
+		
+	}
+	
+	private void switchToMap(){
+		
+	}
+	
 	private JPanel createBattleCard(){
 		BattleScreen battle = new BattleScreen(null,null);
 		BattleScreen.add(battle);
