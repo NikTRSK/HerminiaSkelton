@@ -416,16 +416,107 @@ public class BattleScreen extends JPanel{
 	private void caughtCP(){
 		JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL); 
 		
-		JPanel newCP = new JPanel();
+		JLabel name = new JLabel(wildCP.getName()+" was caught! He/she was added to your team");
+		name.setFont(Constants.GAMEFONT);
+		name.setForeground(Constants.FONT_COLOR);
 		
+		JButton okay = new JButton("Okay");
+		okay.setForeground(Constants.FONT_COLOR);
+		okay.setBackground(Constants.BACKGROUND_COLOR2);
+		okay.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
+				battleOver();
+			}
+			
+		});
+		
+		JPanel newCP = new JPanel();
+		newCP.setLayout(new BorderLayout());
+		newCP.setBackground(Constants.BACKGROUND_COLOR);
+		newCP.add(new JLabel(wildCP.getSprite()), BorderLayout.CENTER);
+		newCP.add(name, BorderLayout.NORTH);
+		newCP.add(okay, BorderLayout.SOUTH);
+		
+		dialog.add(newCP);
+		dialog.pack();
+		dialog.setVisible(true);
 	}
 	
 	private void lostBattle(){
+		JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL);
+		int runner = Constants.rand.nextInt(playerCPs.size());
 		
+		JLabel info = new JLabel("All of your CPs have fainted! "+playerCPs.get(runner).getName()
+								+" doesn't trust you anymore and ran away!");
+		info.setForeground(Constants.FONT_COLOR);
+		info.setBackground(Constants.BACKGROUND_COLOR2);
+		info.setFont(Constants.GAMEFONT);
+		
+		JButton okay = new JButton("Go to Health Center");
+		okay.setForeground(Constants.FONT_COLOR);
+		okay.setBackground(Constants.BACKGROUND_COLOR2);
+		okay.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
+				playerCPs.remove(runner);
+				battleOver();
+				//TODO: teleport player to health center
+			}
+			
+		});
+		
+		
+		JPanel result = new JPanel();
+		result.setLayout(new BorderLayout());
+		result.setBackground(Constants.BACKGROUND_COLOR);
+		result.add(info, BorderLayout.NORTH);
+		result.add(new JLabel(playerCPs.get(runner).getSprite()), BorderLayout.CENTER);
+		result.add(okay, BorderLayout.SOUTH);
+		
+		dialog.add(result);
+		dialog.pack();
+		dialog.setVisible(true);
 	}
 	
 	private void wonBattle(){
+		JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL);
 		
+		JLabel info = new JLabel("You won the battle! "+activeCP.getName()
+								+" gained xp.");
+		info.setForeground(Constants.FONT_COLOR);
+		info.setBackground(Constants.BACKGROUND_COLOR2);
+		info.setFont(Constants.GAMEFONT);
+		
+		JButton okay = new JButton("Okay");
+		okay.setForeground(Constants.FONT_COLOR);
+		okay.setBackground(Constants.BACKGROUND_COLOR2);
+		okay.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
+				activeCP.addXP(wildCP.getLevel());
+				battleOver();
+			}
+			
+		});
+		
+		
+		JPanel result = new JPanel();
+		result.setLayout(new BorderLayout());
+		result.setBackground(Constants.BACKGROUND_COLOR);
+		result.add(info, BorderLayout.NORTH);
+		result.add(new JLabel(activeCP.getSprite()), BorderLayout.CENTER);
+		result.add(okay, BorderLayout.SOUTH);
+		
+		dialog.add(result);
+		dialog.pack();
+		dialog.setVisible(true);
 	}
 	
 	private boolean executeCatch(){
@@ -462,9 +553,7 @@ public class BattleScreen extends JPanel{
 		}else if(activeCP.getHealth()==0){
 			System.out.println("2");
 			//MainGUI.addToChat("All your CPs died!");
-			int runner = Constants.rand.nextInt(playerCPs.size());
-			//MainGUI.addToChat(playerCPs.get(runner).getName()+" decided he didn't trust you and ran away!");
-			playerCPs.remove(runner);
+			
 			//Player.setx(Constants.HealthCenterX);
 			//Player.sety(Constants.HealthCenterY);
 			//Player.setZone(Constants.HealthCenterZone);
