@@ -5,10 +5,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
-public class MapScreen extends JPanel {
+import client.Player;
+
+public class MapScreen extends JPanel implements KeyListener {
 	
 	private MapZone currZone;
 	private int mWidth = 0;
@@ -18,20 +22,41 @@ public class MapScreen extends JPanel {
 	private Image mImage = null;
 	
 	private MapZone[][] zones;
+	private int zoneX, zoneY;
 	
-	public MapScreen(Dimension fullScreenDimensions) {
+	private Player mPlayer;
+	
+	public void renderAndPaint() {
+		render();
+		paint();
+	}
+	
+	public MapScreen(Dimension fullScreenDimensions, Player player) {
 		super();
 		mWidth = (int)(2 * fullScreenDimensions.getWidth() / 3); // map is 2/3 or fullscreen
 		mHeight = (int)(fullScreenDimensions.getHeight());       // map is full height
-//		System.out.println(mWidth + " " + mHeight);
-//		mImage = createImage(mWidth, mHeight);
-//		if(mImage == null) System.out.println("NULL");
-		System.out.println(mHeight);
-		currZone = new MapZone(MapConstants.A1, mWidth, mHeight); // choose where player starts
+		
+		zoneX = 0;
+		zoneY = 0;
+//		currZone = new MapZone(MapConstants.A1, mWidth, mHeight); // choose where player starts
 		
 		// TODO initialize map zones
-//		zones = new MapZone[4][3];
-//		for(int i = 0; i < )
+		zones = new MapZone[4][3];
+		for(int i = 0; i < 4; i++) {
+			for(int j = 0; j < 3; j++) {
+				zones[i][j] = new MapZone(MapConstants.ZONES[j][i], mWidth, mHeight);
+			}
+		}
+		
+		currZone = zones[0][0];
+		
+		// figure out player stuff
+		mPlayer = player;
+		player.setSize(mWidth/10, mHeight/10);
+		
+		addKeyListener(this);
+//		setFocusable(true);
+//		requestFocusInWindow();
 	}
 	
 	public void render() {
@@ -59,6 +84,9 @@ public class MapScreen extends JPanel {
 				node.draw(mGraphics);
 			}
 		}
+		
+		//draw player
+		mPlayer.draw(mGraphics);
 	}
 	
 	public void paint() {
@@ -82,4 +110,89 @@ public class MapScreen extends JPanel {
 			g.drawImage(mImage, 0, 0, null);
 		}
 	} // from Factory code
+	
+	//movement stuff
+	private void movePlayer(KeyEvent e) {
+		int currX = mPlayer.getX();
+		int currY = mPlayer.getY();
+			 if(e.getKeyCode() == KeyEvent.VK_UP)    currY--;
+		else if(e.getKeyCode() == KeyEvent.VK_DOWN)  currY++;
+		else if(e.getKeyCode() == KeyEvent.VK_LEFT)  currX--;
+		else if(e.getKeyCode() == KeyEvent.VK_RIGHT) currX++;
+		
+		if(validMove(currX, currY)) {
+			if(e.getKeyCode() == KeyEvent.VK_UP)    mPlayer.moveUp();
+			else if(e.getKeyCode() == KeyEvent.VK_DOWN)  mPlayer.moveDown();
+			else if(e.getKeyCode() == KeyEvent.VK_LEFT)  mPlayer.moveLeft();
+			else if(e.getKeyCode() == KeyEvent.VK_RIGHT) mPlayer.moveRight();
+		}
+		     
+		renderAndPaint();
+		
+		//TODO handle moving through grass
+	}
+	
+	private boolean validMove(int x, int y) {
+//		System.out.println("x: " + x + "y: " + y);
+		if(x > 9) {
+			moveZoneRight();
+			return false;
+		}
+		if(x < 0) {
+			moveZoneLeft();
+			return false;
+		}
+		if(y > 9) {
+			moveZoneDown();
+			return false;
+		}
+		if(y < 0) {
+			moveZoneUp();
+			return false;
+		}
+		
+		if(currZone.getNodes()[x][y] instanceof WallNode) {
+			return false;
+		}
+		return true;
+	}
+	
+	private void moveZoneRight() {
+		zoneX++;
+		currZone = zones[zoneX][zoneY];
+		mPlayer.setX(0);
+	}
+	
+	private void moveZoneLeft() {
+		zoneX--;
+		currZone = zones[zoneX][zoneY];
+		mPlayer.setX(9);
+	}
+	
+	private void moveZoneDown() {
+		zoneY++;
+		currZone = zones[zoneX][zoneY];
+		mPlayer.setY(0);
+	}
+	
+	private void moveZoneUp() {
+		zoneY--;
+		currZone = zones[zoneX][zoneY];
+		mPlayer.setY(9);
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		movePlayer(e);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+	}
 }

@@ -6,8 +6,11 @@ import java.util.Vector;
 import javax.swing.ImageIcon;
 
 import AllCPs.CP;
+import libraries.ImageLibrary;
+import map.MapConstants;
+import map.MapNode;
 
-public class Player {
+public class Player extends MapNode {
 	private String username;
 	private int assignmentsLeft;
 	long randomSeed;
@@ -18,13 +21,24 @@ public class Player {
 	Random rand;
 	
 	public Player(String name, long randomSeed, int avatarNum){
+		super(0, 0, 0, 0);
+		
 		username = name;
 		assignmentsLeft = Constants.StartingAssignments;
 		avatar = new ImageIcon(Constants.avatar[avatarNum]);
 		rand = new Random(randomSeed);
 		CPs = new Vector<CP>();
-		x = 10;
-		y = 10;
+		x = 5;
+		y = 5;
+		
+		mImage = ImageLibrary.getImage(MapConstants.AVATAR);
+	}
+	
+	public void setSize(int inWidth, int inHeight) {
+		width = inWidth;
+		height = inHeight;
+		trueX = x * width;
+		trueY = y * height;
 	}
 	
 	public String getName(){
@@ -45,9 +59,11 @@ public class Player {
 	
 	public void setX(int x){
 		this.x = x;
+		calculatePosition();
 	}
 	public void setY(int y){
 		this.y = y;
+		calculatePosition();
 	}
 	public void deductAssignment(){
 		assignmentsLeft--;
@@ -57,5 +73,31 @@ public class Player {
 	}
 	public void draw(){
 		//TODO
+	}
+	
+	//movement stuff
+	private void calculatePosition() {
+		trueX = x * width;
+		trueY = y * height;
+	}
+	
+	public void moveUp() {
+		y--;
+		calculatePosition();
+	}
+	
+	public void moveDown() {
+		y++;
+		calculatePosition();
+	}
+	
+	public void moveLeft() {
+		x--;
+		calculatePosition();
+	}
+	
+	public void moveRight() {
+		x++;
+		calculatePosition();
 	}
 }

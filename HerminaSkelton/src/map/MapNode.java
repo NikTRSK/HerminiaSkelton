@@ -10,16 +10,16 @@ public abstract class MapNode {
 	
 	protected Image mImage = null;
 	
-	protected MapNode(int inY, int inX, int inWidth, int inHeight) {
+	protected MapNode(int inX, int inY, int inWidth, int inHeight) {
 		width = inWidth;
 		height = inHeight;
-		x = inX * width;
-		y = inY * height;
+		trueX = inX * width;
+		trueY = inY * height;
 	}
 	
 	//The "true" location and size of the object use this for updating
-	private int x = 0, y = 0;
-	private int width = 0, height = 0;
+	protected int trueX = 0, trueY = 0;
+	protected int width = 0, height = 0;
 	
 	private double mXScale;
 	private double mYScale;
@@ -30,15 +30,15 @@ public abstract class MapNode {
 	
 	public void draw(Graphics g) {
 		g.setColor(Color.black);
-		g.drawImage(mImage, x, y, width, height, null);
+		g.drawImage(mImage, trueX, trueY, width, height, null);
 	}
 	
 	//Scale the object for rendering
-	public void resize(double xScale, double yScale) {
-		mXScale = xScale;
-		mYScale = yScale;
-		renderBounds.x = (int)(x * xScale);
-		renderBounds.y = (int)(y * yScale);
-		renderBounds.width = (int)(width * xScale); renderBounds.height = (int)(height* yScale);
-	}
+//	public void resize(double xScale, double yScale) {
+//		mXScale = xScale;
+//		mYScale = yScale;
+//		renderBounds.x = (int)(x * xScale);
+//		renderBounds.y = (int)(y * yScale);
+//		renderBounds.width = (int)(width * xScale); renderBounds.height = (int)(height* yScale);
+//	}
 }
