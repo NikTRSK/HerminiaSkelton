@@ -11,11 +11,11 @@ public class MapZone {
 		for(int i = 0; i < 10; i++) { //rows
 			for(int j = 0; j < 10; j++) { //cols
 				if(blueprint[i][j].equals(MapConstants.G)) { // grass
-					nodes[i][j] = new GrassNode(i, j, mapWidth/10, mapHeight/10);
+					nodes[j][i] = new GrassNode(j, i, mapWidth/10, mapHeight/10);
 				} else if(blueprint[i][j].equals(MapConstants.P)) { // path
-					nodes[i][j] = new PathNode(i, j, mapWidth/10, mapHeight/10);
+					nodes[j][i] = new PathNode(j, i, mapWidth/10, mapHeight/10);
 				} else if(blueprint[i][j].equals(MapConstants.W)) { // path
-					nodes[i][j] = new WallNode(i, j, mapWidth/10, mapHeight/10);
+					nodes[j][i] = new WallNode(j, i, mapWidth/10, mapHeight/10);
 				}
 			}
 		}

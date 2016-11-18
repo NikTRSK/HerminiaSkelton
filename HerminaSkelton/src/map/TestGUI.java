@@ -9,6 +9,8 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
+import client.Player;
+
 public class TestGUI extends JFrame {
 	
 	private MapScreen map;
@@ -23,10 +25,16 @@ public class TestGUI extends JFrame {
 		
 		setVisible(true);
 		
-		map = new MapScreen(screenSize);
+		Player player = new Player("John", 1, 0);
+		
+		map = new MapScreen(screenSize, player);
 		add(map, BorderLayout.CENTER);
-		map.render();
-		map.paint();
+//		map.addKeyListener(map);
+		map.setFocusable(true);
+		map.requestFocusInWindow();
+//		map.render();
+//		map.paint();
+		map.renderAndPaint();
 		
 	}
 	
