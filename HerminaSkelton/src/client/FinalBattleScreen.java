@@ -2,6 +2,7 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -53,6 +54,9 @@ public class FinalBattleScreen extends JPanel{
 	private JPanel attackPanel;
 	private JButton attackA;
 	private JButton attackB;
+	
+	// Stuff for waitPanel.
+	private JPanel waitPanel;
 
 	public FinalBattleScreen(GameClientListener cl, FinalBattleState fbs, Integer me){
 		this.cl = cl;
@@ -70,6 +74,7 @@ public class FinalBattleScreen extends JPanel{
 		initializeChooseAttack();
 		initializeChooseTarget();
 		initializeChooseSwitch();
+		initializeWaitPanel();
 		initializeCards();
 		createGUI();
 	}
@@ -292,15 +297,69 @@ public class FinalBattleScreen extends JPanel{
 	}
 	
 	private void initializeChooseSwitch(){
-		//TODO
+		switchOptions = new JButton[player.getCP().size()];
+		
+		JButton backButton = new JButton("<< Back");
+		backButton.setBackground(Constants.BACKGROUND_COLOR2);
+		backButton.setForeground(Constants.FONT_COLOR);
+		backButton.setFont(Constants.GAMEFONT);
+		backButton.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 5));
+		backButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+			}
+		});
+		
+		for(int i = 0; i < player.getCP().size(); i++){
+			CP option = player.getCP().get(i);
+			JButton chooseOption = new JButton(option.getName()+" lvl "+option.getLevel());
+			chooseOption.setBackground(Constants.BACKGROUND_COLOR2);
+			chooseOption.setForeground(Constants.FONT_COLOR);
+			chooseOption.setFont(Constants.GAMEFONT);
+			chooseOption.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 5));
+			switchOptions[i] = chooseOption;
+		}
+		
+		switchPanel = new JPanel();
+		switchPanel.setBackground(Constants.BACKGROUND_COLOR);
+		switchPanel.setLayout(new GridLayout(1, switchOptions.length));
+		
+		for(int i = 0; i < switchOptions.length; i++){
+			switchPanel.add(switchOptions[i]);
+		}
+		
+	}
+	
+	private void initializeWaitPanel(){
+		JLabel waitMessage = new JLabel("Waiting for other player...");
+		waitMessage.setFont(Constants.GAMEFONT);
+		waitMessage.setForeground(Constants.FONT_COLOR);
+		
+		waitPanel = new JPanel();
+		waitPanel.setLayout(new BorderLayout());
+		waitPanel.setBackground(Constants.BACKGROUND_COLOR);
+		waitPanel.add(waitMessage);
 	}
 	
 	private void initializeCards(){
-		//TODO
+		cardHolder = new JPanel(new CardLayout());	
+		cardHolder.setPreferredSize(new Dimension(0, 300));
+		cardHolder.add(actionPanel, "card 1");
+		cardHolder.add(attackPanel, "card 2");
+		cardHolder.add(targetPanel, "card 3");
+		cardHolder.add(switchPanel, "card 4");
+		cardHolder.add(waitPanel, "card 5");
+		add(cardHolder, BorderLayout.SOUTH);
 	}
 	
 	private void createGUI(){
-		//TODO
+		this.setLayout(new BorderLayout());
+		this.add(battlePanel, BorderLayout.CENTER);
+		this.add(cardHolder, BorderLayout.SOUTH);
+		
+		CardLayout layout = (CardLayout)cardHolder.getLayout();
+		layout.show(cardHolder, "card 1");
 	}
 	
 	public void recieveMessage(FinalBattleState fbs){
