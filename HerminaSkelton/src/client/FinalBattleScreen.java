@@ -1,19 +1,20 @@
 package client;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import AllCPs.CP;
-import utilities.DataPacket;
+import utilities.FinalBattleState;
+import utilities.PlayerAction;
 
 public class FinalBattleScreen extends JPanel{
 
 	private static final long serialVersionUID = -9154200804429634453L;
 	//private ClientListener cl;
 	
-	private Player player1;
-	private Player player2;
-	private Miller miller;
+	private Player player;
+	private Integer me;
 	
 	private CP playerCP1;
 	private CP playerCP2;
@@ -29,38 +30,71 @@ public class FinalBattleScreen extends JPanel{
 	private JLabel img2;
 	private JLabel img3;
 	private JLabel img4;
+	
+	private JButton[] switchOptions;
+	private JButton attackA;
+	private JButton attackB;
 
-	public FinalBattleScreen(/*GameClientListener cl*/Miller profMiller){
+	public FinalBattleScreen(/*GameClientListener cl, */FinalBattleState fbs, Integer me){
 		//this.cl = cl;
-		this.miller = profMiller;
+		this.me = me;
 		
+		this.player = fbs.player;
+		this.playerCP1 = fbs.cp1;
+		this.playerCP2 = fbs.cp2;
+		this.millerCP1 = fbs.cp3;
+		this.millerCP2 = fbs.cp4;
+		
+		initializeBattlePanel();
+		initializeOptionPanel();
+		initializeChooseAttack();
+		initializeChooseSwitch();
+		initializeCards();
+		createGUI();
 	}
 	
-	public void setPlayers(Player p1, Player p2){
-		this.player1 = p1;
-		playerCP1 = player1.getCP().get(Constants.rand.nextInt(player1.getCP().size()));
-		
-		this.player2 = p2;
-		playerCP2 = player2.getCP().get(Constants.rand.nextInt(player2.getCP().size()));
+	
+	
+	private void initializeBattlePanel(){
+		//TODO
 	}
 	
-	public void recieveMessage(DataPacket dp){
-		String command = dp.getCommand();
-		if(command.equals("Miller Move 1")){
-			
-		}else if(command.equals("Miller Move 2")){
-			
-		}else if(command.equals("Miller Switch 1")){
-			
-		}else if(command.equals("Miller Switch 2")){
-			
-		}else if(command.equals("")){
-			
-		}
+	private void initializeOptionPanel(){
+		//TODO
 	}
 	
-	private void sendMessage(DataPacket dp){
+	private void initializeChooseAttack(){
+		//TODO
+	}
+	
+	private void initializeChooseSwitch(){
+		//TODO
+	}
+	
+	private void initializeCards(){
+		//TODO
+	}
+	
+	private void createGUI(){
+		//TODO
+	}
+	
+	public void recieveMessage(FinalBattleState fbs){
+		this.player = fbs.player;
+		this.playerCP1 = fbs.cp1;
+		this.playerCP2 = fbs.cp2;
+		this.millerCP1 = fbs.cp3;
+		this.millerCP2 = fbs.cp4;
 		
+		update();
+	}
+	
+	private void update(){
+		//TODO
+	}
+	
+	private void sendMessage(PlayerAction pa){
+		//cl.sendAction(pa);
 	}
 	
 	
