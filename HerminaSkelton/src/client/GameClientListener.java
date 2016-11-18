@@ -61,13 +61,26 @@ public class GameClientListener extends Thread{
 		return ans;
 	}
 
+	public boolean login(User user) {
+		sendData(new DataPacket<User>(utilities.Commands.LOGIN_USER, user));
+
+		return true;
+	}
+	
+	public boolean create(User user) {
+		sendData(new DataPacket<User>(utilities.Commands.LOGIN_USER, user));
+		
+		return true;
+	}
 	
 	public void run(){		
 		try{
-			DataPacket<?> input = (DataPacket<?>)ois.readObject();			
-			String streamContent = input.getCommand();
-			//ServerListener listener = new ServerListener(mSocket);
 			while(true){
+				// get the data packet
+				DataPacket<?> input = (DataPacket<?>)ois.readObject();			
+				String streamContent = input.getCommand();
+				//ServerListener listener = new ServerListener(mSocket);
+				
 				if (streamContent == utilities.Commands.END_GAME){
 					//String endMsg = (String)input.getData();
 					mGameGUI.updateGameGUI(streamContent);
