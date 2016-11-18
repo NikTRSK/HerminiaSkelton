@@ -1,4 +1,4 @@
-# CS 201 Final Projet: Herminia Skelton
+# CS 201 Final Project: Herminia Skelton
 
 - **Names**:
     + Nikica Trajkovski
