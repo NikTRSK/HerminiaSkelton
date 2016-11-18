@@ -53,8 +53,6 @@ public class FinalBattleScreen extends JPanel{
 		createGUI();
 	}
 	
-	
-	
 	private void initializeBattlePanel(){
 		//TODO
 	}

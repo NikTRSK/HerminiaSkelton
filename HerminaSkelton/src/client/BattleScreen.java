@@ -40,6 +40,9 @@ public class BattleScreen extends JPanel{
 	private JPanel cardHolder;
 	private JPanel battlePanel;
 	
+	private BackGroundPanel typeBackground1;
+	private BackGroundPanel typeBackground2;
+	
 	private JButton attack;
 	private JButton switchCP;
 	private JButton throwAssignment;
@@ -106,16 +109,16 @@ public class BattleScreen extends JPanel{
 		imageLabel1 = new JLabel(sprite1);
 		
 		CPUpdates1 = new JTextArea("");
-		JPanel holder1 = new BackGroundPanel(Constants.POKEBALL);
-		holder1.setLayout(new BorderLayout());
-		holder1.add(imageLabel1, BorderLayout.CENTER);
-		holder1.add(healthLabel1, BorderLayout.SOUTH);
+		typeBackground1 = new BackGroundPanel(Constants.TYPE_BACKGROUNDS[activeCP.getType()-1]);
+		typeBackground1.setLayout(new BorderLayout());
+		typeBackground1.add(imageLabel1, BorderLayout.CENTER);
+		typeBackground1.add(healthLabel1, BorderLayout.SOUTH);
 		
 		CP1 = new JPanel();
 		CP1.setLayout(new BorderLayout());
 		CP1.setBackground(Constants.TYPE_COLOR[wildCP.getType()]);
 		CP1.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR2, 5));
-		CP1.add(holder1, BorderLayout.CENTER);
+		CP1.add(typeBackground1, BorderLayout.CENTER);
 		
 		healthLabel2 = new JLabel(wildCP.getHealth()+"/"+wildCP.getMaxHealth());
 		healthLabel2.setFont(new Font("Courier", Font.BOLD, 35));
@@ -129,17 +132,17 @@ public class BattleScreen extends JPanel{
 		imageLabel2 = new JLabel(sprite2);
 		
 		CPUpdates2 = new JTextArea("dbd");
-		JPanel holder2 = new BackGroundPanel(Constants.POKEBALL);
-		holder2.setLayout(new BorderLayout());
-		holder2.add(imageLabel2, BorderLayout.CENTER);
-		holder2.add(healthLabel2, BorderLayout.SOUTH);
+		typeBackground2 = new BackGroundPanel(Constants.TYPE_BACKGROUNDS[wildCP.getType()-1]);
+		typeBackground2.setLayout(new BorderLayout());
+		typeBackground2.add(imageLabel2, BorderLayout.CENTER);
+		typeBackground2.add(healthLabel2, BorderLayout.SOUTH);
 		
 		
 		CP2 = new JPanel();
 		CP2.setLayout(new BorderLayout());
 		CP2.setBackground(Constants.TYPE_COLOR[wildCP.getType()]);
 		CP2.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR2, 5));
-		CP2.add(holder2, BorderLayout.CENTER);
+		CP2.add(typeBackground2, BorderLayout.CENTER);
 		
 		battlePanel = new JPanel();
 		battlePanel.setLayout(new GridLayout(1, 2));
@@ -357,6 +360,7 @@ public class BattleScreen extends JPanel{
 			}
 			Constants.attackMoves[activeCP.getAttackMoves()[move]].move(activeCP, wildCP, CPUpdates1);
 			redraw();
+			if(wildCP.getHealth()<=0)wonBattle();
 		}
 		
 	}
@@ -375,15 +379,15 @@ public class BattleScreen extends JPanel{
 		sprite1 = new ImageIcon(newImg);
 		imageLabel1.setIcon(sprite1);
 		
-		CP1.setBackground(Constants.TYPE_COLOR[activeCP.getType()]);
+		typeBackground1.setImage(Constants.TYPE_BACKGROUNDS[activeCP.getType()-1]);
 		
 		sprite2 = wildCP.getSprite();
-		image = sprite1.getImage();
+		image = sprite2.getImage();
 		newImg = image.getScaledInstance(250, 250,  java.awt.Image.SCALE_SMOOTH);
 		sprite2 = new ImageIcon(newImg);
 		imageLabel2.setIcon(sprite2);
 		
-		CP2.setBackground(Constants.TYPE_COLOR[wildCP.getType()]);
+		typeBackground2.setImage(Constants.TYPE_BACKGROUNDS[wildCP.getType()-1]);
 		
 		for(int i = 0; i<switchOption.length; i++){
 			if(playerCPs.get(i).getHealth()<=0){
