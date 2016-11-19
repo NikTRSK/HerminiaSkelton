@@ -20,7 +20,7 @@ public class ServerListener {
 	private ServerSocket serverSocket;
 //	private Vector<ServerClientCommunicator> playerThreads;
 	private HashMap<Integer, ServerClientCommunicator> playerThreads;
-//	private Game game;
+	private GameServerGUI gameServerGUI;
 	
 	private DatabaseLogic db;
 	private Queue<String> playerQueue;
@@ -28,8 +28,9 @@ public class ServerListener {
 	
 	boolean listenForConnections;
 	
-	public ServerListener(ServerSocket serverSocket) {
+	public ServerListener(ServerSocket serverSocket, GameServerGUI gsg) {
 		this.serverSocket = serverSocket;
+		this.gameServerGUI = gsg;
 //		this.playerThreads = new Vector<ServerClientCommunicator>();
 		this.playerThreads = new HashMap<Integer, ServerClientCommunicator>();
 		this.db = new DatabaseLogic();
@@ -37,6 +38,10 @@ public class ServerListener {
 		this.gameInstances = new Vector<GameInstance>();
 		new Thread().start();
 	}
+	
+//	protected void setServerGUI(GameServerGUI gsg) {
+//		this.gameServerGUI = gsg;
+//	}
 	
 	protected void sendToAllClients(DataPacket<?> dp) {
 		for (ServerClientCommunicator playerThread : playerThreads.values())
@@ -50,6 +55,7 @@ public class ServerListener {
 			if (db.loginUser(userInfo.getUsername(), userInfo.getPassword())) {
 				// add player to the queue
 				playerQueue.add(userInfo.getUsername());
+				gameServerGUI.addUserToUsersTable(userInfo.getUsername());
 				return true;
 			}
 			else
@@ -80,8 +86,26 @@ public class ServerListener {
 		}
 	}
 	
-	public void logOutUser(String userName) {
+	protected synchronized void logOutUser(String userName) {
+		// Find instance of the player
+		ArrayList<String> instanceUsernames = null;
 		
+		for (GameInstance gi : gameInstances) {
+			ArrayList<String> players = gi.getPlayerUsernames();
+			if (players.contains(userName)) {
+				instanceUsernames = players;
+				break;
+			}
+		}
+		
+		// Logout all users from instance
+		if (instanceUsernames != null) {
+			for (int i = playerThreads.size(); i >= 0; i--) {
+				if (playerThreads.get(i).getUserName().equalsIgnoreCase(instanceUsernames.get(0))
+						|| playerThreads.get(i).getUserName().equalsIgnoreCase(instanceUsernames.get(1)))
+					playerThreads.remove(i);
+			}
+		}
 	}
 	
 	public void startGame(GameInstance gameInstance) {

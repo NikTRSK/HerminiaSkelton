@@ -55,10 +55,18 @@ public class DatabaseLogic {
 		}
 	}
 	
+	// get all scores for user
 	public ArrayList<Integer> getScores(String username) {
-		scoreStatement.setString(1, username);
-		rs = scoreStatement.executeQuery();
-		rs.
+		ArrayList<Integer> scores = new ArrayList<Integer>();
+		try {
+			scoreStatement.setString(1, username);
+			rs = scoreStatement.executeQuery();
+			int i = 1;
+			while (rs.next()) {
+				scores.add(rs.getInt("score" + i++));
+			}
+		} catch (SQLException sqle) { utilities.Util.printExceptionToCommand(sqle);	}
+		return scores;
 	}
 	
 	private void initDB() {

@@ -21,8 +21,9 @@ public class GameGUI extends JFrame{
 	private JTextField score;
 	private GameClientListener clientListener;
 
-	public GameGUI(){
+	public GameGUI(GameClientListener gcl){
 		super("Game");
+		clientListener = gcl;
 		setSize(600,600);
 		initializeComponents();
 		createGUI();

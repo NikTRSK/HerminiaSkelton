@@ -15,13 +15,14 @@ public class GameServer {
 		serverSocket = portGUI.getServerSocket();
 		gameServerGUI = new GameServerGUI();
 		listenForConnections();
+//		serverListener.setServerGUI(gameServerGUI);
 		
 //		new GameServerGUI();
 	}
 	
 	public void listenForConnections() {
 		// Start the server
-		serverListener = new ServerListener(serverSocket);
+		serverListener = new ServerListener(serverSocket, new GameServerGUI());
 		serverListener.start();
 	}
 //	

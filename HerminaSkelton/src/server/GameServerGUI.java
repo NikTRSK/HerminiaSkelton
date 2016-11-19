@@ -1,7 +1,5 @@
 package server;
 
-import java.util.ArrayList;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -74,7 +72,17 @@ public class GameServerGUI extends JFrame {
 		gamesModel.addRow(new Object [] {"Game 5", "User 3"});
 	}
 	
-	protected void updateUsersTable() {
-		
+	protected void addUserToUsersTable(String user) {
+		DefaultTableModel usersModel = (DefaultTableModel) usersTable.getModel();
+		usersModel.addRow(new Object [] {user, "n/a"});
+	}
+	
+	protected void removeUserToUsersTable(String user) {
+		DefaultTableModel usersModel = (DefaultTableModel) usersTable.getModel();
+//		Vector data = gamesModel.getDataVector();
+//		for (int i = 0; i < gamesModel.getRowCount(); i++) {
+//			if (gamesModel.get)
+//		}
+//		gamesModel.addRow(new Object [] {user, "n/a"});
 	}
 }
