@@ -62,10 +62,12 @@ public class ServerClientCommunicator extends Thread {
 		}
 	}
 	
-	public void loginUser(User userInfo) {
+/*	public void loginUser(User userInfo) {
 		boolean validUser = serverListener.loginUser(userInfo);
-		if (validUser)
+		if (validUser) {
 			userName = userInfo.getUsername();
+			DataPacket<Boolean>
+		}
 		else {
 			DataPacket<String> error = new DataPacket<String>(Commands.ERROR_MESSAGE, "Invalid Login!!!");
 			try {
@@ -75,7 +77,7 @@ public class ServerClientCommunicator extends Thread {
 				utilities.Util.printExceptionToCommand(ioe);
 			}
 		}
-	}
+	}*/
 	
 	protected void sendMove(Integer move) {
 		sendData(new DataPacket<Integer>(utilities.Commands.OTHER_MOVE, move)); 

@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class DatabaseLogic {
 	// SQL Connection
@@ -13,6 +14,7 @@ public class DatabaseLogic {
 	Statement statement = null;
 	PreparedStatement loginStatement = null;
 	PreparedStatement createStatement = null;
+	PreparedStatement scoreStatement = null;
 	ResultSet rs = null;
 	
 	public DatabaseLogic() {
@@ -53,12 +55,19 @@ public class DatabaseLogic {
 		}
 	}
 	
+	public ArrayList<Integer> getScores(String username) {
+		scoreStatement.setString(1, username);
+		rs = scoreStatement.executeQuery();
+		rs.
+	}
+	
 	private void initDB() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/HerminiaSkelton_DB?user=root&password=root&useSSL=false");
 			loginStatement = conn.prepareStatement("SELECT * FROM users WHERE username=?");
 			createStatement = conn.prepareStatement("INSERT INTO users (username, password) VALUES (?, ?)");
+			scoreStatement = conn.prepareStatement("SELECT score1,score2,score3,score4,score5 FROM users WHERE username=?");
 		} catch (SQLException sql) {
 			System.out.println("sqle: " + sql.getMessage());
 		} catch (ClassNotFoundException cnfe) {

@@ -52,16 +52,19 @@ public class loginGUI extends JFrame{
 	private boolean haveHost = false;
 	private boolean havePort = false;
 	private ImageIcon connectionicon, disconnectionicon;
-	private Lock hostAndPortLock;
-	private Condition hostAndPortCondition;
+	private Lock hostAndPortLock, userLock;
+	private Condition hostAndPortCondition, userCondition;
 	private Socket socket;
+	private GameClientListener gameClient;
 
 	public loginGUI(){
 		
 		initializeComponents();
 		createGUI();
 		addEvents();
-		music.gamestart();
+//		music.gamestart();
+		
+		gameClient = null;
 	}
 	
 	private void initializeComponents(){
@@ -69,6 +72,11 @@ public class loginGUI extends JFrame{
 		socket = null;
 		hostAndPortLock = new ReentrantLock();
 		hostAndPortCondition = hostAndPortLock.newCondition();
+		
+		// added for user
+		userLock = new ReentrantLock();
+		userCondition = userLock.newCondition();
+		// added for user
 		//appearance settings
 		connectionicon = new ImageIcon(Constants.resourceFolderbg + Constants.connected);
 		disconnectionicon = new ImageIcon(Constants.resourceFolderbg + Constants.disconnected);
@@ -338,9 +346,27 @@ public class loginGUI extends JFrame{
 		login.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("LOGIN CLICKED");
 				String name = username.getText().trim();
 				String password = userpassword.getText().trim();
 				User loginUser = new User(name, password);
+				if (gameClient != null) {
+					if (gameClient == null)
+						System.out.println("GC null");
+					else System.out.println("GC notnull");
+					gameClient.login(loginUser);
+//					System.out.println("RESPONSE: " + response);
+//					// wait for login condition
+//					
+//					// handle true/false case
+//					System.out.println("RESPONSE: " + response);
+//					if (!response) {
+//						error.setVisible(true);
+//						error.setText("Username or password incorrect");
+//					} else {
+//						// handle create the main gui and start it
+//					}
+				}
 //				if(!gameclient.sendPacket(loginUser)){
 //					error.setVisible(true);
 //					error.setText("Username or password incorrect");
@@ -353,7 +379,10 @@ public class loginGUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				String name = username.getText().trim();
 				String password = userpassword.getText().trim();
-				User loginUser = new User(name, password);
+				User createUser = new User(name, password);
+				if (gameClient != null) {
+					gameClient.create(createUser);
+				}
 //				if(!gameclient.sendPacket(loginUser)){
 //					error.setVisible(true);
 //					error.setText("User name already in the system");
@@ -394,6 +423,8 @@ public class loginGUI extends JFrame{
 						port.setEditable(false);
 						host.setEditable(false);
 						connectionIcon.setIcon(connectionicon);
+						gameClient = new GameClientListener(socket); // initialize the game client
+						gameClient.setLoginGUI(loginGUI.this);
 					} catch (IOException ioe) {
 						error.setText(utilities.Constants.PORT_ERROR_MESSAGE);
 						Util.printExceptionToCommand(ioe);
@@ -407,6 +438,25 @@ public class loginGUI extends JFrame{
 			}
 		});
 	}
+	
+	protected void processLogin(Boolean response) {
+		if (!response) {
+			error.setVisible(true);
+			error.setText("Username or password incorrect");
+		} else {
+			// handle create the main gui and start it
+		}
+	}
+	
+	protected void processCreateAccount(Boolean response) {
+		if (!response) {
+			error.setVisible(true);
+			error.setText("Account already exists");
+		} else {
+			// handle create the main gui and start it
+		}
+	}
+	
 	public static void main(String[] args){
 		new loginGUI().setVisible(true);
 	}
