@@ -109,19 +109,22 @@ public class ServerClientCommunicator extends Thread {
         			sendData(new DataPacket<Boolean>(utilities.Commands.AUTH_RESPONSE, true));
         		} else sendData(new DataPacket<Boolean>(utilities.Commands.AUTH_RESPONSE, false));
         		break;
+        	
         	case utilities.Commands.LOGOUT_USER :
         		serverListener.logOutUser((String)userName);
         		break;
-//        	case utilities.Commands.START_GAME :
-//        		break;
+        		
         	case utilities.Commands.CREATE_USER :
         		User createUserInfo = (User)input.getData();
         		Boolean createUserResponse = (serverListener.createUser(createUserInfo));
         		sendData(new DataPacket<Boolean>(utilities.Commands.CREATE_RESPONSE, createUserResponse));
+        	
         	case utilities.Commands.CHAT_MESSAGE :
         		ChatMessage cm = (ChatMessage)input.getData();
         		cm.setUsername(userName);
-        		serverListener.sendToAllClients(new DataPacket<ChatMessage>(utilities.Commands.CHAT_MESSAGE, cm));
+//        		serverListener.sendToAllClients(new DataPacket<ChatMessage>(utilities.Commands.CHAT_MESSAGE, cm));
+        		serverListener.sendToAllClients(input);
+        	
         	case utilities.Commands.END_GAME :
         		break;
         }

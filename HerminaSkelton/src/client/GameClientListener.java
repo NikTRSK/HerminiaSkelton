@@ -161,7 +161,10 @@ public class GameClientListener extends Thread{
 					loginGUI.processCreateAccount(create);
 				}
 				else if(streamContent.equals(utilities.Commands.START_GAME)){
-					
+					// Dispose of login
+					loginGUI.dispose();
+					// Start Main GUI
+					mGameGUI = new GameGUI(this);
 				}
 			}
 		}catch(IOException ioe){
