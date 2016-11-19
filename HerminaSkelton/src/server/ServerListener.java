@@ -26,11 +26,13 @@ public class ServerListener {
 	private Queue<String> playerQueue;
 	private Vector<GameInstance> gameInstances;
 	
-	boolean listenForConnections;
+	private boolean listenForConnections;
+	private int instanceID;
 	
 	public ServerListener(ServerSocket serverSocket, GameServerGUI gsg) {
 		this.serverSocket = serverSocket;
 		this.gameServerGUI = gsg;
+		this.instanceID = 1;
 //		this.playerThreads = new Vector<ServerClientCommunicator>();
 		this.playerThreads = new HashMap<Integer, ServerClientCommunicator>();
 		this.db = new DatabaseLogic();
@@ -79,10 +81,12 @@ public class ServerListener {
 			// create palyer instances
 			PlayerInstance P1 = new PlayerInstance(p1);
 			PlayerInstance P2 = new PlayerInstance(p2);
-			GameInstance gi = new GameInstance(P1, P2);
+			GameInstance gi = new GameInstance(P1, P2, instanceID++);
 			gameInstances.add(gi);
 			// signal players to start the game
 			startGame(gi);
+			// update server table
+			gameServerGUI.addGameInstance(gi);
 		}
 	}
 	
@@ -101,9 +105,14 @@ public class ServerListener {
 		// Logout all users from instance
 		if (instanceUsernames != null) {
 			for (int i = playerThreads.size(); i >= 0; i--) {
-				if (playerThreads.get(i).getUserName().equalsIgnoreCase(instanceUsernames.get(0))
-						|| playerThreads.get(i).getUserName().equalsIgnoreCase(instanceUsernames.get(1)))
+				if (playerThreads.get(i).getUserName().equalsIgnoreCase(instanceUsernames.get(0))) {
+					playerThreads.get(i).sendData(new DataPacket<String>(utilities.Commands.LOGOUT_USER, playerThreads.get(i).getUserName()));
 					playerThreads.remove(i);
+				}
+				if (instanceUsernames.size() > 1 && playerThreads.get(i).getUserName().equalsIgnoreCase(instanceUsernames.get(1))) {
+					playerThreads.get(i).sendData(new DataPacket<String>(utilities.Commands.LOGOUT_USER, playerThreads.get(i).getUserName()));
+					playerThreads.remove(i);
+				}
 			}
 		}
 	}

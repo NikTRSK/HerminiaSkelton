@@ -36,6 +36,7 @@ public class Constants {
     public static final String finalmusic = "finalstart.mp3";
     public static final String connected = "connected.png";
     public static final String disconnected  = "disconnected.png";
+    public static final String serverbkgimg = "serverbkgimg.png";
     
     //
     public static final String win = " did a great job and found true friendships with your CPs. Good luck on the final exam";

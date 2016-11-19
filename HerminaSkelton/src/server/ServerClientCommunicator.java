@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import utilities.ChatMessage;
-import utilities.Commands;
 import utilities.DataPacket;
 import utilities.GameInstance;
 import utilities.User;
