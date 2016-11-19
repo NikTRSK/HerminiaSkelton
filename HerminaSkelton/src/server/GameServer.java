@@ -1,19 +1,17 @@
 package server;
 
 import java.net.ServerSocket;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 
 public class GameServer {
 	private ServerSocket serverSocket;
 	private static ServerListener serverListener;
 	
-	private GameServerGUI gameServerGUI;
+//	private GameServerGUI gameServerGUI;
 	
 	public GameServer() {
 		PortGUI portGUI = new PortGUI();
 		serverSocket = portGUI.getServerSocket();
-		gameServerGUI = new GameServerGUI();
+//		gameServerGUI = new GameServerGUI();
 		listenForConnections();
 //		serverListener.setServerGUI(gameServerGUI);
 		
@@ -25,7 +23,7 @@ public class GameServer {
 		serverListener = new ServerListener(serverSocket, new GameServerGUI());
 		serverListener.start();
 	}
-//	
+	
 //	public static void startGame(Game game) {
 //		if (serverListener != null)
 //			serverListener.startGame(game);
