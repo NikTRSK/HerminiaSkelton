@@ -153,7 +153,8 @@ public class waitGUI extends JFrame{
 		        		,JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,ObjButtons,ObjButtons[1]);
 		        if(PromptResult==JOptionPane.YES_OPTION)
 		        {
-		            System.exit(0);
+		        	gameClient.logout();
+		        	close();
 		            //gameclientlistener...
 		        }
 		    }
@@ -177,7 +178,7 @@ public class waitGUI extends JFrame{
 				singlePlayer.setEnabled(false);
 				multiPlayer.setEnabled(false);
 				gameListener.sendGameMode(1);
-				sel.setText("Multi-player mode selected");
+				sel.setText("Waiting for other player to join");
 			}
 			
 		});
@@ -217,6 +218,10 @@ public class waitGUI extends JFrame{
 			}
 			
 		});
+	}
+	
+	protected void close(){
+		 System.exit(0);
 	}
 	
 	private void setBackground(){

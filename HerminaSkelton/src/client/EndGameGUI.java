@@ -225,6 +225,7 @@ public class EndGameGUI extends JFrame{
 		        		,JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,ObjButtons,ObjButtons[2]);
 		        if(PromptResult==JOptionPane.YES_OPTION)
 		        {
+		        	mlistener.logout();
 		        	System.exit(0);
 		        }
 		        else if(PromptResult == JOptionPane.CANCEL_OPTION){
