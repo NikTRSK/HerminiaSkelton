@@ -48,7 +48,8 @@ public class loginGUI extends JFrame{
 	private JLabel connectionIcon;
 	private JButton login, createAccount, guest, connect;
 	private GridBagConstraints mGridBagConst;
-	private boolean checkUsername, checkPassword;
+	private boolean checkUsername = false;
+	private boolean checkPassword = false;
 	private boolean haveHost = false;
 	private boolean havePort = false;
 	private ImageIcon connectionicon, disconnectionicon;
@@ -95,12 +96,12 @@ public class loginGUI extends JFrame{
 		userpassword.setFont(new Font("Serif", Font.BOLD, 15));
 		userpassword.setForeground(Color.gray);
 		userpassword.setEditable(false);
-		port = new JTextField("Port");
+		port = new JTextField(Integer.toString(Constants.DEFAULT_PORT));
 		port.setFont(new Font("Serif", Font.BOLD, 15));
-		port.setForeground(Color.black);
-		host = new JTextField("Host");
+		port.setForeground(Color.gray);
+		host = new JTextField(Constants.DEFUALT_HOST);
 		host.setFont(new Font("Serif", Font.BOLD, 15));
-		host.setForeground(Color.black);
+		host.setForeground(Color.gray);
 		login = new JButton("   login   ");
 		login.setFont(new Font("Serif", Font.BOLD, 15));
 		login.setBorderPainted(false);
@@ -231,6 +232,24 @@ public class loginGUI extends JFrame{
 		return havePort;
 	}
 	
+	private boolean haveName(){
+		checkUsername = true;
+		if (username.getText().trim().equals("")){
+			checkUsername = false;
+		}
+		return checkUsername;
+	}
+	
+	private boolean havePassword(){
+		checkPassword = true;
+		if (userpassword.getText().trim().equals("")){
+			checkPassword = false;
+		}
+		return checkPassword;
+	}
+	
+	
+	
 	public Socket getSocket() {
 		while (socket == null) {
 			hostAndPortLock.lock();
@@ -247,15 +266,13 @@ public class loginGUI extends JFrame{
 	private class MyDocumentListener implements DocumentListener{
 
 		@Override
-		public void changedUpdate(DocumentEvent arg0) {
-			connect.setEnabled(haveHost() && havePort());
-			
+		public void changedUpdate(DocumentEvent e) {
+			removeUpdate(e);
 		}
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			connect.setEnabled(haveHost() && havePort());
-			
+			removeUpdate(e);
 		}
 
 		@Override
@@ -264,11 +281,75 @@ public class loginGUI extends JFrame{
 		}
 			
 	}
+	private class MyDocumentListener2 implements DocumentListener{
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			removeUpdate(e);
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			removeUpdate(e);
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			createAccount.setEnabled(haveName() && havePassword());
+			login.setEnabled(haveName() && havePassword());
+		}
+			
+	}
 	
 	private void addEvents(){
 		host.getDocument().addDocumentListener(new MyDocumentListener());
 		port.getDocument().addDocumentListener(new MyDocumentListener());
+		username.getDocument().addDocumentListener(new MyDocumentListener2());
+		userpassword.getDocument().addDocumentListener(new MyDocumentListener2());
+		port.setFocusable(true);
+		host.setFocusable(true);
+		host.addFocusListener(new FocusListener(){
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(host.getText().trim().equals(Constants.DEFUALT_HOST)){
+					host.setText("");
+					host.setForeground(Color.black);
+				}
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(host.getText().trim().equals("")){
+					host.setText(Constants.DEFUALT_HOST);
+					host.setForeground(Color.gray);
+				}
+				
+			}
+			
+		});
+		port.addFocusListener(new FocusListener(){
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(port.getText().trim().equals(Integer.toString(Constants.DEFAULT_PORT))){
+					port.setText("");
+					port.setForeground(Color.black);
+				}
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(port.getText().trim().equals("")){
+					port.setText(Integer.toString(Constants.DEFAULT_PORT));
+					port.setForeground(Color.gray);
+				}
+				
+			}
+			
+		});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		username.setFocusable(true);
 		username.addFocusListener(new FocusListener(){
 
@@ -277,12 +358,7 @@ public class loginGUI extends JFrame{
 				if(username.getText().equals("username")){
 					username.setText("");
 					username.setForeground(Color.black);
-					checkUsername = false;
 					error.setText("");
-				}
-				else{
-					error.setVisible(false);
-					checkUsername = true;
 				}
 			}
 
@@ -291,17 +367,6 @@ public class loginGUI extends JFrame{
 				if(username.getText().equals("")){
 					username.setText("username");
 					username.setForeground(Color.gray);
-					checkUsername = false;
-					login.setEnabled(false);
-					createAccount.setEnabled(false);
-				}
-				else{
-
-					if(checkPassword){
-						login.setEnabled(true);
-						createAccount.setEnabled(true);
-					}
-					checkUsername = true;
 				}
 			}
 		});
@@ -313,14 +378,7 @@ public class loginGUI extends JFrame{
 				if(userpassword.getText().equals("password")){
 					userpassword.setText("");
 					userpassword.setForeground(Color.black);
-					checkPassword = false;
-					login.setEnabled(false);
-					createAccount.setEnabled(false);
 					error.setText("");
-				}
-				else{
-					error.setVisible(false);
-					checkPassword = true;
 				}
 			}
 
@@ -329,16 +387,6 @@ public class loginGUI extends JFrame{
 				if(userpassword.getText().equals("")){
 					userpassword.setText("password");
 					userpassword.setForeground(Color.gray);
-					checkPassword = false;
-					login.setEnabled(false);
-					createAccount.setEnabled(false);
-				}
-				else{
-					if(checkUsername){
-						login.setEnabled(true);
-						createAccount.setEnabled(true);
-					}
-					checkPassword = true;
 				}
 			}
 			
