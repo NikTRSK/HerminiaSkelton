@@ -1,76 +1,83 @@
-package utilities;
+package client;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.awt.Color;
+import java.awt.Font;
+import java.util.Random;
+
+import AllCPs.CP;
+import AllCPs.EdgarLugo;
+import AllCPs.EmmaLautz;
+import AllCPs.JimmyChen;
+import AllCPs.KeerthanHarish;
+import AllCPs.PriyankaShah;
+import AllMoves.AttackMove;
+import AllMoves.BasicMove;
+import AllMoves.FireMove;
+import AllMoves.GrassMove;
+import AllMoves.WaterMove;
 
 public class Constants {
-    public static final DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-    
-    
-    /*
-     * SETTINGS
-     * 					*/
-    public static final int DEFAULT_PORT = 6880;
-    public static final String DEFUALT_HOST = "localhost";
-    public static final int MIN_PORT_VAL = 0;
-    public static final int MAX_PORT_VAL = 65535;
-    public static final int GAME_SIZE = 2;
-    
-    
-    // STRINGS
-    public static final String PORT_DESCRIPTION_STRING = "<html>Enter the port number on which<br />you would like the server to listen.</html>";
-    public static final String PORT_LABEL_STRING = "Port";
-    public static final String PORT_ERROR_MESSAGE = "<html><font color=\"red\">Please enter a valid port<br />between " + MIN_PORT_VAL + " and " + MAX_PORT_VAL + "</font></html>";
-    public static final String PORT_IN_USE_MESSAGE = "<html><font color=\"red\">Port already in use.  Select another port<br />between " + MIN_PORT_VAL + " and " + MAX_PORT_VAL + "</font></html>";
-    
-    
-    
-    // DATA RESOURCES
-    public static final String resourceFolderbgm = "resources/bgm/";
-    public static final String resourceFolderbg = "resources/img/";
-    public static final String connectedimag = "connected.png";
-    public static final String disconnectedimag = "disconnected.png";
-    public static final String battlemusic = "battlestart.mp3";
-    public static final String casualmusic = "casualstart.mp3";
-    public static final String startmusic = "gamestart.mp3";
-    public static final String finalmusic = "finalstart.mp3";
-    public static final String waitmusic = "wait.mp3";
-    public static final String connected = "connected.png";
-    public static final String disconnected  = "disconnected.png";
-    public static final String serverbkgimg = "serverbkgimg.png";
-    
-    //
-    public static final String win = " did a great job and found true friendships with your CPs. Good luck on the final exam";
-    public static final String lose = " did a terrible job, make sure to try it again";
-    
-    //
-    public static final String generateWord(boolean win, String name1, String name2, int gamemode){
-    	String temp;
-    	if(win){
-    		if(gamemode == 2){
-				temp = "Congratulate " +  name1 + " " + name2 + " " + " you guys ";
-			}
-			else{
-				temp = "Congratulate " +  name1 + " you ";
-			}
-			temp+=Constants.win;
-			if(gamemode == 2){
-				temp += " you guys ";
-			}
-			else{
-				temp += " you ";
-			}
-			return temp;
-    	}
-    	else{
-			if(gamemode == 2){
-				temp = "WAHAHAHAHA " +  name1 + " " + name2 + " " + " you guys ";
-			}
-			else{
-				temp = "WAHAHAHAHA " +  name1 + " you ";
-			}
-			temp+=Constants.lose;
-			return temp;
-		}
-    }
+	//Gamewide random number generator
+	public static Random rand = new Random(System.currentTimeMillis());
+	
+	//Image Files
+	public static String[] avatar = {"resources/mario.svg"};
+	public static String millerImage;
+	public static String[] CPImage = {"resources/images/edgar_lugo.jpg", "resources/images/emma_lautz.jpg", 
+									  "resources/images/priyanka_shah.jpg", "resources/images/keerthan_harish.jpg",
+									  "resources/images/jimmy_chen.jpg", "resources/images/kien_nguyen.jpg"};
+	public static String FINAL_BATTLE_BACKGROUND = "resources/images/final_battle_background.jpeg";
+	public static String[] TYPE_BACKGROUNDS = {"resources/images/water_background.png", "resources/images/fire_background.jpg",
+											   "resources/images/grass_background.jpg"};
+	
+	//Moves and types
+	public static String[] basicMoveNames = {
+			"Pound", "Smash", "Beat Up", "Scratch", "Slash"
+	};
+	public static int NUM_MOVES = 3;
+	public static AttackMove[] attackMoves = {
+			new BasicMove(), new FireMove(), new GrassMove(), new WaterMove()
+	};
+	public static String[] type = {
+			"Normal", "Water", "Fire", "Grass"
+	};
+
+
+	//Constants for CP growth rate
+	public static int levelThresholds[] = {1,3,6,10,15,21,28,36,45,55};
+	public static int min = 5;
+	public static int low = 12;
+	public static int medium = 25;
+	public static int high = 40;
+	public static int max = 60;
+	
+	//CP generator
+	public static int numCPs = 5;
+	public static CP generateCP(int cp){
+		if(cp==0)return new EdgarLugo(1);
+		else if(cp==1)return new EmmaLautz(1);
+		else if(cp==2)return new PriyankaShah(1);
+		else if(cp==3)return new KeerthanHarish(1);
+		else return new JimmyChen(1);
+	}
+
+	//Difficulty multipliers
+	public static int levelMultiplier = 5;
+	public static double numberMultiplier = 0.75;
+	
+	//Miscellaneous Constants
+	public static int StartingAssignments = 5;
+	public static double attackMultiplier = 0.2;
+	public static String guestName = "Friend";
+	
+	//Colors
+	public static final Font GAMEFONT = new Font("Courier", Font.BOLD, 14);
+	public static final Color BACKGROUND_COLOR = new Color(255,140,0);
+	public static final Color FONT_COLOR = Color.WHITE;
+	public static final Color BACKGROUND_COLOR2 = Color.DARK_GRAY;
+	public static final Color[] TYPE_COLOR= {
+			Color.GRAY, Color.BLUE, Color.RED, Color.GREEN
+	};
+	public static final Color HEALTHY_COLOR = new Color(34,139,34);
+	public static final Color UNHEALTHY_COLOR = new Color(220,20,60);
 }
