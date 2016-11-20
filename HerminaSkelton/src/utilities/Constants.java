@@ -34,6 +34,7 @@ public class Constants {
     public static final String casualmusic = "casualstart.mp3";
     public static final String startmusic = "gamestart.mp3";
     public static final String finalmusic = "finalstart.mp3";
+    public static final String waitmusic = "wait.mp3";
     public static final String connected = "connected.png";
     public static final String disconnected  = "disconnected.png";
     public static final String serverbkgimg = "serverbkgimg.png";

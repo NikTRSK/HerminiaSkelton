@@ -456,10 +456,10 @@ public class loginGUI extends JFrame{
 			// handle create the main gui and start it
 		}
 	}
-/*	
+	
 	public static void main(String[] args){
 		new loginGUI().setVisible(true);
-	}*/
+	}
 }
 
 //
