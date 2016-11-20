@@ -53,14 +53,18 @@ public class ServerListener {
 		try {
 			// check if user is valid
 			if (db.loginUser(userInfo.getUsername(), userInfo.getPassword())) {
-				// add player to the queue
-				playerQueue.add(ID);
 				gameServerGUI.addUserToUsersTable(userInfo.getUsername());
 				return true;
 			}
 			else
 				return false;
 		} catch (SQLException e) { e.printStackTrace(); return false; }
+	}
+	
+	protected void addPlayerToQueue(Integer ID) {
+		// add player to the queue
+		playerQueue.add(ID);
+		checkQueue();
 	}
 	
 	protected boolean createUser(User userInfo) {
@@ -71,19 +75,19 @@ public class ServerListener {
 	}
 	
 	public void checkQueue() {
+		System.out.println("Checking queue " + playerQueue.size());
 		GameInstance gi = null;
 		// if queue has 2 players start game instance
-		if (playerQueue.size() >= utilities.Constants.GAME_SIZE) {
+		if (playerQueue.size() >= 1) {
+			
 			// get usernames
 //			String p1 = playerQueue.peek(); playerQueue.remove();
 //			String p2 = playerQueue.peek(); playerQueue.remove();
 			Integer p1 = playerQueue.peek(); playerQueue.remove();
-			while (playerThreads.get(p1).getGameType() != -1) {
-				playerQueue.add(p1);
-				p1 = playerQueue.peek(); playerQueue.remove();
-			}
+			System.out.println("Game Type: " + playerThreads.get(p1).getGameType());
 			// single player
 			if (playerThreads.get(p1).getGameType() == 0) {
+				System.out.println("Creating single player instance");
 				PlayerInstance P1 = new PlayerInstance(playerThreads.get(p1).getUserName());
 				gi = new GameInstance(P1, null, instanceID++);
 			} else {
@@ -134,9 +138,11 @@ public class ServerListener {
 	}
 	
 	public void startGame(GameInstance gameInstance) {
+		ArrayList<String> players = gameInstance.getPlayerUsernames();
 //  for (ServerClientCommunicator pt : playerThreads) {
 		for (ServerClientCommunicator player : playerThreads.values()) {
-			player.startGame(gameInstance);
+			if (players.contains(player.getUserName()))
+				player.startGame(gameInstance);
 		}
 	}
 	
@@ -193,7 +199,7 @@ public class ServerListener {
 				playerThreads.put(clientID, player);
 				player.start();
 				
-				checkQueue();
+//				checkQueue();
 				
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -1,5 +1,6 @@
 package AllCPs;
 
+import client.Constants;
 import javax.swing.ImageIcon;
 
 import client.Constants;
