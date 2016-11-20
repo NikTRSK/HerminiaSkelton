@@ -1,12 +1,12 @@
 package client;
 
+import java.net.Socket;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import AllCPs.CP;
-import AllCPs.EdgarLugo;
-import AllCPs.PriyankaShah;
 
 public class test extends JFrame{
 
@@ -24,7 +24,7 @@ public class test extends JFrame{
 		for(int i = 0; i<3; i++){
 			testPlayer.addCP(Constants.generateCP(Constants.rand.nextInt(3)));
 		}
-		add(new BattleScreen(testPlayer, new GameGUI()));
+		add(new BattleScreen(testPlayer, new GameGUI(new GameClientListener(new Socket()))));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		/*super("test");
