@@ -46,6 +46,7 @@ public class waitGUI extends JFrame{
 		this.gameListener = gameListener;
 		this.host = host;
 		this.port = port;
+		gameListener.setWaitGUI(this);
 		initializeComponents();
 		setIcon();
 		createGUI();
@@ -237,7 +238,8 @@ public class waitGUI extends JFrame{
 		}
 	}
 	
-	public static void main(String[] args){
-		new waitGUI(null, Constants.DEFUALT_HOST, Integer.toString(Constants.DEFAULT_PORT)).setVisible(true);
-	}	
+	protected void startGame(){
+		new GameGUI(gameListener).setVisible(true);
+		dispose();
+	}
 }
