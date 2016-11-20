@@ -78,4 +78,6 @@ public class Constants {
 	public static final Color[] TYPE_COLOR= {
 			Color.GRAY, Color.BLUE, Color.RED, Color.GREEN
 	};
+	public static final Color HEALTHY_COLOR = new Color(34,139,34);
+	public static final Color UNHEALTHY_COLOR = new Color(220,20,60);
 }
