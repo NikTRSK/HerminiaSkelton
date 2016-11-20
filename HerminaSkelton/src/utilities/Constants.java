@@ -48,10 +48,10 @@ public class Constants {
     	String temp;
     	if(win){
     		if(gamemode == 2){
-				temp = "Congratulate" +  name1 + " " + name2 + " you guys ";
+				temp = "Congratulate " +  name1 + " " + name2 + " " + " you guys ";
 			}
 			else{
-				temp = "Congratulate" +  name1 + " you ";
+				temp = "Congratulate " +  name1 + " you ";
 			}
 			temp+=Constants.win;
 			if(gamemode == 2){
@@ -64,10 +64,10 @@ public class Constants {
     	}
     	else{
 			if(gamemode == 2){
-				temp = "WAHAHAHAHA" +  name1 + " " + name2 + " you guys ";
+				temp = "WAHAHAHAHA " +  name1 + " " + name2 + " " + " you guys ";
 			}
 			else{
-				temp = "WAHAHAHAHA" +  name1 + " you ";
+				temp = "WAHAHAHAHA " +  name1 + " you ";
 			}
 			temp+=Constants.lose;
 			return temp;

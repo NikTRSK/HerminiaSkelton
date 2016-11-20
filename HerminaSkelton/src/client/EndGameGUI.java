@@ -1,6 +1,8 @@
 package client;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,10 +12,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import AllCPs.CP;
 import utilities.Constants;
@@ -29,6 +34,7 @@ public class EndGameGUI extends JFrame{
 	private int score1;
 	private int score2;
 	private JLabel name1, name2, score1_, score2_;
+	private JTextArea professorwords;
 	private GameClientListener mlistener;
 	private Vector<Integer> topFiveScores;
 	private GridBagConstraints mGridBagConst;
@@ -59,7 +65,9 @@ public class EndGameGUI extends JFrame{
 	private void initializeComponents(){
 		message = new JLabel("");
 		name1 = new JLabel("");
+		name1.setFont(new Font("Serif", Font.BOLD, 20));
 		name2 = new JLabel("");
+		name2.setFont(new Font("Serif", Font.BOLD, 20));
 		name1.setText(username1);
 		if(gamemode ==2){
 			name2.setText(username2);
@@ -70,6 +78,10 @@ public class EndGameGUI extends JFrame{
 		if(gamemode ==2){
 			score2_.setText(Integer.toString(score2));
 		}
+		professorwords = new JTextArea(temp);
+		professorwords.setEditable(false);
+		professorwords.setOpaque(false);
+		professorwords.setPreferredSize(new Dimension(100,100));
 	}
 	
 	private void setBackground(){
@@ -136,6 +148,9 @@ public class EndGameGUI extends JFrame{
 			mGridBagConst.gridx = 1;
 			add(namLabel,mGridBagConst);
 		}
+		mGridBagConst.gridy = 6;
+		mGridBagConst.insets = new Insets(0,0,0,0);
+		add(professorwords,mGridBagConst);
 	}
 	
 	private void addEvents(){
