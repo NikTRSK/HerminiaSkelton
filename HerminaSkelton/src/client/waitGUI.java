@@ -37,8 +37,13 @@ public class waitGUI extends JFrame{
 	private int select = -1;
 	private boolean pause = false;
 	private BackgroundMusic music;
+	private JButton portInfo;
+	private String host;
+	private int port;
 	
-	public waitGUI(GameClientListener gameListener){
+	public waitGUI(GameClientListener gameListener, String host, int port){
+		this.host = host;
+		this.port = port;
 		initializeComponents();
 		setIcon();
 		createGUI();
@@ -54,6 +59,12 @@ public class waitGUI extends JFrame{
 		mute.setContentAreaFilled(false);
 		mute.setBorderPainted(false);
 		mute.setToolTipText("mute?");
+		portInfo = new JButton("");
+		portInfo.setText("Host: " + host + "; Port: " + port);
+		portInfo.setOpaque(false);
+		portInfo.setContentAreaFilled(false);
+		portInfo.setBorderPainted(false);
+		portInfo.setEnabled(false);
 		singlePlayer = new JButton("Single Player");
 		singlePlayer.setFont(new Font("Serif", Font.BOLD, 15));
 		multiPlayer = new JButton("Multi Player");
@@ -124,6 +135,8 @@ public class waitGUI extends JFrame{
 		mGridBagConst.gridy = 5;
 		add(startButton,mGridBagConst);
 		
+		mGridBagConst.gridy = 6;
+		add(portInfo,mGridBagConst);
 	}
 	
 	private void addEvents(){
@@ -221,6 +234,6 @@ public class waitGUI extends JFrame{
 	}
 	
 	public static void main(String[] args){
-		new waitGUI(null).setVisible(true);
+		new waitGUI(null, Constants.DEFUALT_HOST, Constants.DEFAULT_PORT).setVisible(true);
 	}	
 }

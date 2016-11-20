@@ -5,7 +5,8 @@ import javax.swing.ImageIcon;
 import client.Constants;
 
 public class PriyankaShah extends CP{
-	
+	private static final long serialVersionUID = 3789579948275631658L;
+
 	//Fire type
 	public PriyankaShah(int level) {
 		super(level);

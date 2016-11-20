@@ -1,35 +1,34 @@
 package client;
 
-import java.util.Random;
+import java.io.Serializable;
 import java.util.Vector;
-
-import javax.swing.ImageIcon;
 
 import AllCPs.CP;
 import libraries.ImageLibrary;
 import map.MapConstants;
 import map.MapNode;
 
-public class Player extends MapNode {
+public class Player extends MapNode implements Serializable{
+
+	private static final long serialVersionUID = 1600475272113020639L;
 	private String username;
-	private int assignmentsLeft;
-	long randomSeed;
-	Vector<CP> CPs;
-	int x;
-	int y;
-	ImageIcon avatar;
-	Random rand;
+	private Integer assignmentsLeft;
+	private Vector<CP> CPs;
+	private Integer x;
+	private Integer y;
+	private Integer steps;
 	
-	public Player(String name, long randomSeed, int avatarNum){
+	public Player(String name){
 		super(0, 0, 0, 0);
 		
 		username = name;
 		assignmentsLeft = Constants.StartingAssignments;
-		avatar = new ImageIcon(Constants.avatar[avatarNum]);
-		rand = new Random(randomSeed);
+
 		CPs = new Vector<CP>();
 		x = 5;
 		y = 5;
+		
+		steps = new Integer(0);
 		
 		mImage = ImageLibrary.getImage(MapConstants.AVATAR);
 	}
@@ -99,5 +98,18 @@ public class Player extends MapNode {
 	public void moveRight() {
 		x++;
 		calculatePosition();
+	}
+	
+	public void incrementSteps(){
+		steps++;
+	}
+	
+	//generates a score
+	public int generateScore(){
+		int score = 1;
+		for(int i = 0; i<CPs.size(); i++)score*=(CPs.get(i).getLevel()*5);
+		score*=(assignmentsLeft*3);
+		score*=steps;
+		return score;
 	}
 }

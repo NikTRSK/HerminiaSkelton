@@ -5,7 +5,8 @@ import javax.swing.ImageIcon;
 import client.Constants;
 
 public class KeerthanHarish extends CP{
-	
+	private static final long serialVersionUID = -7139733661302942938L;
+
 	//Fire type
 	public KeerthanHarish(int level) {
 		super(level);

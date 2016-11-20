@@ -5,12 +5,13 @@ import javax.swing.ImageIcon;
 import client.Constants;
 
 public class JimmyChen extends CP{
-	
+	private static final long serialVersionUID = 198915323707221394L;
+
 	//Grass type
 	public JimmyChen(int level) {
 		super(level);
 		name = "Jimmy Chen";
-		type = 2;
+		type = 3;
 		updateStats();
 		sprite = new ImageIcon(Constants.CPImage[4]);
 	}
