@@ -1,4 +1,4 @@
-package client;
+ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -40,8 +40,10 @@ public class waitGUI extends JFrame{
 	private JButton portInfo;
 	private String host;
 	private String port;
+	private GameClientListener gameListener;
 	
 	public waitGUI(GameClientListener gameListener, String host, String port){
+		this.gameListener = gameListener;
 		this.host = host;
 		this.port = port;
 		initializeComponents();
@@ -162,6 +164,7 @@ public class waitGUI extends JFrame{
 				singlePlayer.setEnabled(false);
 				multiPlayer.setEnabled(false);
 				sel.setText("Single player mode selected");
+				gameListener.sendGameMode(0);
 				startButton.setEnabled(true);
 			}
 			
@@ -172,6 +175,7 @@ public class waitGUI extends JFrame{
 				select = 1;
 				singlePlayer.setEnabled(false);
 				multiPlayer.setEnabled(false);
+				gameListener.sendGameMode(1);
 				sel.setText("Multi-player mode selected");
 			}
 			

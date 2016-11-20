@@ -7,11 +7,16 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,6 +36,7 @@ public class EndGameGUI extends JFrame{
 	private JLabel message;
 	private JButton favCP;
 	private boolean win;
+	private boolean pause = false;
 	private int gamemode;
 	private int score1;
 	private int score2;
@@ -41,6 +47,7 @@ public class EndGameGUI extends JFrame{
 	private Vector<Integer> topFiveScores;
 	private GridBagConstraints mGridBagConst;
 	private BackgroundMusic music;
+	private JButton mute;
 	public EndGameGUI(int gamemode, String name1, String name2, CP bestfriend, int score1, int score2, boolean win, GameClientListener mlistener){
 		//gamemode 0 as guest, gamemmode 1 as singleplayer, gameode 2 as multiplayer
 		this.gamemode = gamemode;
@@ -70,6 +77,17 @@ public class EndGameGUI extends JFrame{
 	
 	private void setIcon(){
 		favCP.setIcon(bestfriend.getSprite());
+		try{
+			Image img3 = ImageIO.read(new File(Constants.resourceFolderbg + "unmute.png"));
+			mute.setIcon(new ImageIcon(img3));
+		}
+		catch (IOException e) {
+			JPanel error = new JPanel();
+			JOptionPane.showMessageDialog(error,
+					"Asset Corruption",
+					"File Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	private void initializeComponents(){
@@ -102,6 +120,12 @@ public class EndGameGUI extends JFrame{
 		favCP.setOpaque(false);
 		favCP.setContentAreaFilled(false);
 		favCP.setBorderPainted(false);
+		music = new BackgroundMusic();
+		mute = new JButton();
+		mute.setOpaque(false);
+		mute.setContentAreaFilled(false);
+		mute.setBorderPainted(false);
+		mute.setToolTipText("mute?");
 	}
 	
 	private void setBackground(){
@@ -182,6 +206,12 @@ public class EndGameGUI extends JFrame{
 		mGridBagConst.insets = new Insets(0,0,0,300);
 		add(favCP,mGridBagConst);
 
+		mGridBagConst.gridy = 8;
+		mGridBagConst.gridx = 1;
+		mGridBagConst.ipadx = 32;
+		mGridBagConst.ipady = 32;
+		mGridBagConst.insets = new Insets(0,0,0,0);
+		add(mute,mGridBagConst);
 	}
 	
 	private void addEvents(){
@@ -202,6 +232,42 @@ public class EndGameGUI extends JFrame{
 		        	new waitGUI(mlistener,"old host", "old port").setVisible(true);
 		        }
 		    }
+		});
+		mute.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!pause){
+					music.pauseMusic();
+					pause = true;
+					try{
+						Image img = ImageIO.read(new File(Constants.resourceFolderbg + "mute.png"));
+						mute.setIcon(new ImageIcon(img));
+					}
+					catch (IOException e1) {
+						JPanel error = new JPanel();
+						JOptionPane.showMessageDialog(error,
+								"Asset Corruption",
+								"File Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				else{
+					music.unpauseMusic();
+					pause = false;
+					try{
+						Image img = ImageIO.read(new File(Constants.resourceFolderbg + "unmute.png"));
+						mute.setIcon(new ImageIcon(img));
+					}
+					catch (IOException e1) {
+						JPanel error = new JPanel();
+						JOptionPane.showMessageDialog(error,
+								"Asset Corruption",
+								"File Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+			
 		});
 	}
 	protected void closePanel(){

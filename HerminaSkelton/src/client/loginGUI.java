@@ -453,26 +453,8 @@ public class loginGUI extends JFrame{
 				String password = userpassword.getText().trim();
 				User loginUser = new User(name, password);
 				if (gameClient != null) {
-					if (gameClient == null)
-						System.out.println("GC null");
-					else System.out.println("GC notnull");
 					gameClient.login(loginUser);
-//					System.out.println("RESPONSE: " + response);
-//					// wait for login condition
-//					
-//					// handle true/false case
-//					System.out.println("RESPONSE: " + response);
-//					if (!response) {
-//						error.setVisible(true);
-//						error.setText("Username or password incorrect");
-//					} else {
-//						// handle create the main gui and start it
-//					}
 				}
-//				if(!gameclient.sendPacket(loginUser)){
-//					error.setVisible(true);
-//					error.setText("Username or password incorrect");
-//				}
 			}
 		});
 		createAccount.addActionListener(new ActionListener(){
@@ -582,7 +564,8 @@ public class loginGUI extends JFrame{
 			error.setVisible(true);
 			error.setText("Username or password incorrect");
 		} else {
-			// handle create the main gui and start it
+			new waitGUI(gameClient,host.getText(),port.getText()).setVisible(true);
+			dispose();
 		}
 	}
 	
@@ -591,7 +574,7 @@ public class loginGUI extends JFrame{
 			error.setVisible(true);
 			error.setText("Account already exists");
 		} else {
-			// handle create the main gui and start it
+			error.setText("Account Successfully created");
 		}
 	}
 	
@@ -599,5 +582,3 @@ public class loginGUI extends JFrame{
 		new loginGUI().setVisible(true);
 	}
 }
-
-//
