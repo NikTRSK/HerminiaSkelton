@@ -2,20 +2,25 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import AllCPs.CP;
 import utilities.BackGroundPanel;
+import utilities.DeadSwitch;
 import utilities.FinalBattleState;
 import utilities.PlayerAction;
 
@@ -28,9 +33,21 @@ public class FinalBattleScreen extends JPanel{
 	private Integer me;
 	private CP[] CPs;
 	private JPanel cardHolder;
+	private GameGUI mainGUI;
 	
+	// Stuff for Battle Panel.
+	private JLabel[] sprites;
+	private JLabel[] healthLabels;
+	private BackGroundPanel battlePanel;
+		
 	// Stuff for chooseActionPanel.
 	private JPanel actionPanel;
+
+	// Stuff for Choose Attack.
+	private JPanel attackPanel;
+	private JButton attackA;
+	private JButton attackB;
+	private Integer myAttack;
 	
 	// Stuff for Choose Target.
 	private JPanel targetPanel;
@@ -41,26 +58,17 @@ public class FinalBattleScreen extends JPanel{
 	private JButton chooseTarget1;
 	private JButton chooseTarget2;
 	
-	// Stuff for Battle Panel.
-	private JLabel[] sprites;
-	private JLabel[] healthLabels;
-	private BackGroundPanel battlePanel;
-	
 	// Stuff for Choose Switch.
 	private JButton[] switchOptions;
 	private JPanel switchPanel;
 	
-	// Stuff for Choose Attack.
-	private JPanel attackPanel;
-	private JButton attackA;
-	private JButton attackB;
-	
 	// Stuff for waitPanel.
 	private JPanel waitPanel;
 
-	public FinalBattleScreen(GameClientListener cl, FinalBattleState fbs, Integer me){
+	public FinalBattleScreen(GameGUI mainGUI, GameClientListener cl, FinalBattleState fbs, Integer me){
 		this.cl = cl;
 		this.me = me;
+		this.myAttack = null;
 		
 		this.player = fbs.player;
 		this.CPs = new CP[4];
@@ -128,14 +136,11 @@ public class FinalBattleScreen extends JPanel{
 		attack.setBackground(Constants.BACKGROUND_COLOR2);
 		attack.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 5));
 		attack.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO
 				CardLayout layout = (CardLayout)cardHolder.getLayout();
 				layout.show(cardHolder, "card 2");
 			}
-			
 		});
 		
 		JButton switchCP = new JButton("Switch CP");
@@ -147,9 +152,8 @@ public class FinalBattleScreen extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO
 				CardLayout layout = (CardLayout)cardHolder.getLayout();
-				layout.show(cardHolder, "card 3");
+				layout.show(cardHolder, "card 4");
 				
 			}
 			
@@ -170,7 +174,8 @@ public class FinalBattleScreen extends JPanel{
 		backButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO
+				CardLayout layout = (CardLayout)cardHolder.getLayout();
+				layout.show(cardHolder, "card 1");
 			}
 		});
 		
@@ -182,7 +187,9 @@ public class FinalBattleScreen extends JPanel{
 		attackA.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO
+				myAttack = new Integer(CPs[me].getAttackMoves()[0]);
+				CardLayout layout = (CardLayout)cardHolder.getLayout();
+				layout.show(cardHolder, "card 3");
 			}
 		});
 		
@@ -194,7 +201,9 @@ public class FinalBattleScreen extends JPanel{
 		attackB.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO
+				myAttack = new Integer(CPs[me].getAttackMoves()[1]);
+				CardLayout layout = (CardLayout)cardHolder.getLayout();
+				layout.show(cardHolder, "card 3");
 			}
 		});
 		
@@ -214,7 +223,9 @@ public class FinalBattleScreen extends JPanel{
 		backButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO
+				myAttack = null;
+				CardLayout layout = (CardLayout)cardHolder.getLayout();
+				layout.show(cardHolder, "card 2");
 			}
 		});
 		
@@ -238,8 +249,10 @@ public class FinalBattleScreen extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO 
-				
+				sendMessage(new PlayerAction(me, 1, Constants.attackMoves[myAttack], me, 2));
+				myAttack = null;
+				CardLayout layout = (CardLayout)cardHolder.getLayout();
+				layout.show(cardHolder, "card 5");
 			}
 			
 		});
@@ -250,9 +263,6 @@ public class FinalBattleScreen extends JPanel{
 		holder1.add(targetHealth1, BorderLayout.NORTH);
 		holder1.add(targetSprite1);
 		holder1.add(targetHealth1, BorderLayout.SOUTH);
-		
-		
-		
 		
 		// For Miller's second CP.
 		targetHealth2 = new JLabel(CPs[3].getHealth()+"/"+CPs[3].getMaxHealth());
@@ -274,8 +284,10 @@ public class FinalBattleScreen extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO 
-				
+				sendMessage(new PlayerAction(me, 1, Constants.attackMoves[myAttack], me, 3));
+				myAttack = null;
+				CardLayout layout = (CardLayout)cardHolder.getLayout();
+				layout.show(cardHolder, "card 5");
 			}
 			
 		});
@@ -286,8 +298,6 @@ public class FinalBattleScreen extends JPanel{
 		holder2.add(targetHealth2, BorderLayout.NORTH);
 		holder2.add(targetSprite2);
 		holder2.add(chooseTarget2, BorderLayout.SOUTH);
-		
-		
 				
 		targetPanel = new JPanel();
 		targetPanel.setLayout(new GridLayout(1, 3));
@@ -307,17 +317,30 @@ public class FinalBattleScreen extends JPanel{
 		backButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO
+				CardLayout layout = (CardLayout)cardHolder.getLayout();
+				layout.show(cardHolder, "card 1");
 			}
 		});
 		
 		for(int i = 0; i < player.getCP().size(); i++){
 			CP option = player.getCP().get(i);
+			int a = i;
 			JButton chooseOption = new JButton(option.getName()+" lvl "+option.getLevel());
 			chooseOption.setBackground(Constants.BACKGROUND_COLOR2);
 			chooseOption.setForeground(Constants.FONT_COLOR);
 			chooseOption.setFont(Constants.GAMEFONT);
 			chooseOption.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 5));
+			chooseOption.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					sendMessage(new PlayerAction(me, new Integer(2), null, me, a));
+					CardLayout layout = (CardLayout)cardHolder.getLayout();
+					layout.show(cardHolder, "card 5");
+				}
+				
+			});
+			if(option==CPs[me])chooseOption.setEnabled(false);
 			switchOptions[i] = chooseOption;
 		}
 		
@@ -372,13 +395,106 @@ public class FinalBattleScreen extends JPanel{
 		update();
 	}
 	
+	public void replaceDead(){
+		JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL);  
+		
+		  JPanel CPHolder = new JPanel();
+		  CPHolder.setLayout(new BoxLayout(CPHolder, BoxLayout.X_AXIS));
+		  
+		  for(int i = 0; i < player.getCP().size(); i++){
+			  if(player.getCP().get(i).getHealth()<=0)continue;
+			  int a = i;
+			  
+			  JButton chooseCP = new JButton(player.getCP().get(i).getName()+" lvl "+player.getCP().get(i).getLevel());
+			  chooseCP.setBackground(Constants.BACKGROUND_COLOR2);
+			  chooseCP.setForeground(Constants.FONT_COLOR);
+			  chooseCP.setFont(Constants.GAMEFONT);
+			  chooseCP.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					//TODO: cl.sendCPChange(new DeadSwitch(me, a));
+					dialog.dispose();
+				}
+				  
+			  });
+			  
+			  JPanel CP = new JPanel();
+			  CP.setLayout(new BorderLayout());
+			  CP.add(new JLabel(player.getCP().get(i).getSprite()), BorderLayout.CENTER);
+			  CP.add(chooseCP, BorderLayout.SOUTH);
+			  CPHolder.add(CP);
+		  }
+		  
+		  
+		  JPanel dialogPanel = new JPanel();
+		  dialogPanel.setLayout(new BorderLayout());
+		  dialogPanel.setBackground(Constants.BACKGROUND_COLOR);
+		  dialogPanel.add(CPHolder, BorderLayout.CENTER);
+		  dialogPanel.add(new JLabel("Your CP fainted, choose another!"), BorderLayout.NORTH);
+		  
+		  dialog.add(dialogPanel);
+		  dialog.pack();
+		  dialog.setVisible(true);
+	}
+	
 	private void update(){
-		//TODO
+		// Battle Panel.
+		for(int i = 0; i < 4; i++){
+			sprites[i].setIcon(CPs[i].getSprite());
+			healthLabels[i].setText(CPs[i].getHealth()+"/"+CPs[i].getMaxHealth());
+		}
+		
+		// Choose Attack Panel.
+		ActionListener[] al = attackA.getActionListeners();
+		for(int i = 0; i < al.length; i++){
+			attackA.removeActionListener(al[i]);
+		}
+		al = attackB.getActionListeners();
+		for(int i = 0; i < al.length; i++){
+			attackB.removeActionListener(al[i]);
+		}
+		attackA.setText(Constants.attackMoves[CPs[me].getAttackMoves()[0]].getName());
+		attackA.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				myAttack = new Integer(CPs[me].getAttackMoves()[0]);
+				CardLayout layout = (CardLayout)cardHolder.getLayout();
+				layout.show(cardHolder, "card 3");
+			}
+		});
+		attackB.setText(Constants.attackMoves[CPs[me].getAttackMoves()[1]].getName());
+		attackB.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				myAttack = new Integer(CPs[me].getAttackMoves()[1]);
+				CardLayout layout = (CardLayout)cardHolder.getLayout();
+				layout.show(cardHolder, "card 3");
+			}
+		});
+		
+		// Choose Target Panel.
+		chooseTarget1.setText(CPs[2].getName());
+		chooseTarget2.setText(CPs[3].getName());
+		targetHealth1.setText(CPs[2].getHealth()+"/"+CPs[2].getMaxHealth());
+		targetHealth2.setText(CPs[3].getHealth()+"/"+CPs[3].getMaxHealth());
+		targetSprite1.setIcon(CPs[2].getSprite());
+		targetSprite2.setIcon(CPs[3].getSprite());		
+		
+		// Switch Panel.
+		Vector<CP> CPVector = player.getCP();
+		for(int i = 0; i < CPVector.size(); i++){
+			switchOptions[i].setEnabled(true);
+			if(CPVector.get(i)==CPs[me])switchOptions[i].setEnabled(false);
+			if(CPVector.get(i).getHealth()<=0)switchOptions[i].setEnabled(false);
+		}
+		
+		// Change to options.
+		CardLayout layout = (CardLayout)cardHolder.getLayout();
+		layout.show(cardHolder, "card 5");
 	}
 	
 	private void sendMessage(PlayerAction pa){
 		//cl.sendAction(pa);
 	}
-	
-	
 }

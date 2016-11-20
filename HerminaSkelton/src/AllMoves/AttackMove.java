@@ -1,13 +1,16 @@
 package AllMoves;
 
+import java.io.Serializable;
+
 import javax.swing.JTextArea;
 
 import AllCPs.CP;
 import client.Constants;
 
-public abstract class AttackMove {
+public abstract class AttackMove implements Serializable{
+	private static final long serialVersionUID = 2597384860635477608L;
 	protected String name;
-	protected int type;
+	protected Integer type;
 	
 	//Executes an attack on the enemy pokemon
 	public void move(CP attacker, CP defender, JTextArea text){

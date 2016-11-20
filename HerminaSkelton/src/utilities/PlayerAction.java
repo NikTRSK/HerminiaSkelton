@@ -1,10 +1,12 @@
 package utilities;
 
-import AllCPs.CP;
+import java.io.Serializable;
+
 import AllMoves.AttackMove;
 
-public class PlayerAction {
-	
+public class PlayerAction implements Serializable{
+	private static final long serialVersionUID = -9091937529471936091L;
+
 	// Is this from player 1 or player 2?
 	private Integer player;
 	
@@ -16,15 +18,15 @@ public class PlayerAction {
 	private AttackMove move;
 	
 	// The player's CP.
-	private CP activeCP;
+	private Integer activeCP;
 	
 	// If type 1, this is the enemy CP.
-	// If type 2, this is the CP being swithced in.
-	private CP target;
+	// If type 2, this is the CP being switched in.
+	private Integer target;
 	
 	// Constructor.
 	public PlayerAction(Integer player, Integer type, AttackMove move,
-						CP activeCP, CP target){
+						Integer activeCP, Integer target){
 		
 		this.player   = player;
 		this.type     = type;
@@ -44,10 +46,10 @@ public class PlayerAction {
 	public AttackMove getMove(){
 		return move;
 	}
-	public CP getActive(){
+	public Integer getActive(){
 		return activeCP;
 	}
-	public CP getTarget(){
+	public Integer getTarget(){
 		return target;
 	}
 }

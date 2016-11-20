@@ -1,9 +1,13 @@
 package utilities;
 
+import java.io.Serializable;
+
 import AllCPs.CP;
 import client.Player;
 
-public class FinalBattleState {
+public class FinalBattleState implements Serializable{
+	private static final long serialVersionUID = 1664909770205358784L;
+	
 	// Renders the current state of each CP.
 	public CP cp1; // Player 1.
 	public CP cp2; // Player 2.

@@ -1,19 +1,22 @@
 package AllCPs;
 
+import java.io.Serializable;
+
 import javax.swing.ImageIcon;
 
 import client.Constants;
 
-public abstract class CP {
+public abstract class CP implements Serializable{
+	private static final long serialVersionUID = 3562524123400148447L;
 	protected String name;
 	protected ImageIcon sprite;
-	protected int type;
-	protected int level;
-	protected int experience;
-	protected int healthPoints;
-	protected int attack;
-	protected int speed;
-	protected int currHealth;	
+	protected Integer type;
+	protected Integer level;
+	protected Integer experience;
+	protected Integer healthPoints;
+	protected Integer attack;
+	protected Integer speed;
+	protected Integer currHealth;	
 	protected int[] moves;
 	
 	//Initializes the level and experience of the CP
