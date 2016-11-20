@@ -39,9 +39,9 @@ public class waitGUI extends JFrame{
 	private BackgroundMusic music;
 	private JButton portInfo;
 	private String host;
-	private int port;
+	private String port;
 	
-	public waitGUI(GameClientListener gameListener, String host, int port){
+	public waitGUI(GameClientListener gameListener, String host, String port){
 		this.host = host;
 		this.port = port;
 		initializeComponents();
@@ -234,6 +234,6 @@ public class waitGUI extends JFrame{
 	}
 	
 	public static void main(String[] args){
-		new waitGUI(null, Constants.DEFUALT_HOST, Constants.DEFAULT_PORT).setVisible(true);
+		new waitGUI(null, Constants.DEFUALT_HOST, Integer.toString(Constants.DEFAULT_PORT)).setVisible(true);
 	}	
 }

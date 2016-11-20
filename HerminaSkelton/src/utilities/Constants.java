@@ -35,6 +35,7 @@ public class Constants {
     public static final String startmusic = "gamestart.mp3";
     public static final String finalmusic = "finalstart.mp3";
     public static final String waitmusic = "wait.mp3";
+    public static final String endmusic = "end.mp3";
     public static final String connected = "connected.png";
     public static final String disconnected  = "disconnected.png";
     public static final String serverbkgimg = "serverbkgimg.png";
@@ -55,10 +56,10 @@ public class Constants {
 			}
 			temp+=Constants.win;
 			if(gamemode == 2){
-				temp += "you guys ";
+				temp += " you guys ";
 			}
 			else{
-				temp += "you ";
+				temp += " you ";
 			}
 			return temp;
     	}
