@@ -17,12 +17,20 @@ public class FinalBattleState implements Serializable{
 	// In case the Player wants/needs to switch CP.
 	public Player player;
 	
+	// 1 if the player is still alive
+	// 2 if the player is dead but partner is alive
+	// 3 if both players are dead (lose the game)
+	// 4 if miller is dead (win the game)
+	public Integer gameState;
+	
 	// Constructor.
-	public FinalBattleState(CP cp1, CP cp2, CP cp3, CP cp4, Player player) {
+	public FinalBattleState(CP cp1, CP cp2, CP cp3, CP cp4, Player player, int state) {
 		this.cp1 = cp1;
 		this.cp2 = cp2;
 		this.cp3 = cp3;
 		this.cp4 = cp4;
+		
+		this.gameState = new Integer(state);
 		
 		this.player = player;
 	}

@@ -17,6 +17,7 @@ public abstract class CP implements Serializable{
 	protected Integer attack;
 	protected Integer speed;
 	protected Integer currHealth;	
+	protected Boolean real;
 	protected int[] moves;
 	
 	//Initializes the level and experience of the CP
@@ -26,6 +27,7 @@ public abstract class CP implements Serializable{
 		this.moves = new int[2];
 		this.moves[0] = 0;
 		this.moves[1] = Constants.rand.nextInt(Constants.NUM_MOVES)+1;
+		this.real = true;
 	}
 	
 	//Getter Functions
@@ -85,6 +87,9 @@ public abstract class CP implements Serializable{
 	public void setLevel(int level){
 		this.level = level;
 		experience = Constants.levelThresholds[level];
+	}
+	public boolean isReal(){
+		return real;
 	}
 	protected abstract void updateStats(); //Stat growth rate varies by CP
 }
