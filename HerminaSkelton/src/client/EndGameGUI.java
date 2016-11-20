@@ -53,30 +53,7 @@ public class EndGameGUI extends JFrame{
 	}
 	
 	private void addNames(){
-		if(win){
-			if(gamemode == 2){
-				temp = "Congratulate" +  username1 + " " + username2 + " you guys ";
-			}
-			else{
-				temp = "Congratulate" +  username1 + " you ";
-			}
-			temp+=Constants.win;
-			if(gamemode == 2){
-				temp += "you guys ";
-			}
-			else{
-				temp += "you ";
-			}
-		}
-		else{
-			if(gamemode == 2){
-				temp = "WAHAHAHAHA" +  username1 + " " + username2 + " you guys ";
-			}
-			else{
-				temp = "WAHAHAHAHA" +  username1 + " you ";
-			}
-			temp+=Constants.lose;
-		}
+		temp = Constants.generateWord(win, username1, username2, gamemode);
 	}
 	
 	private void initializeComponents(){
