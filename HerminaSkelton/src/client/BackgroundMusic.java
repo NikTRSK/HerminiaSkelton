@@ -57,7 +57,6 @@ public class BackgroundMusic{
 	
 	protected void casualstart(){
 		if(musicFound){
-			myBGM.stop();
 			myBGM = new MediaPlayer(casualmusic);
 			myBGM.setOnEndOfMedia(new Runnable() {
 			       public void run() {
@@ -70,7 +69,6 @@ public class BackgroundMusic{
 	
 	protected void waitstart(){
 		if(musicFound){
-			myBGM.stop();
 			myBGM = new MediaPlayer(waitmusic);
 			myBGM.setOnEndOfMedia(new Runnable() {
 			       public void run() {
