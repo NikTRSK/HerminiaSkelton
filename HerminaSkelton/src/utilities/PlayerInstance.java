@@ -7,11 +7,13 @@ public class PlayerInstance implements Serializable {
 	String userName;
 	Boolean madeAMove;
 	Integer move;
+	Integer gameType;
 //	GameInstance gameInstance;
 	
 	public PlayerInstance(String username) {
 		this.userName = username;
 		this.madeAMove = false;
+		this.gameType = -1;
 	}
 	
 	public String getUsername() {
@@ -22,6 +24,13 @@ public class PlayerInstance implements Serializable {
 		return this.madeAMove;
 	}
 	
+	public void setGameType(Integer type) {
+		this.gameType = type;
+	}
+	
+	public Integer getGameType() {
+		return this.gameType;
+	}
 /*	public void setMadeAMove() {
 		this.madeAMove = true;
 	}*/
