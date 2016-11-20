@@ -330,6 +330,10 @@ public class loginGUI extends JFrame{
 			
 	}
 	
+	protected void close(){
+		 System.exit(0);
+	}
+	
 	private void addEvents(){
 		host.getDocument().addDocumentListener(new MyDocumentListener());
 		port.getDocument().addDocumentListener(new MyDocumentListener());
@@ -396,8 +400,7 @@ public class loginGUI extends JFrame{
 		        		,JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,ObjButtons,ObjButtons[1]);
 		        if(PromptResult==JOptionPane.YES_OPTION)
 		        {
-		            System.exit(0);
-		            //gameclientlistener...
+		        	gameClient.logout();
 		        }
 		    }
 		});

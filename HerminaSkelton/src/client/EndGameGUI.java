@@ -7,12 +7,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,6 +40,7 @@ public class EndGameGUI extends JFrame{
 	private GameClientListener mlistener;
 	private Vector<Integer> topFiveScores;
 	private GridBagConstraints mGridBagConst;
+	private BackgroundMusic music;
 	public EndGameGUI(int gamemode, String name1, String name2, CP bestfriend, int score1, int score2, boolean win, GameClientListener mlistener){
 		//gamemode 0 as guest, gamemmode 1 as singleplayer, gameode 2 as multiplayer
 		this.gamemode = gamemode;
@@ -61,6 +61,7 @@ public class EndGameGUI extends JFrame{
 		setIcon();
 		createGUI();
 		addEvents();
+		music.endstart();
 	}
 	
 	private void addNames(){
@@ -72,6 +73,7 @@ public class EndGameGUI extends JFrame{
 	}
 	
 	private void initializeComponents(){
+		music = new BackgroundMusic();
 		message = new JLabel("");
 		name1 = new JLabel("");
 		name1.setFont(new Font("Serif", Font.BOLD, 20));
@@ -179,10 +181,35 @@ public class EndGameGUI extends JFrame{
 		mGridBagConst.ipady = 100;
 		mGridBagConst.insets = new Insets(0,0,0,300);
 		add(favCP,mGridBagConst);
+
 	}
 	
 	private void addEvents(){
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+		    @Override
+		    public void windowClosing(WindowEvent we)
+		    { 
+		        String ObjButtons[] = {"Yes","No","Restart"};
+		        int PromptResult = JOptionPane.showOptionDialog(null,"Logout or Restart?","Hermina Skelton"
+		        		,JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,ObjButtons,ObjButtons[2]);
+		        if(PromptResult==JOptionPane.YES_OPTION)
+		        {
+		        	System.exit(0);
+		        }
+		        else if(PromptResult == JOptionPane.CANCEL_OPTION){
+		        	closePanel();
+		        	new waitGUI(mlistener,"old host", "old port").setVisible(true);
+		        }
+		    }
+		});
+	}
+	protected void closePanel(){
+		music.endMusic();
+		this.dispose();
+	}
+	protected void close(){
+		 System.exit(0);
 	}
 	
 	public static void main(String[] args){
