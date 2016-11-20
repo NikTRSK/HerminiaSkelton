@@ -96,7 +96,12 @@ public class GameServerGUI extends JFrame {
 	protected void addGameInstance(GameInstance gi) {
 		DefaultTableModel gamesModel = (DefaultTableModel) gamesTable.getModel();
 		ArrayList<String> players = gi.getPlayerUsernames();
-		gamesModel.addRow(new Object [] {"Game " + gi.getInstanceID(), players.get(0) + " | " + players.get(1)});
+		String playerList = "";
+		if (players.size() == 1)
+			playerList += players.get(0);
+		else if (players.size() == 2)
+			playerList += players.get(0) + " | " + players.get(1);
+		gamesModel.addRow(new Object [] {"Game " + gi.getInstanceID(), playerList});
 		
 		updateUsersTable(gi.getInstanceID(), players);
 //		gi.getPlayerUsernames()

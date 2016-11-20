@@ -1,7 +1,9 @@
 package utilities;
 
-public class GameTimer extends Thread {
-	
+import java.io.Serializable;
+
+public class GameTimer extends Thread implements Serializable {
+	private static final long serialVersionUID = 6661280195671974593L;
 	private Integer timer;
 //	private Boolean timerExpired;
 	GameInstance gameInstance;

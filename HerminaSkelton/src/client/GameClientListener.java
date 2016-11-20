@@ -24,6 +24,7 @@ public class GameClientListener extends Thread{
 	private ObjectOutputStream oos;
 	//private PrintWriter pw;
 	private GameGUI mGameGUI;
+	private waitGUI waitgui;
 	private loginGUI loginGUI;
 	private Boolean ans = null;
 	// added this
@@ -62,7 +63,11 @@ public class GameClientListener extends Thread{
 	}
 	
 	protected void setGameGUI(GameGUI gameGUI) {
-		mGameGUI = gameGUI;
+		this.mGameGUI = gameGUI;
+	}
+	
+	protected void setWaitGUI(waitGUI waitgui) {
+		this.waitgui = waitgui;
 	}
 	
 	public void sendAction(){
@@ -128,10 +133,7 @@ public class GameClientListener extends Thread{
 					loginGUI.processCreateAccount(create);
 				}
 				else if(streamContent.equals(utilities.Commands.START_GAME)){
-					// Dispose of login
-					loginGUI.dispose();
-					// Start Main GUI
-					mGameGUI = new GameGUI(this);
+					waitgui.startGame();
 				}
 			}
 		}catch(IOException ioe){

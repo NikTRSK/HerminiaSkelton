@@ -123,7 +123,9 @@ public class ServerClientCommunicator extends Thread {
         		
         	case utilities.Commands.GAME_MODE :
         		Integer gameMode = (Integer)input.getData();
+        		System.out.println("Setting Game Mode");
         		gameType = gameMode;
+        		serverListener.addPlayerToQueue(connectionID);
         		break;
         		
         	case utilities.Commands.END_GAME :
