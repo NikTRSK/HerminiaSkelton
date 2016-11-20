@@ -2,8 +2,6 @@ package AllCPs;
 
 import javax.swing.ImageIcon;
 
-import client.Constants;
-
 public class BlankCP extends CP{
 	private static final long serialVersionUID = -3388022880368146263L;
 
@@ -19,6 +17,10 @@ public class BlankCP extends CP{
 
 		@Override
 		protected void updateStats() {
+			this.attack = 0;
+			this.healthPoints = 0;
+			this.speed = 0;
+			this.level = 1;
 			// Do nothing
 		}
 }

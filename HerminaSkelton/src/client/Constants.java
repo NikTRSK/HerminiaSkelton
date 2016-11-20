@@ -25,7 +25,7 @@ public class Constants {
 	public static String millerImage;
 	public static String[] CPImage = {"resources/images/edgar_lugo.jpg", "resources/images/emma_lautz.jpg", 
 									  "resources/images/priyanka_shah.jpg", "resources/images/keerthan_harish.jpg",
-									  "resources/images/jimmy_chen.jpg"};
+									  "resources/images/jimmy_chen.jpg", "resources/images/kien_nguyen.jpg"};
 	public static String FINAL_BATTLE_BACKGROUND = "resources/images/final_battle_background.jpeg";
 	public static String[] TYPE_BACKGROUNDS = {"resources/images/water_background.png", "resources/images/fire_background.jpg",
 											   "resources/images/grass_background.jpg"};
