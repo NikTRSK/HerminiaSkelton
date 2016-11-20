@@ -1,5 +1,9 @@
 package client;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -7,6 +11,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+
+import utilities.ChatMessage;
+import utilities.DataPacket;
+import utilities.User;
 
 public class ChatPanel extends JPanel {
 
@@ -27,8 +36,8 @@ public class ChatPanel extends JPanel {
 	}
 	
 	private void initializeVariables(){
-		chatText = new JTextArea();
-		scrollArea = new JScrollPane();
+		chatText = new JTextArea(50,50);
+		scrollArea = new JScrollPane(chatText);
 		writeMsgArea = new JTextField();
 		sendButton = new JButton("Send");
 	}
@@ -37,14 +46,31 @@ public class ChatPanel extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		chatText.setEditable(false);
-		scrollArea.add(chatText);
+		chatText.setText("Start chatting");
+		chatText.setLineWrap(true);
+		chatText.setWrapStyleWord(true);
+		//chatText.setPreferredSize(new Dimension(300,100));
+		//scrollArea.setPreferredSize(new Dimension(300,100));
+		scrollArea.getViewport().setView(chatText);
+		scrollArea.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+		
+		sendButton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String string = writeMsgArea.getText();
+				ChatMessage msg = new ChatMessage(string, null);
+				chatText.append("\n"+string);
+				writeMsgArea.setText("");
+				mListener.sendData(new DataPacket<String>(utilities.Commands.CHAT_MESSAGE, string));			
+			}
+			
+		});
+		
 		
 		add(scrollArea);
 		add(writeMsgArea);
 		add(sendButton);
-	}
-	
-	private void sendMessage(String msg){
-		
 	}
 }
