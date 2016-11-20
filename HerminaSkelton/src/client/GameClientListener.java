@@ -10,6 +10,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.swing.JFrame;
 import javax.swing.text.Utilities;
 
 import server.ServerListener;
@@ -64,10 +65,12 @@ public class GameClientListener extends Thread{
 	
 	protected void setGameGUI(GameGUI gameGUI) {
 		this.mGameGUI = gameGUI;
+		this.waitgui = null;
 	}
 	
 	protected void setWaitGUI(waitGUI waitgui) {
 		this.waitgui = waitgui;
+		this.loginGUI = null;
 	}
 	
 	public void sendAction(){
@@ -102,7 +105,11 @@ public class GameClientListener extends Thread{
 	}
 	
 	public void logout() {
-		// stub
+		try {
+			ois.close();
+			oos.close();
+			mSocket.close();
+		} catch (IOException ioe) { utilities.Util.printExceptionToCommand(ioe); }
 	}
 	
 	public void sendGameMode(Integer type) {
