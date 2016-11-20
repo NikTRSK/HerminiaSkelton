@@ -8,11 +8,16 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import client.Constants;
 import client.Player;
 
 public class MapScreen extends JPanel implements KeyListener {
+	
+	private JFrame mFrame;
 	
 	private MapZone currZone;
 	private int mWidth = 0;
@@ -31,8 +36,10 @@ public class MapScreen extends JPanel implements KeyListener {
 		paint();
 	}
 	
-	public MapScreen(Dimension fullScreenDimensions, Player player) {
+	public MapScreen(JFrame frame, Dimension fullScreenDimensions, Player player) {
 		super();
+		mFrame = frame;
+		
 		mWidth = (int)(2 * fullScreenDimensions.getWidth() / 3); // map is 2/3 or fullscreen
 		mHeight = (int)(fullScreenDimensions.getHeight());       // map is full height
 		
@@ -111,6 +118,15 @@ public class MapScreen extends JPanel implements KeyListener {
 		}
 	} // from Factory code
 	
+	
+	public void setToCPCenter() {
+		currZone = zones[1][2]; //TODO set to constants
+		mPlayer.setX(5);
+		mPlayer.setY(5);
+		
+		renderAndPaint();
+	}
+	
 	//movement stuff
 	private void movePlayer(KeyEvent e) {
 		int currX = mPlayer.getX();
@@ -125,11 +141,23 @@ public class MapScreen extends JPanel implements KeyListener {
 			else if(e.getKeyCode() == KeyEvent.VK_DOWN)  mPlayer.moveDown();
 			else if(e.getKeyCode() == KeyEvent.VK_LEFT)  mPlayer.moveLeft();
 			else if(e.getKeyCode() == KeyEvent.VK_RIGHT) mPlayer.moveRight();
+//			mPlayer.incrementSteps();
 		}
 		     
 		renderAndPaint();
 		
-		//TODO handle moving through grass
+		if(currZone.getNodes()[mPlayer.getX()][mPlayer.getY()] instanceof GrassNode) {
+			if(encounteredCP()) {
+				JOptionPane.showMessageDialog(mFrame, "CP found!");
+//				mFrame.switchToBattle();
+			}
+		}
+	}
+	
+	private boolean encounteredCP() {
+		int random = client.Constants.rand.nextInt(8);
+		if(random < 1) return true;
+		return false;
 	}
 	
 	private boolean validMove(int x, int y) {
