@@ -34,6 +34,7 @@ public class FinalBattleScreen extends JPanel{
 	private CP[] CPs;
 	private JPanel cardHolder;
 	private GameGUI mainGUI;
+	private Integer state;
 	
 	// Stuff for Battle Panel.
 	private JLabel[] sprites;
@@ -64,11 +65,15 @@ public class FinalBattleScreen extends JPanel{
 	
 	// Stuff for waitPanel.
 	private JPanel waitPanel;
+	
+	// Stuff for deadPanel.
+	private JPanel deadPanel;
 
 	public FinalBattleScreen(GameGUI mainGUI, GameClientListener cl, FinalBattleState fbs, Integer me){
 		this.cl = cl;
 		this.me = me;
 		this.myAttack = null;
+		this.state = 1;
 		
 		this.player = fbs.player;
 		this.CPs = new CP[4];
@@ -83,6 +88,7 @@ public class FinalBattleScreen extends JPanel{
 		initializeChooseTarget();
 		initializeChooseSwitch();
 		initializeWaitPanel();
+		initializeDeadPanel();
 		initializeCards();
 		createGUI();
 	}
@@ -365,6 +371,17 @@ public class FinalBattleScreen extends JPanel{
 		waitPanel.add(waitMessage);
 	}
 	
+	private void initializeDeadPanel(){
+		JLabel message = new JLabel("Your CPs have all fainted! Maybe your partner can still win...");
+		message.setFont(Constants.GAMEFONT);
+		message.setForeground(Constants.FONT_COLOR);
+		
+		deadPanel = new JPanel();
+		deadPanel.setLayout(new BorderLayout());
+		deadPanel.setBackground(Constants.BACKGROUND_COLOR);
+		deadPanel.add(message);
+	}
+	
 	private void initializeCards(){
 		cardHolder = new JPanel(new CardLayout());	
 		cardHolder.setPreferredSize(new Dimension(0, 300));
@@ -373,6 +390,7 @@ public class FinalBattleScreen extends JPanel{
 		cardHolder.add(targetPanel, "card 3");
 		cardHolder.add(switchPanel, "card 4");
 		cardHolder.add(waitPanel, "card 5");
+		cardHolder.add(deadPanel, "card 6");
 		add(cardHolder, BorderLayout.SOUTH);
 	}
 	
@@ -391,6 +409,7 @@ public class FinalBattleScreen extends JPanel{
 		this.CPs[1] = fbs.cp2;
 		this.CPs[2] = fbs.cp3;
 		this.CPs[3] = fbs.cp4;
+		this.state = fbs.gameState;
 		
 		update();
 	}
@@ -439,10 +458,27 @@ public class FinalBattleScreen extends JPanel{
 	}
 	
 	private void update(){
+		// Checking State.
+		if(state==3){
+			endGame(false);
+			return;
+		}
+		if(state==4){
+			endGame(true);
+			return;
+		}
+		
 		// Battle Panel.
 		for(int i = 0; i < 4; i++){
 			sprites[i].setIcon(CPs[i].getSprite());
 			healthLabels[i].setText(CPs[i].getHealth()+"/"+CPs[i].getMaxHealth());
+		}
+		
+		if(state==2){
+			sprites[me].setIcon(new ImageIcon(""));
+			healthLabels[me].setText("");
+			CardLayout layout = (CardLayout)cardHolder.getLayout();
+			layout.show(cardHolder, "card 6");
 		}
 		
 		// Choose Attack Panel.
@@ -491,10 +527,14 @@ public class FinalBattleScreen extends JPanel{
 		
 		// Change to options.
 		CardLayout layout = (CardLayout)cardHolder.getLayout();
-		layout.show(cardHolder, "card 5");
+		layout.show(cardHolder, "card 1");
 	}
 	
 	private void sendMessage(PlayerAction pa){
 		//cl.sendAction(pa);
+	}
+	
+	private void endGame(boolean win){
+		//TODO
 	}
 }

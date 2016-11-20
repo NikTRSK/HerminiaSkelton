@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import javax.swing.JTextArea;
 
+import AllCPs.BlankCP;
 import AllCPs.CP;
 import AllMoves.AttackMove;
 import client.Miller;
@@ -20,6 +21,8 @@ public class FinalBattleManager {
 	private PlayerAction pa1;
 	private PlayerAction pa2;
 	
+	private int[] state;
+	
 	private Player[] players;
 	
 	private ServerClientCommunicator scc;
@@ -32,7 +35,11 @@ public class FinalBattleManager {
 		players[0] = p1;
 		players[1] = p2;
 		
-		CPs= new CP[4];
+		this.state = new int[2];
+		state[0] = 1;
+		state[1] = 1;
+		
+		this.CPs= new CP[4];
 		
 		this.scc = scc;
 		
@@ -44,8 +51,14 @@ public class FinalBattleManager {
 	}
 	
 	public void recieveMessage(PlayerAction pa){
-		if(pa1==null)pa1 = pa;
-		else {
+		if(pa1==null){
+			pa1 = pa;
+			if(pa.getPlayerNum()==0){
+				if(state[1]==2)runTurn();
+			}else{
+				if(state[0]==2)runTurn();
+			}
+		}else {
 			pa2 = pa;
 			runTurn();
 		}
@@ -154,23 +167,42 @@ public class FinalBattleManager {
 				}
 			}
 		}
-		if(won)endGame(1);
-		if(p1lost&&p2lost)endGame(0);
+		if(won){
+			state[0] = 4;
+			state[1] = 4;
+			sendUpdate();
+			return;
+		}
+		if(p1lost)state[0] = 2;
+		if(p2lost)state[1] = 2;
+		if(p1lost&&p2lost){
+			state[0] = 3;
+			state[1] = 3;
+			sendUpdate();
+			return;
+		}
+		//if(won)endGame(1);
+		//if(p1lost&&p2lost)endGame(0);
 		
 		// replacing dead CPs
 		boolean updateYet = true;
 		for(int i = 0; i < 4; i++){
 			if(CPs[i].getHealth()<=0){
 				if(i<2){
-					replaceCP(i);
-					updateYet = false;
+					if(state[i]!=2){
+						replaceCP(i);
+						updateYet = false;
+					}
 				}else{
 					Vector<Integer> liveCPs = new Vector<Integer>();
 					for(int j = 0; j<millerCPs.size(); j++){
 						CP temp = millerCPs.get(j);
 						if(temp.getHealth()>0 && !(temp==CPs[2]) && !(temp==CPs[3]))liveCPs.add(j);
+					}if(liveCPs.size()>0){
+						CPs[i] = millerCPs.get(client.Constants.rand.nextInt(liveCPs.size()));
+					}else{
+						CPs[i] = new BlankCP(1);
 					}
-					CPs[i] = millerCPs.get(client.Constants.rand.nextInt(liveCPs.size()));
 				}
 			}
 		}
@@ -179,8 +211,8 @@ public class FinalBattleManager {
 	
 	private void sendUpdate(){
 		//TODO
-		//cl.sendFinalBattleUpdate(1, new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players[0]));
-		//cl.sendFinalBattleUpdate(2, new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players[1]));
+		//cl.sendFinalBattleUpdate(1, new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players[0], state[0]));
+		//cl.sendFinalBattleUpdate(2, new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players[1], state[0]));
 	}
 
 	private void replaceCP(int player){
