@@ -20,11 +20,11 @@ public class test extends JFrame{
 	public test(){
 		super("test");
 		setSize(1000, 1000);
-		testPlayer = new Player("matt", System.currentTimeMillis(), 0);
+		testPlayer = new Player("matt");
 		for(int i = 0; i<3; i++){
 			testPlayer.addCP(Constants.generateCP(Constants.rand.nextInt(3)));
 		}
-		add(new BattleScreen(testPlayer, new GameGUI(new GameClientListener(new Socket()))));
+		add(new BattleScreen(testPlayer));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		/*super("test");

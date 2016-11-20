@@ -23,6 +23,7 @@ import javax.swing.JTextArea;
 
 import AllCPs.CP;
 import utilities.BackGroundPanel;
+import utilities.HealthPanel;
 
 public class BattleScreen extends JPanel{
 	private static final long serialVersionUID = 538889179893602549L;
@@ -51,8 +52,10 @@ public class BattleScreen extends JPanel{
 	
 	private ImageIcon sprite1;
 	private ImageIcon sprite2;
-	private JLabel healthLabel1;
-	private JLabel healthLabel2;
+	//private JLabel healthLabel1;
+	private HealthPanel healthPanel1;
+	//private JLabel healthLabel2;
+	private HealthPanel healthPanel2;
 	private JLabel imageLabel1;
 	private JLabel imageLabel2;
 	private JPanel CP1;
@@ -62,8 +65,9 @@ public class BattleScreen extends JPanel{
 	private JTextArea CPUpdates2;
 	
 	
-	public BattleScreen(Player currPlayer, GameGUI mainGUI){
-		this.mainGUI = mainGUI;
+	public BattleScreen(Player currPlayer/*, GameGUI mainGUI*/){
+		//TODO uncomment
+		//this.mainGUI = mainGUI;
 		player = currPlayer;
 		
 		initializeVariables();
@@ -100,11 +104,12 @@ public class BattleScreen extends JPanel{
 	}
 	
 	private void initializeBattlePanel(){		
-		healthLabel1 = new JLabel(activeCP.getHealth()+"/"+activeCP.getMaxHealth());
-		healthLabel1.setFont(new Font("Courier", Font.BOLD, 35));
-		healthLabel1.setHorizontalTextPosition(JLabel.CENTER);
+		//healthLabel1 = new JLabel(activeCP.getHealth()+"/"+activeCP.getMaxHealth());
+		//healthLabel1.setFont(new Font("Courier", Font.BOLD, 35));
+		//healthLabel1.setHorizontalTextPosition(JLabel.CENTER);
 		//TODO: green-red health panels
-		JPanel healthPanel1 = new JPanel();
+		healthPanel1 = new HealthPanel(activeCP);
+		healthPanel1.setPreferredSize(new Dimension(0, 50));
 		
 		Image image = sprite1.getImage();
 		Image newimg = image.getScaledInstance(250, 250,  java.awt.Image.SCALE_SMOOTH);
@@ -115,7 +120,7 @@ public class BattleScreen extends JPanel{
 		typeBackground1 = new BackGroundPanel(Constants.TYPE_BACKGROUNDS[activeCP.getType()-1]);
 		typeBackground1.setLayout(new BorderLayout());
 		typeBackground1.add(imageLabel1, BorderLayout.CENTER);
-		typeBackground1.add(healthLabel1, BorderLayout.SOUTH);
+		typeBackground1.add(healthPanel1, BorderLayout.SOUTH);
 		
 		CP1 = new JPanel();
 		CP1.setLayout(new BorderLayout());
@@ -123,11 +128,8 @@ public class BattleScreen extends JPanel{
 		CP1.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR2, 5));
 		CP1.add(typeBackground1, BorderLayout.CENTER);
 		
-		healthLabel2 = new JLabel(wildCP.getHealth()+"/"+wildCP.getMaxHealth());
-		healthLabel2.setFont(new Font("Courier", Font.BOLD, 35));
-		healthLabel2.setHorizontalTextPosition(JLabel.CENTER);
-		//TODO: green-red health panels
-		JPanel healthPanel2 = new JPanel();
+		healthPanel2 = new HealthPanel(wildCP);
+		healthPanel2.setPreferredSize(new Dimension(0, 50));
 		
 		image = sprite2.getImage();
 		newimg = image.getScaledInstance(250, 250,  java.awt.Image.SCALE_SMOOTH);
@@ -138,7 +140,7 @@ public class BattleScreen extends JPanel{
 		typeBackground2 = new BackGroundPanel(Constants.TYPE_BACKGROUNDS[wildCP.getType()-1]);
 		typeBackground2.setLayout(new BorderLayout());
 		typeBackground2.add(imageLabel2, BorderLayout.CENTER);
-		typeBackground2.add(healthLabel2, BorderLayout.SOUTH);
+		typeBackground2.add(healthPanel2, BorderLayout.SOUTH);
 		
 		
 		CP2 = new JPanel();
@@ -288,6 +290,7 @@ public class BattleScreen extends JPanel{
 			int a = i;
 			JButton CP = new JButton(playerCPs.get(i).getName()+" lvl "+playerCPs.get(i).getLevel());
 			if(playerCPs.get(i).equals(activeCP))CP.setEnabled(false);
+			if(playerCPs.get(i).getHealth()<=0)CP.setText(CP.getText()+" (fainted)");
 			CP.setBackground(Constants.BACKGROUND_COLOR2);
 			CP.setForeground(Constants.FONT_COLOR);
 			CP.setFont(Constants.GAMEFONT);
@@ -373,8 +376,8 @@ public class BattleScreen extends JPanel{
 		attacks[0].setText(Constants.attackMoves[a[0]].getName());
 		attacks[1].setText(Constants.attackMoves[a[1]].getName());
 		
-		healthLabel1.setText(activeCP.getHealth()+"/"+activeCP.getMaxHealth());
-		healthLabel2.setText(wildCP.getHealth()+"/"+wildCP.getMaxHealth());
+		healthPanel1.refresh(activeCP);
+		healthPanel2.refresh(wildCP);
 		
 		sprite1 = activeCP.getSprite();
 		Image image = sprite1.getImage();
@@ -395,13 +398,19 @@ public class BattleScreen extends JPanel{
 		for(int i = 0; i<switchOption.length; i++){
 			if(playerCPs.get(i).getHealth()<=0){
 				switchOption[i].setEnabled(false);
-				switchOption[i].setText(switchOption[i].getText()+" (fainted)");
 			}
 		}
 	}
 	
 	private void deadCP(){
 		JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL);  
+		
+		for(int i = 0; i<switchOption.length; i++){
+			if(playerCPs.get(i)==activeCP){
+				switchOption[i].setEnabled(false);
+				switchOption[i].setText(switchOption[i].getText()+" (fainted)");
+			}
+		}
 		
 		  JPanel CPHolder = new JPanel();
 		  CPHolder.setLayout(new BoxLayout(CPHolder, BoxLayout.X_AXIS));
@@ -572,7 +581,7 @@ public class BattleScreen extends JPanel{
 			return false;
 		}	
 	}
-
+	
 	private void battleOver(){
 		if(activeCP.levelUp()){
 			JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL);

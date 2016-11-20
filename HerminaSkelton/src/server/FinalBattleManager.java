@@ -10,6 +10,7 @@ import AllMoves.AttackMove;
 import client.Miller;
 import client.Player;
 import utilities.DeadSwitch;
+import utilities.GameInstance;
 import utilities.PlayerAction;
 
 public class FinalBattleManager {
@@ -25,9 +26,11 @@ public class FinalBattleManager {
 	
 	private Player[] players;
 	
-	private ServerClientCommunicator scc;
+	private ServerListener sl;
 	
-	public FinalBattleManager(Player p1, Player p2, int difficulty, ServerClientCommunicator scc){
+	private GameInstance gi;
+	
+	public FinalBattleManager(Player p1, Player p2, int difficulty, ServerListener sl, GameInstance gi){
 		this.miller = new Miller(difficulty);
 		this.millerCPs = miller.getCP();
 		
@@ -41,12 +44,13 @@ public class FinalBattleManager {
 		
 		this.CPs= new CP[4];
 		
-		this.scc = scc;
+		this.sl = sl;
+		
+		this.gi = gi;
 		
 		this.pa1 = null;
 		this.pa2 = null;
-		//TODO
-		//scc.setFinalBattleManager(this);
+		
 		sendUpdate();
 	}
 	
@@ -170,7 +174,7 @@ public class FinalBattleManager {
 		if(won){
 			state[0] = 4;
 			state[1] = 4;
-			sendUpdate();
+			endGame(1);
 			return;
 		}
 		if(p1lost)state[0] = 2;
@@ -178,11 +182,9 @@ public class FinalBattleManager {
 		if(p1lost&&p2lost){
 			state[0] = 3;
 			state[1] = 3;
-			sendUpdate();
+			endGame(0);
 			return;
 		}
-		//if(won)endGame(1);
-		//if(p1lost&&p2lost)endGame(0);
 		
 		// replacing dead CPs
 		boolean updateYet = true;
@@ -211,8 +213,8 @@ public class FinalBattleManager {
 	
 	private void sendUpdate(){
 		//TODO
-		//cl.sendFinalBattleUpdate(1, new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players[0], state[0]));
-		//cl.sendFinalBattleUpdate(2, new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players[1], state[0]));
+		//sl.sendFinalBattleUpdate(1, new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players[0], state[0]), gi);
+		//sl.sendFinalBattleUpdate(2, new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players[1], state[0]), gi);
 	}
 
 	private void replaceCP(int player){
@@ -222,6 +224,6 @@ public class FinalBattleManager {
 	
 	private void endGame(int result){
 		//TODO
-		//cl.endGame(result);
+		//sl.endGame(result, gi);
 	}
 }
