@@ -20,6 +20,7 @@ public class GameGUI extends JFrame{
 	private ChatPanel chat;
 	private JTextField score;
 	private GameClientListener clientListener;
+	private Player player;//TODO fill this in somewhere
 
 	public GameGUI(GameClientListener gcl){
 		super("Game");
@@ -77,14 +78,14 @@ public class GameGUI extends JFrame{
 	}
 	
 	private JPanel createMapCard(){
-		map.MapScreen map = new map.MapScreen(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
+		map.MapScreen map = new map.MapScreen(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()), player);
 		MapScreen.add(map);
 		
 		return MapScreen;
 	}
 	
 	private JPanel createBattleCard(){
-		BattleScreen battle = new BattleScreen(null);
+		BattleScreen battle = new BattleScreen(player, this);
 		BattleScreen.add(battle);
 		
 		return BattleScreen;
