@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
@@ -19,6 +21,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -39,6 +42,7 @@ public class loginGUI extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	private BackgroundMusic music;
+	private boolean pause = false;
 	private JLabel loginLable;
 	private JLabel error;
 	private JTextField username;
@@ -48,20 +52,27 @@ public class loginGUI extends JFrame{
 	private JLabel connectionIcon;
 	private JButton login, createAccount, guest, connect;
 	private GridBagConstraints mGridBagConst;
-	private boolean checkUsername, checkPassword;
+	private boolean checkUsername = false;
+	private boolean checkPassword = false;
 	private boolean haveHost = false;
 	private boolean havePort = false;
 	private ImageIcon connectionicon, disconnectionicon;
-	private Lock hostAndPortLock;
-	private Condition hostAndPortCondition;
+	private Lock hostAndPortLock, userLock;
+	private Condition hostAndPortCondition, userCondition;
 	private Socket socket;
+	private GameClientListener gameClient;
+	private JButton mute;
+	private boolean loginornot = false;
 
 	public loginGUI(){
 		
 		initializeComponents();
+		setIcon();
 		createGUI();
 		addEvents();
 		music.gamestart();
+		
+		gameClient = null;
 	}
 	
 	private void initializeComponents(){
@@ -69,7 +80,17 @@ public class loginGUI extends JFrame{
 		socket = null;
 		hostAndPortLock = new ReentrantLock();
 		hostAndPortCondition = hostAndPortLock.newCondition();
+
+		// added for user
+		userLock = new ReentrantLock();
+		userCondition = userLock.newCondition();
+		// added for user
 		//appearance settings
+		mute = new JButton();
+		mute.setOpaque(false);
+		mute.setContentAreaFilled(false);
+		mute.setBorderPainted(false);
+		mute.setToolTipText("mute?");
 		connectionicon = new ImageIcon(Constants.resourceFolderbg + Constants.connected);
 		disconnectionicon = new ImageIcon(Constants.resourceFolderbg + Constants.disconnected);
 		music = new BackgroundMusic();
@@ -87,12 +108,12 @@ public class loginGUI extends JFrame{
 		userpassword.setFont(new Font("Serif", Font.BOLD, 15));
 		userpassword.setForeground(Color.gray);
 		userpassword.setEditable(false);
-		port = new JTextField("Port");
+		port = new JTextField(Integer.toString(Constants.DEFAULT_PORT));
 		port.setFont(new Font("Serif", Font.BOLD, 15));
-		port.setForeground(Color.black);
-		host = new JTextField("Host");
+		port.setForeground(Color.gray);
+		host = new JTextField(Constants.DEFUALT_HOST);
 		host.setFont(new Font("Serif", Font.BOLD, 15));
-		host.setForeground(Color.black);
+		host.setForeground(Color.gray);
 		login = new JButton("   login   ");
 		login.setFont(new Font("Serif", Font.BOLD, 15));
 		login.setBorderPainted(false);
@@ -120,6 +141,19 @@ public class loginGUI extends JFrame{
 		checkPassword = false;
 	}
 	
+	private void setIcon(){
+		try{
+			Image img = ImageIO.read(new File(Constants.resourceFolderbg + "unmute.png"));
+			mute.setIcon(new ImageIcon(img));
+		}
+		catch (IOException e1) {
+			JPanel error = new JPanel();
+			JOptionPane.showMessageDialog(error,
+					"Asset Corruption",
+					"File Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
 	private void createGUI(){
 		setSize(800,620);
 		setLocation(750,100);
@@ -143,48 +177,54 @@ public class loginGUI extends JFrame{
 		add(portandhost,mGridBagConst);
 		
 		mGridBagConst.gridy = 1;
-		mGridBagConst.ipadx = 0;
-		mGridBagConst.ipady = 0;
-		mGridBagConst.insets = new Insets(20,500,100,80);
-		add(loginLable,mGridBagConst);
+		mGridBagConst.ipadx = 32;
+		mGridBagConst.ipady = 32;
+		mGridBagConst.insets = new Insets(0,600,0,0);
+		add(mute,mGridBagConst);
 		
 		mGridBagConst.gridy = 2;
+		mGridBagConst.ipadx = 0;
+		mGridBagConst.ipady = 0;
+		mGridBagConst.insets = new Insets(10,500,40,80);
+		add(loginLable,mGridBagConst);
+		
+		mGridBagConst.gridy = 3;
 		mGridBagConst.ipadx = 300;
 		
-		mGridBagConst.insets = new Insets(0,450,30,80);
+		mGridBagConst.insets = new Insets(0,450,20,80);
 		error.setVisible(true);
 		add(error,mGridBagConst);
 		
-		mGridBagConst.gridy = 3;
+		mGridBagConst.gridy = 4;
 		mGridBagConst.ipadx = 0;
 		mGridBagConst.insets = new Insets(0,430,0,0);
 		connectionIcon = new JLabel(disconnectionicon);
 		connectionIcon.setPreferredSize(new Dimension(32,32));
 		add(connectionIcon, mGridBagConst);
 		
-		mGridBagConst.gridy = 4;
+		mGridBagConst.gridy = 5;
 		mGridBagConst.ipadx = 200;
 		mGridBagConst.ipady = 20;
 		mGridBagConst.insets = new Insets(0,500,10,80);
 		add(username,mGridBagConst);
 		
-		mGridBagConst.gridy = 5;
+		mGridBagConst.gridy = 6;
 		add(userpassword,mGridBagConst);
 		
-		mGridBagConst.gridy = 6;
+		mGridBagConst.gridy = 7;
 		mGridBagConst.ipadx = 120;
 		mGridBagConst.ipady = 10;
 		add(login,mGridBagConst);
 		
-		mGridBagConst.gridy = 7;
+		mGridBagConst.gridy = 8;
 		mGridBagConst.ipadx = 120;
 		mGridBagConst.ipady = 20;
 		add(createAccount,mGridBagConst);
 		
-		mGridBagConst.gridy = 8;
+		mGridBagConst.gridy = 9;
 		add(guest,mGridBagConst);
 		
-		mGridBagConst.gridy = 9;
+		mGridBagConst.gridy = 10;
 		add(connect,mGridBagConst);
 	}
 	
@@ -223,6 +263,22 @@ public class loginGUI extends JFrame{
 		return havePort;
 	}
 	
+	private boolean haveName(){
+		checkUsername = true;
+		if (username.getText().trim().equals("")){
+			checkUsername = false;
+		}
+		return checkUsername;
+	}
+	
+	private boolean havePassword(){
+		checkPassword = true;
+		if (userpassword.getText().trim().equals("")){
+			checkPassword = false;
+		}
+		return checkPassword;
+	}
+		
 	public Socket getSocket() {
 		while (socket == null) {
 			hostAndPortLock.lock();
@@ -239,15 +295,13 @@ public class loginGUI extends JFrame{
 	private class MyDocumentListener implements DocumentListener{
 
 		@Override
-		public void changedUpdate(DocumentEvent arg0) {
-			connect.setEnabled(haveHost() && havePort());
-			
+		public void changedUpdate(DocumentEvent e) {
+			removeUpdate(e);
 		}
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			connect.setEnabled(haveHost() && havePort());
-			
+			removeUpdate(e);
 		}
 
 		@Override
@@ -256,11 +310,97 @@ public class loginGUI extends JFrame{
 		}
 			
 	}
+	private class MyDocumentListener2 implements DocumentListener{
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			removeUpdate(e);
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			removeUpdate(e);
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			createAccount.setEnabled(haveName() && havePassword());
+			login.setEnabled(haveName() && havePassword());
+		}
+			
+	}
 	
 	private void addEvents(){
 		host.getDocument().addDocumentListener(new MyDocumentListener());
 		port.getDocument().addDocumentListener(new MyDocumentListener());
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		username.getDocument().addDocumentListener(new MyDocumentListener2());
+		userpassword.getDocument().addDocumentListener(new MyDocumentListener2());
+		port.setFocusable(true);
+		host.setFocusable(true);
+		host.addFocusListener(new FocusListener(){
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(host.getText().trim().equals(Constants.DEFUALT_HOST)){
+					error.setText("");
+					host.setText("");
+					host.setForeground(Color.black);
+				}
+				error.setText("");
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(host.getText().trim().equals("")){
+					error.setText("");
+					host.setText(Constants.DEFUALT_HOST);
+					host.setForeground(Color.gray);
+				}
+				
+			}
+			
+		});
+		port.addFocusListener(new FocusListener(){
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(port.getText().trim().equals(Integer.toString(Constants.DEFAULT_PORT))){
+					port.setText("");
+					error.setText("");
+					port.setForeground(Color.black);
+				}
+				error.setText("");
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(port.getText().trim().equals("")){
+					error.setText("");
+					port.setText(Integer.toString(Constants.DEFAULT_PORT));
+					port.setForeground(Color.gray);
+				}
+				
+			}
+			
+		});
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+		    @Override
+		    public void windowClosing(WindowEvent we)
+		    { 
+		    	if(!loginornot){
+		    		System.exit(0);
+		    	}
+		        String ObjButtons[] = {"Yes","No"};
+		        int PromptResult = JOptionPane.showOptionDialog(null,"Logout?","Hermina Skelton"
+		        		,JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,ObjButtons,ObjButtons[1]);
+		        if(PromptResult==JOptionPane.YES_OPTION)
+		        {
+		            System.exit(0);
+		            //gameclientlistener...
+		        }
+		    }
+		});
 		username.setFocusable(true);
 		username.addFocusListener(new FocusListener(){
 
@@ -269,12 +409,7 @@ public class loginGUI extends JFrame{
 				if(username.getText().equals("username")){
 					username.setText("");
 					username.setForeground(Color.black);
-					checkUsername = false;
 					error.setText("");
-				}
-				else{
-					error.setVisible(false);
-					checkUsername = true;
 				}
 			}
 
@@ -283,17 +418,6 @@ public class loginGUI extends JFrame{
 				if(username.getText().equals("")){
 					username.setText("username");
 					username.setForeground(Color.gray);
-					checkUsername = false;
-					login.setEnabled(false);
-					createAccount.setEnabled(false);
-				}
-				else{
-
-					if(checkPassword){
-						login.setEnabled(true);
-						createAccount.setEnabled(true);
-					}
-					checkUsername = true;
 				}
 			}
 		});
@@ -305,14 +429,7 @@ public class loginGUI extends JFrame{
 				if(userpassword.getText().equals("password")){
 					userpassword.setText("");
 					userpassword.setForeground(Color.black);
-					checkPassword = false;
-					login.setEnabled(false);
-					createAccount.setEnabled(false);
 					error.setText("");
-				}
-				else{
-					error.setVisible(false);
-					checkPassword = true;
 				}
 			}
 
@@ -321,16 +438,6 @@ public class loginGUI extends JFrame{
 				if(userpassword.getText().equals("")){
 					userpassword.setText("password");
 					userpassword.setForeground(Color.gray);
-					checkPassword = false;
-					login.setEnabled(false);
-					createAccount.setEnabled(false);
-				}
-				else{
-					if(checkUsername){
-						login.setEnabled(true);
-						createAccount.setEnabled(true);
-					}
-					checkPassword = true;
 				}
 			}
 			
@@ -338,9 +445,27 @@ public class loginGUI extends JFrame{
 		login.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("LOGIN CLICKED");
 				String name = username.getText().trim();
 				String password = userpassword.getText().trim();
 				User loginUser = new User(name, password);
+				if (gameClient != null) {
+					if (gameClient == null)
+						System.out.println("GC null");
+					else System.out.println("GC notnull");
+					gameClient.login(loginUser);
+//					System.out.println("RESPONSE: " + response);
+//					// wait for login condition
+//					
+//					// handle true/false case
+//					System.out.println("RESPONSE: " + response);
+//					if (!response) {
+//						error.setVisible(true);
+//						error.setText("Username or password incorrect");
+//					} else {
+//						// handle create the main gui and start it
+//					}
+				}
 //				if(!gameclient.sendPacket(loginUser)){
 //					error.setVisible(true);
 //					error.setText("Username or password incorrect");
@@ -353,7 +478,10 @@ public class loginGUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				String name = username.getText().trim();
 				String password = userpassword.getText().trim();
-				User loginUser = new User(name, password);
+				User createUser = new User(name, password);
+				if (gameClient != null) {
+					gameClient.create(createUser);
+				}
 //				if(!gameclient.sendPacket(loginUser)){
 //					error.setVisible(true);
 //					error.setText("User name already in the system");
@@ -394,6 +522,8 @@ public class loginGUI extends JFrame{
 						port.setEditable(false);
 						host.setEditable(false);
 						connectionIcon.setIcon(connectionicon);
+						gameClient = new GameClientListener(socket); // initialize the game client
+						gameClient.setLoginGUI(loginGUI.this);
 					} catch (IOException ioe) {
 						error.setText(utilities.Constants.PORT_ERROR_MESSAGE);
 						Util.printExceptionToCommand(ioe);
@@ -406,7 +536,62 @@ public class loginGUI extends JFrame{
 				}
 			}
 		});
+		mute.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!pause){
+					music.pauseMusic();
+					pause = true;
+					try{
+						Image img = ImageIO.read(new File(Constants.resourceFolderbg + "mute.png"));
+						mute.setIcon(new ImageIcon(img));
+					}
+					catch (IOException e1) {
+						JPanel error = new JPanel();
+						JOptionPane.showMessageDialog(error,
+								"Asset Corruption",
+								"File Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				else{
+					music.unpauseMusic();
+					pause = false;
+					try{
+						Image img = ImageIO.read(new File(Constants.resourceFolderbg + "unmute.png"));
+						mute.setIcon(new ImageIcon(img));
+					}
+					catch (IOException e1) {
+						JPanel error = new JPanel();
+						JOptionPane.showMessageDialog(error,
+								"Asset Corruption",
+								"File Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+			
+		});
 	}
+	
+	protected void processLogin(Boolean response) {
+		if (!response) {
+			error.setVisible(true);
+			error.setText("Username or password incorrect");
+		} else {
+			// handle create the main gui and start it
+		}
+	}
+	
+	protected void processCreateAccount(Boolean response) {
+		if (!response) {
+			error.setVisible(true);
+			error.setText("Account already exists");
+		} else {
+			// handle create the main gui and start it
+		}
+	}
+	
 	public static void main(String[] args){
 		new loginGUI().setVisible(true);
 	}

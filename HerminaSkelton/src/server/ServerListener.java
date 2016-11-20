@@ -20,16 +20,19 @@ public class ServerListener {
 	private ServerSocket serverSocket;
 //	private Vector<ServerClientCommunicator> playerThreads;
 	private HashMap<Integer, ServerClientCommunicator> playerThreads;
-//	private Game game;
+	private GameServerGUI gameServerGUI;
 	
 	private DatabaseLogic db;
 	private Queue<String> playerQueue;
 	private Vector<GameInstance> gameInstances;
 	
-	boolean listenForConnections;
+	private boolean listenForConnections;
+	private int instanceID;
 	
-	public ServerListener(ServerSocket serverSocket) {
+	public ServerListener(ServerSocket serverSocket, GameServerGUI gsg) {
 		this.serverSocket = serverSocket;
+		this.gameServerGUI = gsg;
+		this.instanceID = 1;
 //		this.playerThreads = new Vector<ServerClientCommunicator>();
 		this.playerThreads = new HashMap<Integer, ServerClientCommunicator>();
 		this.db = new DatabaseLogic();
@@ -37,6 +40,10 @@ public class ServerListener {
 		this.gameInstances = new Vector<GameInstance>();
 		new Thread().start();
 	}
+	
+//	protected void setServerGUI(GameServerGUI gsg) {
+//		this.gameServerGUI = gsg;
+//	}
 	
 	protected void sendToAllClients(DataPacket<?> dp) {
 		for (ServerClientCommunicator playerThread : playerThreads.values())
@@ -50,6 +57,7 @@ public class ServerListener {
 			if (db.loginUser(userInfo.getUsername(), userInfo.getPassword())) {
 				// add player to the queue
 				playerQueue.add(userInfo.getUsername());
+				gameServerGUI.addUserToUsersTable(userInfo.getUsername());
 				return true;
 			}
 			else
@@ -73,15 +81,40 @@ public class ServerListener {
 			// create palyer instances
 			PlayerInstance P1 = new PlayerInstance(p1);
 			PlayerInstance P2 = new PlayerInstance(p2);
-			GameInstance gi = new GameInstance(P1, P2);
+			GameInstance gi = new GameInstance(P1, P2, instanceID++);
 			gameInstances.add(gi);
 			// signal players to start the game
 			startGame(gi);
+			// update server table
+			gameServerGUI.addGameInstance(gi);
 		}
 	}
 	
-	public void logOutUser(String userName) {
+	protected synchronized void logOutUser(String userName) {
+		// Find instance of the player
+		ArrayList<String> instanceUsernames = null;
 		
+		for (GameInstance gi : gameInstances) {
+			ArrayList<String> players = gi.getPlayerUsernames();
+			if (players.contains(userName)) {
+				instanceUsernames = players;
+				break;
+			}
+		}
+		
+		// Logout all users from instance
+		if (instanceUsernames != null) {
+			for (int i = playerThreads.size(); i >= 0; i--) {
+				if (playerThreads.get(i).getUserName().equalsIgnoreCase(instanceUsernames.get(0))) {
+					playerThreads.get(i).sendData(new DataPacket<String>(utilities.Commands.LOGOUT_USER, playerThreads.get(i).getUserName()));
+					playerThreads.remove(i);
+				}
+				if (instanceUsernames.size() > 1 && playerThreads.get(i).getUserName().equalsIgnoreCase(instanceUsernames.get(1))) {
+					playerThreads.get(i).sendData(new DataPacket<String>(utilities.Commands.LOGOUT_USER, playerThreads.get(i).getUserName()));
+					playerThreads.remove(i);
+				}
+			}
+		}
 	}
 	
 	public void startGame(GameInstance gameInstance) {

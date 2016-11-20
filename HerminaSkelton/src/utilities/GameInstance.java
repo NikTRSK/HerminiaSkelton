@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 public class GameInstance {
 	ArrayList<PlayerInstance> players = new ArrayList<PlayerInstance>();
+	Integer gameID;
 	
-	public GameInstance(PlayerInstance p1, PlayerInstance p2) {
+	public GameInstance(PlayerInstance p1, PlayerInstance p2, Integer id) {
 		players.add(p1);
 		players.add(p2);
+		gameID = id;
 	}
 	
 	public ArrayList<PlayerInstance> getPlayers() {
@@ -39,5 +41,9 @@ public class GameInstance {
 			return players.get(1).getMove();
 		else
 			return players.get(0).getMove();
+	}
+	
+	public Integer getInstanceID() {
+		return this.gameID;
 	}
 }

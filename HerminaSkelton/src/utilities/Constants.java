@@ -11,6 +11,7 @@ public class Constants {
      * SETTINGS
      * 					*/
     public static final int DEFAULT_PORT = 6880;
+    public static final String DEFUALT_HOST = "localhost";
     public static final int MIN_PORT_VAL = 0;
     public static final int MAX_PORT_VAL = 65535;
     public static final int GAME_SIZE = 2;
@@ -33,8 +34,10 @@ public class Constants {
     public static final String casualmusic = "casualstart.mp3";
     public static final String startmusic = "gamestart.mp3";
     public static final String finalmusic = "finalstart.mp3";
+    public static final String waitmusic = "wait.mp3";
     public static final String connected = "connected.png";
     public static final String disconnected  = "disconnected.png";
+    public static final String serverbkgimg = "serverbkgimg.png";
     
     //
     public static final String win = " did a great job and found true friendships with your CPs. Good luck on the final exam";

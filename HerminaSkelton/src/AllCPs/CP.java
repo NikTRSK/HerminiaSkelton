@@ -1,19 +1,23 @@
 package AllCPs;
 
+import java.io.Serializable;
+
 import javax.swing.ImageIcon;
 
 import client.Constants;
 
-public abstract class CP {
+public abstract class CP implements Serializable{
+	private static final long serialVersionUID = 3562524123400148447L;
 	protected String name;
 	protected ImageIcon sprite;
-	protected int type;
-	protected int level;
-	protected int experience;
-	protected int healthPoints;
-	protected int attack;
-	protected int speed;
-	protected int currHealth;	
+	protected Integer type;
+	protected Integer level;
+	protected Integer experience;
+	protected Integer healthPoints;
+	protected Integer attack;
+	protected Integer speed;
+	protected Integer currHealth;	
+	protected Boolean real;
 	protected int[] moves;
 	
 	//Initializes the level and experience of the CP
@@ -23,6 +27,7 @@ public abstract class CP {
 		this.moves = new int[2];
 		this.moves[0] = 0;
 		this.moves[1] = Constants.rand.nextInt(Constants.NUM_MOVES)+1;
+		this.real = true;
 	}
 	
 	//Getter Functions
@@ -82,6 +87,9 @@ public abstract class CP {
 	public void setLevel(int level){
 		this.level = level;
 		experience = Constants.levelThresholds[level];
+	}
+	public boolean isReal(){
+		return real;
 	}
 	protected abstract void updateStats(); //Stat growth rate varies by CP
 }

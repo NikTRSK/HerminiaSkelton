@@ -7,7 +7,7 @@ import javafx.util.Duration;
 import utilities.Constants;
 
 public class BackgroundMusic{
-	private Media battlemusic, casualmusic, startmusic, finalmusic;
+	private Media battlemusic, casualmusic, startmusic, finalmusic, waitmusic;
 	private boolean musicFound;
 	private static MediaPlayer myBGM;
 	private JFXPanel fxPanel;
@@ -26,7 +26,9 @@ public class BackgroundMusic{
 		File startMusicFilePath = new File(Constants.resourceFolderbgm + Constants.startmusic);
 		startmusic = new Media(startMusicFilePath.toURI().toString());
 		File finalMusicFilePath = new File(Constants.resourceFolderbgm + Constants.finalmusic);
-		casualmusic = new Media(finalMusicFilePath.toURI().toString());
+		finalmusic = new Media(finalMusicFilePath.toURI().toString());
+		File waitMusicFilePath = new File(Constants.resourceFolderbgm + Constants.waitmusic);
+		waitmusic = new Media(waitMusicFilePath.toURI().toString());
 	}
 	
 	protected void gamestart(){
@@ -55,8 +57,19 @@ public class BackgroundMusic{
 	
 	protected void casualstart(){
 		if(musicFound){
-			myBGM.stop();
 			myBGM = new MediaPlayer(casualmusic);
+			myBGM.setOnEndOfMedia(new Runnable() {
+			       public void run() {
+			    	   myBGM.seek(Duration.ZERO);
+			       }
+			   });
+			myBGM.play();
+		}	
+	}
+	
+	protected void waitstart(){
+		if(musicFound){
+			myBGM = new MediaPlayer(waitmusic);
 			myBGM.setOnEndOfMedia(new Runnable() {
 			       public void run() {
 			    	   myBGM.seek(Duration.ZERO);
@@ -82,6 +95,18 @@ public class BackgroundMusic{
 		if(musicFound){
 			myBGM.stop();
 		}	
+	}
+	
+	protected void pauseMusic(){
+		if(musicFound){
+			myBGM.pause();
+		}
+	}
+	
+	protected void unpauseMusic(){
+		if(musicFound){
+			myBGM.play();
+		}
 	}
 
 }
