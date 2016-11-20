@@ -1,6 +1,5 @@
 package client;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -12,15 +11,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 import AllCPs.CP;
+import AllCPs.EmmaLautz;
 import utilities.Constants;
 
 public class EndGameGUI extends JFrame{
@@ -29,10 +30,12 @@ public class EndGameGUI extends JFrame{
 	private String username2;
 	private String temp;
 	private JLabel message;
+	private JButton favCP;
 	private boolean win;
 	private int gamemode;
 	private int score1;
 	private int score2;
+	private CP bestfriend;
 	private JLabel name1, name2, score1_, score2_;
 	private JTextArea professorwords;
 	private GameClientListener mlistener;
@@ -42,6 +45,7 @@ public class EndGameGUI extends JFrame{
 		//gamemode 0 as guest, gamemmode 1 as singleplayer, gameode 2 as multiplayer
 		this.gamemode = gamemode;
 		this.mlistener = mlistener;
+		this.bestfriend = bestfriend;
 		this.win = win;
 		this.score1 = score1;
 		this.score2 = score2;
@@ -54,12 +58,17 @@ public class EndGameGUI extends JFrame{
 		addNames();
 		setBackground();
 		initializeComponents();
+		setIcon();
 		createGUI();
 		addEvents();
 	}
 	
 	private void addNames(){
 		temp = Constants.generateWord(win, username1, username2, gamemode);
+	}
+	
+	private void setIcon(){
+		favCP.setIcon(bestfriend.getSprite());
 	}
 	
 	private void initializeComponents(){
@@ -80,8 +89,17 @@ public class EndGameGUI extends JFrame{
 		}
 		professorwords = new JTextArea(temp);
 		professorwords.setEditable(false);
+		professorwords.setPreferredSize(new Dimension(5,5));
 		professorwords.setOpaque(false);
-		professorwords.setPreferredSize(new Dimension(100,100));
+		professorwords.setColumns(1);
+		professorwords.setLineWrap(true);
+		professorwords.setRows(1);
+		professorwords.setWrapStyleWord(true);
+		professorwords.setFont(new Font("Serif", Font.BOLD, 20));
+		favCP = new JButton();
+		favCP.setOpaque(false);
+		favCP.setContentAreaFilled(false);
+		favCP.setBorderPainted(false);
 	}
 	
 	private void setBackground(){
@@ -114,10 +132,10 @@ public class EndGameGUI extends JFrame{
 		
 		mGridBagConst.gridx = 0;
 		mGridBagConst.gridy = 0;
-		mGridBagConst.anchor = GridBagConstraints.FIRST_LINE_START;
+		mGridBagConst.insets = new Insets(100,0,0,0);
 		add(name1,mGridBagConst);
 		mGridBagConst.gridx = 1;
-		mGridBagConst.insets = new Insets(0,0,0,900);
+		mGridBagConst.insets = new Insets(100,100,0,300);
 		add(name2,mGridBagConst);
 		
 		mGridBagConst.insets = new Insets(0,0,0,0);
@@ -125,7 +143,7 @@ public class EndGameGUI extends JFrame{
 		mGridBagConst.gridy = 1;
 		add(score1_,mGridBagConst);
 		mGridBagConst.gridx = 1;
-		mGridBagConst.insets = new Insets(0,0,0,900);
+		mGridBagConst.insets = new Insets(0,100,0,300);
 		add(score2_,mGridBagConst);
 		
 		for(int i = 0 ; i < 5; i++){
@@ -136,21 +154,31 @@ public class EndGameGUI extends JFrame{
 			}
 			mGridBagConst.insets = new Insets(0,0,0,0);
 			if(i == 4){
-				mGridBagConst.insets = new Insets(0,0,400,0);
+				mGridBagConst.insets = new Insets(0,0,0,0);
 			}
 			mGridBagConst.gridx = 0;
 			mGridBagConst.gridy = i+2;
 			add(numLabel,mGridBagConst);
-			mGridBagConst.insets = new Insets(0,0,0,900);
+			mGridBagConst.insets = new Insets(0,100,0,400);
 			if(i == 4){
-				mGridBagConst.insets = new Insets(0,0,400,900);
+				mGridBagConst.insets = new Insets(0,100,0,100);
 			}
 			mGridBagConst.gridx = 1;
 			add(namLabel,mGridBagConst);
 		}
-		mGridBagConst.gridy = 6;
-		mGridBagConst.insets = new Insets(0,0,0,0);
+		mGridBagConst.gridy = 7;
+		mGridBagConst.gridx = 3;
+		mGridBagConst.ipadx = 150;
+		mGridBagConst.ipady = 150;
+		mGridBagConst.insets = new Insets(0,0,100,100);
 		add(professorwords,mGridBagConst);
+		
+		mGridBagConst.gridy = 8;
+		mGridBagConst.gridx = 3;
+		mGridBagConst.ipadx = 100;
+		mGridBagConst.ipady = 100;
+		mGridBagConst.insets = new Insets(0,0,0,300);
+		add(favCP,mGridBagConst);
 	}
 	
 	private void addEvents(){
@@ -158,6 +186,6 @@ public class EndGameGUI extends JFrame{
 	}
 	
 	public static void main(String[] args){
-		new EndGameGUI(2,"Nick","Matt", null, 2000,3000,true, null).setVisible(true);
+		new EndGameGUI(2,"Nick","Matt", new EmmaLautz(3), 2000,3000,true, null).setVisible(true);
 	}
 }
