@@ -7,10 +7,14 @@ public class GameInstance {
 	Integer gameID;
 	GameTimer timer;
 	Boolean timerExpired;
+	Integer gameMode;
 	
 	public GameInstance(PlayerInstance p1, PlayerInstance p2, Integer id) {
 		players.add(p1);
-		players.add(p2);
+		if (p2 != null) {
+			players.add(p2);
+			gameMode = 0;
+		}
 		gameID = id;
 		timerExpired = false;
 		timer = new GameTimer(this);

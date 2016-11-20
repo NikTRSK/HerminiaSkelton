@@ -23,7 +23,8 @@ public class ServerListener {
 	private GameServerGUI gameServerGUI;
 	
 	private DatabaseLogic db;
-	private Queue<String> playerQueue;
+//	private Queue<String> playerQueue;
+	private Queue<Integer> playerQueue;
 	private Vector<GameInstance> gameInstances;
 	
 	private boolean listenForConnections;
@@ -36,7 +37,8 @@ public class ServerListener {
 //		this.playerThreads = new Vector<ServerClientCommunicator>();
 		this.playerThreads = new HashMap<Integer, ServerClientCommunicator>();
 		this.db = new DatabaseLogic();
-		this.playerQueue = new LinkedList<String>();
+//		this.playerQueue = new LinkedList<String>();
+		this.playerQueue = new LinkedList<Integer>();
 		this.gameInstances = new Vector<GameInstance>();
 		new Thread().start();
 	}
@@ -47,12 +49,12 @@ public class ServerListener {
 	}
 	
 	// FIGURE OUT HOW TO ADD THE USERNAME
-	protected boolean loginUser(User userInfo) {
+	protected boolean loginUser(User userInfo, Integer ID) {
 		try {
 			// check if user is valid
 			if (db.loginUser(userInfo.getUsername(), userInfo.getPassword())) {
 				// add player to the queue
-				playerQueue.add(userInfo.getUsername());
+				playerQueue.add(ID);
 				gameServerGUI.addUserToUsersTable(userInfo.getUsername());
 				return true;
 			}
@@ -69,20 +71,38 @@ public class ServerListener {
 	}
 	
 	public void checkQueue() {
+		GameInstance gi = null;
 		// if queue has 2 players start game instance
-		if (playerQueue.size() == utilities.Constants.GAME_SIZE) {
+		if (playerQueue.size() >= utilities.Constants.GAME_SIZE) {
 			// get usernames
-			String p1 = playerQueue.peek(); playerQueue.remove();
-			String p2 = playerQueue.peek(); playerQueue.remove();
-			// create palyer instances
-			PlayerInstance P1 = new PlayerInstance(p1);
-			PlayerInstance P2 = new PlayerInstance(p2);
-			GameInstance gi = new GameInstance(P1, P2, instanceID++);
-			gameInstances.add(gi);
-			// signal players to start the game
-			startGame(gi);
-			// update server table
-			gameServerGUI.addGameInstance(gi);
+//			String p1 = playerQueue.peek(); playerQueue.remove();
+//			String p2 = playerQueue.peek(); playerQueue.remove();
+			Integer p1 = playerQueue.peek(); playerQueue.remove();
+			while (playerThreads.get(p1).getGameType() != -1) {
+				playerQueue.add(p1);
+				p1 = playerQueue.peek(); playerQueue.remove();
+			}
+			// single player
+			if (playerThreads.get(p1).getGameType() == 0) {
+				PlayerInstance P1 = new PlayerInstance(playerThreads.get(p1).getUserName());
+				gi = new GameInstance(P1, null, instanceID++);
+			} else {
+				// check queue again
+				playerQueue.add(p1);
+				return;
+			}
+//			if () 
+//			// create palyer instances
+//			PlayerInstance P1 = new PlayerInstance(p1);
+//			PlayerInstance P2 = new PlayerInstance(p2);
+//			GameInstance gi = new GameInstance(P1, P2, instanceID++);
+//			gameInstances.add(gi);
+			if (gi != null) {
+				// signal players to start the game
+				startGame(gi);
+				// update server table
+				gameServerGUI.addGameInstance(gi);
+			}
 		}
 	}
 	

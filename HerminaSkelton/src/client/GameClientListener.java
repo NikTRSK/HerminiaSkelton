@@ -96,6 +96,14 @@ public class GameClientListener extends Thread{
 		return ans;
 	}
 	
+	public void logout() {
+		// stub
+	}
+	
+	public void sendGameMode(Integer type) {
+		sendData(new DataPacket<Integer>(utilities.Commands.GAME_MODE, type));
+	}
+	
 	public void run(){		
 		try{
 			while(true){

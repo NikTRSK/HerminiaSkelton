@@ -18,12 +18,14 @@ public class ServerClientCommunicator extends Thread {
 //	private BufferedReader br;
 	private ServerListener serverListener;
 	
-	String userName;
-	Integer connectionID;
+	private String userName;
+	private Integer connectionID;
+	private Integer gameType;
 	
 	public ServerClientCommunicator(Socket socket, ServerListener serverListener) throws IOException {
 		this.socket = socket;
 		this.serverListener = serverListener;
+		this.gameType = -1;
 		this.oos = new ObjectOutputStream(socket.getOutputStream());
 		this.ois = new ObjectInputStream(socket.getInputStream());
 //		this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -61,23 +63,6 @@ public class ServerClientCommunicator extends Thread {
 		}
 	}
 	
-/*	public void loginUser(User userInfo) {
-		boolean validUser = serverListener.loginUser(userInfo);
-		if (validUser) {
-			userName = userInfo.getUsername();
-			DataPacket<Boolean>
-		}
-		else {
-			DataPacket<String> error = new DataPacket<String>(Commands.ERROR_MESSAGE, "Invalid Login!!!");
-			try {
-				oos.writeObject(error);
-				oos.flush();
-			} catch (IOException ioe) {
-				utilities.Util.printExceptionToCommand(ioe);
-			}
-		}
-	}*/
-	
 	protected void sendMove(Integer move) {
 		sendData(new DataPacket<Integer>(utilities.Commands.OTHER_MOVE, move)); 
 	}
@@ -93,6 +78,10 @@ public class ServerClientCommunicator extends Thread {
 		return scores;
 	}
 	
+	public Integer getGameType() {
+		return gameType;
+	}
+	
 	public void run() {
     boolean listenForConnections = true;
     while (listenForConnections) {
@@ -102,7 +91,7 @@ public class ServerClientCommunicator extends Thread {
         	case utilities.Commands.LOGIN_USER :
         		System.out.println("Logging in user id" + socket.getPort());
         		User userInfo = (User)input.getData();
-        		if (serverListener.loginUser(userInfo)) {
+        		if (serverListener.loginUser(userInfo, connectionID)) {
         			// Send a response to user
         			userName = userInfo.getUsername();
         			sendData(new DataPacket<Boolean>(utilities.Commands.AUTH_RESPONSE, true));
@@ -130,7 +119,13 @@ public class ServerClientCommunicator extends Thread {
         		cm.setUsername(userName);
 //        		serverListener.sendToAllClients(new DataPacket<ChatMessage>(utilities.Commands.CHAT_MESSAGE, cm));
         		serverListener.sendToAllClients(input);
-        	
+        		break;
+        		
+        	case utilities.Commands.GAME_MODE :
+        		Integer gameMode = (Integer)input.getData();
+        		gameType = gameMode;
+        		break;
+        		
         	case utilities.Commands.END_GAME :
         		break;
         }
