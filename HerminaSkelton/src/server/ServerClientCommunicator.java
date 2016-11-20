@@ -117,7 +117,14 @@ public class ServerClientCommunicator extends Thread {
         		User createUserInfo = (User)input.getData();
         		Boolean createUserResponse = (serverListener.createUser(createUserInfo));
         		sendData(new DataPacket<Boolean>(utilities.Commands.CREATE_RESPONSE, createUserResponse));
-        	
+        		break;
+        		
+        	case utilities.Commands.GAME_SCORES :
+        		Integer playerScore = (Integer)input.getData();
+        		ArrayList<Integer> topScores = getTopScores(playerScore);
+        		sendData(new DataPacket<ArrayList<Integer>>(utilities.Commands.GAME_SCORES, topScores));
+        		break;
+        		
         	case utilities.Commands.CHAT_MESSAGE :
         		ChatMessage cm = (ChatMessage)input.getData();
         		cm.setUsername(userName);
