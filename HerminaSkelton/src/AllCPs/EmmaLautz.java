@@ -5,6 +5,7 @@ import javax.swing.ImageIcon;
 import client.Constants;
 
 public class EmmaLautz extends CP{
+	private static final long serialVersionUID = 9003732126461557874L;
 
 	//Grass type
 	public EmmaLautz(int level) {
