@@ -8,6 +8,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import client.Player;
 
@@ -27,7 +28,7 @@ public class TestGUI extends JFrame {
 		
 		Player player = new Player("John", 1, 0);
 		
-		map = new MapScreen(screenSize, player);
+		map = new MapScreen(this, screenSize, player);
 		add(map, BorderLayout.CENTER);
 //		map.addKeyListener(map);
 		map.setFocusable(true);
@@ -35,7 +36,7 @@ public class TestGUI extends JFrame {
 //		map.render();
 //		map.paint();
 		map.renderAndPaint();
-		
+//		JOptionPane.showMessageDialog(this, "CP found!");
 	}
 	
 	public static void main(String[] args) {
