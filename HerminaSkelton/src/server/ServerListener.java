@@ -41,10 +41,6 @@ public class ServerListener {
 		new Thread().start();
 	}
 	
-//	protected void setServerGUI(GameServerGUI gsg) {
-//		this.gameServerGUI = gsg;
-//	}
-	
 	protected void sendToAllClients(DataPacket<?> dp) {
 		for (ServerClientCommunicator playerThread : playerThreads.values())
 			playerThread.sendData(dp);
@@ -149,11 +145,12 @@ public class ServerListener {
 	}
 	
 	protected ArrayList<Integer> updateScores(String username, Integer playerScore) {
-		// calculate score
-		
 		// pass into the database and return the top five scores
+		return db.getScores(username, playerScore);
+	}
+	
+	public void endGame(GameInstance gi) {
 		
-		return null;
 	}
 	
 	public void start() {
