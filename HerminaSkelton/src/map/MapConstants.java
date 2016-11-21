@@ -228,7 +228,7 @@ public class MapConstants {
 	public static final String GRASS_IMAGE = IMAGES_FOLDER + "grass.jpg";
 	public static final String PATH_IMAGE = IMAGES_FOLDER + "path.jpg";
 	public static final String WALL_IMAGE = IMAGES_FOLDER + "wall.jpg";
-	public static final String CPCENTER_IMAGE = IMAGES_FOLDER + "cpcenter1.png";
+	public static final String CPCENTER_IMAGE = IMAGES_FOLDER + "cpcenter2.png";
 	public static final String AVATAR = IMAGES_FOLDER + "mario.png";
 	
 	//fonts
