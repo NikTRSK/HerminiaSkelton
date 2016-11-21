@@ -43,7 +43,7 @@ public class GameGUI extends JFrame{
 	
 	private map.MapScreen map;
 	private BattleScreen battle;
-
+	
 	private BackgroundMusic music;
 
 	private FinalBattleScreen finalBattle;
