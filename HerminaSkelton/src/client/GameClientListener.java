@@ -183,6 +183,10 @@ public class GameClientListener extends Thread{
 					if (input.getData() != null) {
 						mGameGUI.updateTimer((Integer)input.getData());
 					}
+				} else if(streamContent.equals(utilities.Commands.CHAT_MESSAGE)) {
+					System.out.println("CHAAAAT RECEIVEDDDDD");
+					ChatMessage message = (ChatMessage)input.getData();
+					mGameGUI.appendToChat(message.getUsername(), message.getMessage());
 				}
 			}
 		}catch(IOException ioe){

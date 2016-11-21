@@ -28,8 +28,8 @@ public class ChatPanel extends JPanel {
 		createGUI();
 	}
 	
-	public void appendText(String text, int num){
-		
+	public void appendText(String user, String text){
+		chatText.append("\n" + user + ": " + text);
 	}
 	
 	private void initializeVariables(){
@@ -69,7 +69,7 @@ public class ChatPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				String string = writeMsgArea.getText();
 				ChatMessage msg = new ChatMessage(string, mListener.getUser());
-				chatText.append("\n"+string);
+//				chatText.append("\n"+string);
 				writeMsgArea.setText("");
 				mListener.sendChat(msg);		
 			}
