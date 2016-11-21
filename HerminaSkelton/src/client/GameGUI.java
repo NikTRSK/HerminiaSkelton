@@ -8,6 +8,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -72,7 +74,7 @@ public class GameGUI extends JFrame{
 	}
 	
 	private void initializeComponents(){
-		time = new JLabel();
+		time = new JLabel("00:00");
 		rightPanel = new JPanel();		
 		
 		beta = new Player("Elgin");
@@ -87,18 +89,13 @@ public class GameGUI extends JFrame{
 	}
 	
 	private void createGUI(){
-		//this.setLayout(new GridBagLayout());
 		this.setLayout(new BorderLayout());
 		
 		// Map Stuff.
 		map = new map.MapScreen(this,new Dimension(Toolkit.getDefaultToolkit().getScreenSize()),beta);
-		//int width = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-		//int height = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-		//map.setPreferredSize(new Dimension((2*width)/3,height));
 		
 		// Battle Stuff.
 		battle  = new BattleScreen(beta, this);		
-		//battle.setPreferredSize(new Dimension((2*width)/3,height));
 		centerPanel.setBackground(Constants.BACKGROUND_COLOR);
 		centerPanel.add(map, "card 1");		
 		centerPanel.add(battle, "card 2");
@@ -106,9 +103,18 @@ public class GameGUI extends JFrame{
 		this.add(centerPanel, BorderLayout.CENTER);
 		chat.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 5));
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+		rightPanel.setPreferredSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4,(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
 		rightPanel.setBackground(Constants.BACKGROUND_COLOR);
+		time.setPreferredSize(new Dimension(100,100));
 		rightPanel.add(time);
 		rightPanel.add(chat);
+		
+		chat.setFocusable(true);
+		chat.addFocusListener(new FocusAdapter(){
+			public void focusLost(FocusEvent e){
+				map.requestFocusInWindow();
+			}
+		});
 		
 		this.add(rightPanel, BorderLayout.EAST);
 		
@@ -155,6 +161,7 @@ public class GameGUI extends JFrame{
 		
 		menu.add(inventory);
 		setJMenuBar(menuBar);
+		this.pack();
 	}
 	
 	public void switchToBattle(){
@@ -200,7 +207,7 @@ public class GameGUI extends JFrame{
 		int min = seconds / 60;
 		
 		int minutes = min % 60;
-		time.setText(minutes+":"+sec);
+		time.setText("Timer "+minutes+":"+sec);
 	}
 	
 	public void timerOut(){
