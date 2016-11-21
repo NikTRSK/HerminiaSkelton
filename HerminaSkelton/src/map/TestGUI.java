@@ -26,7 +26,7 @@ public class TestGUI extends JFrame {
 		
 		setVisible(true);
 		
-		Player player = new Player("John", 1, 0);
+		Player player = new Player("John");
 		
 		map = new MapScreen(this, screenSize, player);
 		add(map, BorderLayout.CENTER);

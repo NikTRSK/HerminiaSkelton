@@ -16,6 +16,8 @@ public class MapZone {
 					nodes[j][i] = new PathNode(j, i, mapWidth/10, mapHeight/10);
 				} else if(blueprint[i][j].equals(MapConstants.W)) { // path
 					nodes[j][i] = new WallNode(j, i, mapWidth/10, mapHeight/10);
+				} else if(blueprint[i][j].equals(MapConstants.CP)) { // path
+					nodes[j][i] = new CPCenter(j, i, mapWidth/10, mapHeight/10);
 				}
 			}
 		}

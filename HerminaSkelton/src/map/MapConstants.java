@@ -1,10 +1,18 @@
 package map;
 
+import client.Constants;
+
 public class MapConstants {
+	
+	public static int STARTZONE_X = 1;
+	public static int STARTZONE_Y = 1;
+	public static int START_X = 7;
+	public static int START_Y = 6;
 	
 	public static String G = "Grass";
 	public static String P = "Path";
 	public static String W = "Wall";
+	public static String CP = "CP Center";
 
 	public static final String[][] A1 = {
 			{W, W, W, W, W, W, W, W, W, W},
@@ -79,7 +87,7 @@ public class MapConstants {
 			{P, W, W, W, G, G, W, W, P, P},
 			{P, P, P, P, P, P, P, P, P, P},
 			{P, W, W, P, W, W, W, P, W, P},
-			{P, W, W, P, W, W, P, P, W, P},
+			{P, W, W, P, W, W, P, CP, W, P},
 			{P, W, W, P, W, W, P, W, W, P},
 			{P, P, P, P, P, P, P, P, P, P},
 	};
@@ -174,5 +182,6 @@ public class MapConstants {
 	public static final String GRASS_IMAGE = IMAGES_FOLDER + "grass.jpg";
 	public static final String PATH_IMAGE = IMAGES_FOLDER + "path.jpg";
 	public static final String WALL_IMAGE = IMAGES_FOLDER + "wall.jpg";
+	public static final String CPCENTER_IMAGE = IMAGES_FOLDER + "cpcenter1.png";
 	public static final String AVATAR = IMAGES_FOLDER + "mario.png";
 }

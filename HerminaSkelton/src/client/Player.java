@@ -27,8 +27,8 @@ public class Player extends MapNode implements Serializable{
 		CPs = new Vector<CP>();
 		CPs.add(Constants.generateCP(Constants.rand.nextInt(Constants.numCPs)));
 		
-		x = 5;
-		y = 5;
+		x = MapConstants.START_X;
+		y = MapConstants.START_Y;
 		
 		steps = new Integer(0);
 		
