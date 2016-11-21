@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -27,6 +28,7 @@ public class BattleScreen extends JPanel{
 	private static final long serialVersionUID = 538889179893602549L;
 	
 	private GameGUI mainGUI;
+	private Random rand;
 	
 	private Player player;
 	private Vector<CP> playerCPs;
@@ -65,6 +67,7 @@ public class BattleScreen extends JPanel{
 	
 	public BattleScreen(Player currPlayer, GameGUI mainGUI){
 		this.mainGUI = mainGUI;
+		this.rand = new Random(System.currentTimeMillis());
 		player = currPlayer;
 		
 		initializeVariables();
@@ -88,7 +91,7 @@ public class BattleScreen extends JPanel{
 		while(activeCP.getHealth()<=0){
 			activeCP = playerCPs.get(Constants.rand.nextInt(playerCPs.size()));
 		}
-		wildCP = Constants.generateCP(Constants.rand.nextInt(Constants.numCPs));
+		wildCP = Constants.generateCP(rand.nextInt(Constants.numCPs));
 		sprite1 = activeCP.getSprite();
 		sprite2 = wildCP.getSprite();
 	}
@@ -101,7 +104,7 @@ public class BattleScreen extends JPanel{
 		initializeCardHolder();
 	}
 	
-	private void initializeBattlePanel(){		
+	private void initializeBattlePanel(){
 		//healthLabel1 = new JLabel(activeCP.getHealth()+"/"+activeCP.getMaxHealth());
 		//healthLabel1.setFont(new Font("Courier", Font.BOLD, 35));
 		//healthLabel1.setHorizontalTextPosition(JLabel.CENTER);
@@ -466,6 +469,7 @@ public class BattleScreen extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				player.addCP(wildCP);
 				dialog.dispose();
 				battleOver(false);
 			}
@@ -509,6 +513,7 @@ public class BattleScreen extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();
+				player.healAll();
 				battleOver(true);
 				//TODO: teleport player to health center
 				//Player.setx(Constants.HealthCenterX);
@@ -548,7 +553,9 @@ public class BattleScreen extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();
+				System.out.println("a"+activeCP.getXP());
 				activeCP.addXP(wildCP.getLevel());
+				System.out.println("b"+activeCP.getXP());
 				battleOver(false);
 			}
 			
@@ -623,7 +630,7 @@ public class BattleScreen extends JPanel{
 			//					", Attack = " +activeCP.getAttack() + ", Speed = " +
 			//					activeCP.getSpeed();
 		}
-		mainGUI.switchToMap(lost);
+		mainGUI.switchToMap(lost, player);
 		//newBattle(player);
 	}
 

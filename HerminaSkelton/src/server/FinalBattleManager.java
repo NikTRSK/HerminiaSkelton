@@ -10,6 +10,7 @@ import AllMoves.AttackMove;
 import client.Miller;
 import client.Player;
 import utilities.DeadSwitch;
+import utilities.FinalBattleState;
 import utilities.GameInstance;
 import utilities.PlayerAction;
 
@@ -22,7 +23,7 @@ public class FinalBattleManager {
 	private PlayerAction pa1;
 	private PlayerAction pa2;
 	
-	private int[] state;
+	private Integer[] state;
 	
 	private Player[] players;
 	
@@ -30,21 +31,19 @@ public class FinalBattleManager {
 	
 	private GameInstance gi;
 	
-	public FinalBattleManager(Player p1, Player p2, int difficulty, ServerListener sl, GameInstance gi){
-		this.miller = new Miller(difficulty);
+	public FinalBattleManager(Player p1, Player p2, GameInstance gi){
+		this.miller = new Miller(0); // TODO Miller Difficulty
 		this.millerCPs = miller.getCP();
 		
 		this.players = new Player[2];
 		players[0] = p1;
 		players[1] = p2;
 		
-		this.state = new int[2];
+		this.state = new Integer[2];
 		state[0] = 1;
 		state[1] = 1;
 		
 		this.CPs= new CP[4];
-		
-		this.sl = sl;
 		
 		this.gi = gi;
 		
@@ -54,7 +53,7 @@ public class FinalBattleManager {
 		sendUpdate();
 	}
 	
-	public void recieveMessage(PlayerAction pa){
+	public void recieveAction(PlayerAction pa){
 		if(pa1==null){
 			pa1 = pa;
 			if(pa.getPlayerNum()==0){
@@ -68,7 +67,7 @@ public class FinalBattleManager {
 		}
 	}
 	
-	public void recieveMessage(DeadSwitch ds){
+	public void recieveDeadSwitch(DeadSwitch ds){
 		int p = ds.getPlayerNum();
 		CPs[p] = players[p].getCP().get(ds.getCP());
 		
@@ -212,7 +211,7 @@ public class FinalBattleManager {
 	}
 	
 	private void sendUpdate(){
-		//TODO
+		gi.sendFinalBattleUpdate(new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players, state));
 		//sl.sendFinalBattleUpdate(1, new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players[0], state[0]), gi);
 		//sl.sendFinalBattleUpdate(2, new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players[1], state[0]), gi);
 	}

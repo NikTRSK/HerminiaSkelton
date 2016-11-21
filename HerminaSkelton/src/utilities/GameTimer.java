@@ -17,11 +17,12 @@ public class GameTimer extends Thread implements Serializable {
 	public void run() {
 		while (timer >= 0) {
 			try {
+				timer--;
+				gameInstance.updatePlayerTimers(timer);
 				Thread.yield();
 				Thread.sleep(1000);
-				timer--;
 			} catch (InterruptedException ie) { utilities.Util.printExceptionToCommand(ie);	}
 		}
-		gameInstance.startFinalBattle();
+		gameInstance.timerOut();
 	}
 }

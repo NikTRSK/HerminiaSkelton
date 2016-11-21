@@ -60,10 +60,10 @@ public class ChatPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String string = writeMsgArea.getText();
-				ChatMessage msg = new ChatMessage(string, null);
+				ChatMessage msg = new ChatMessage(string, mListener.getUser());
 				chatText.append("\n"+string);
 				writeMsgArea.setText("");
-				mListener.sendData(new DataPacket<String>(utilities.Commands.CHAT_MESSAGE, string));			
+				mListener.sendData(new DataPacket<ChatMessage>(utilities.Commands.CHAT_MESSAGE, msg));			
 			}
 			
 		});

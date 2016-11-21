@@ -3,6 +3,9 @@ package utilities;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import client.Player;
+import server.FinalBattleManager;
+
 public class GameInstance implements Serializable {
 	/**
 	 * 
@@ -13,6 +16,8 @@ public class GameInstance implements Serializable {
 	GameTimer timer;
 	Boolean timerExpired;
 	Integer gameMode;
+	ArrayList<Player> FBPlayers;
+	FinalBattleManager finalBattleManager;
 	
 	public GameInstance(PlayerInstance p1, PlayerInstance p2, Integer id) {
 		players.add(p1);
@@ -20,6 +25,7 @@ public class GameInstance implements Serializable {
 			players.add(p2);
 			gameMode = 0;
 		}
+		FBPlayers = new ArrayList<Player>();
 		gameID = id;
 		timerExpired = false;
 		timer = new GameTimer(this);
@@ -28,6 +34,12 @@ public class GameInstance implements Serializable {
 	
 	public ArrayList<PlayerInstance> getPlayers() {
 		return this.players;
+	}
+	
+	public void addPlayerToFinalBattle(Player p) {
+		FBPlayers.add(p);
+		if (FBPlayers.size() == players.size())
+			startFinalBattle();
 	}
 	
 	public ArrayList<String> getPlayerUsernames() {
@@ -61,7 +73,28 @@ public class GameInstance implements Serializable {
 		return this.gameID;
 	}
 	
+	public void timerOut() {
+		for (PlayerInstance player : players)
+			player.sendData(new DataPacket<Boolean>(utilities.Commands.TIMER_OUT, true));
+	}
+	
 	public void startFinalBattle() {
-		System.out.println("Starting final battle");
+		if (gameMode == 0) {
+			// TODO
+		} else {
+			finalBattleManager = new FinalBattleManager(FBPlayers.get(0), FBPlayers.get(1), this);
+			for (PlayerInstance player : players)
+				player.startFinalBattle();
+		}
+	}
+	
+	public void sendFinalBattleUpdate(FinalBattleState fbs) {
+		for (PlayerInstance player : players)
+			player.sendData(new DataPacket<FinalBattleState>(utilities.Commands.FINAL_BATTLE, fbs));
+	}
+	
+	public void updatePlayerTimers(Integer time) {
+		for (PlayerInstance player : players)
+			player.updateTimer(time);
 	}
 }

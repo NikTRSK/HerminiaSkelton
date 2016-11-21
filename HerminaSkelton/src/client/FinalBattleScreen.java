@@ -75,7 +75,7 @@ public class FinalBattleScreen extends JPanel{
 		this.myAttack = null;
 		this.state = 1;
 		
-		this.player = fbs.player;
+		this.player = fbs.players[me];
 		this.CPs = new CP[4];
 		this.CPs[0] = fbs.cp1;
 		this.CPs[1] = fbs.cp2;
@@ -91,6 +91,8 @@ public class FinalBattleScreen extends JPanel{
 		initializeDeadPanel();
 		initializeCards();
 		createGUI();
+		
+		this.cl.setFBS(this);
 	}
 	
 	private void initializeBattlePanel(){
@@ -404,12 +406,12 @@ public class FinalBattleScreen extends JPanel{
 	}
 	
 	public void recieveMessage(FinalBattleState fbs){
-		this.player = fbs.player;
+		this.player = fbs.players[me];
 		this.CPs[0] = fbs.cp1;
 		this.CPs[1] = fbs.cp2;
 		this.CPs[2] = fbs.cp3;
 		this.CPs[3] = fbs.cp4;
-		this.state = fbs.gameState;
+		this.state = fbs.gameStates[me];
 		
 		update();
 	}
@@ -432,7 +434,7 @@ public class FinalBattleScreen extends JPanel{
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					//TODO: cl.sendCPChange(new DeadSwitch(me, a));
+					cl.sendDeadSwitch(new DeadSwitch(me, a));
 					dialog.dispose();
 				}
 				  
@@ -531,7 +533,7 @@ public class FinalBattleScreen extends JPanel{
 	}
 	
 	private void sendMessage(PlayerAction pa){
-		//cl.sendAction(pa);
+		cl.sendAction(pa);
 	}
 	
 	private void endGame(boolean win){

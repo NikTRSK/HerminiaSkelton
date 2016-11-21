@@ -6,9 +6,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import client.Player;
 import utilities.ChatMessage;
 import utilities.DataPacket;
+import utilities.DeadSwitch;
 import utilities.GameInstance;
+import utilities.PlayerAction;
 import utilities.User;
 
 public class ServerClientCommunicator extends Thread {
@@ -31,15 +34,16 @@ public class ServerClientCommunicator extends Thread {
 //		this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	}
 	
-	protected void sendData(DataPacket<?> dp) {
+	public void sendData(DataPacket<?> dp) {
 		try {
 			oos.writeObject(dp);
 			oos.flush();
 		} catch (IOException ioe) { utilities.Util.printExceptionToCommand(ioe); }
 	}
 	
-	protected void startGame(GameInstance gameInstance) {
-		sendData(new DataPacket<GameInstance>(utilities.Commands.START_GAME, gameInstance));
+//	protected void startGame(GameInstance gameInstance) {
+	protected void startGame(Integer turn) {
+		sendData(new DataPacket<Integer>(utilities.Commands.START_GAME, turn));
 	}
 	
 	protected void endGame() {
@@ -127,6 +131,21 @@ public class ServerClientCommunicator extends Thread {
         		gameType = gameMode;
         		serverListener.addPlayerToQueue(connectionID);
         		break;
+        		
+        	case utilities.Commands.PLAYER_ACTION :
+        		if (input.getData() instanceof PlayerAction)
+        			receiveAction((PlayerAction)input.getData());
+        		else if (input.getData() instanceof DeadSwitch)
+        			receiveDeadSwitch((DeadSwitch)input.getData());
+        		break;
+        	
+        	case utilities.Commands.FINAL_BATTLE :
+        		// Do stuff
+        		break;
+        		
+        	case utilities.Commands.PLAYER_BEFORE_FB :
+        		Player player = (Player)input.getData();
+        		serverListener.addPlayerToGameInstance(player, userName);
         		
         	case utilities.Commands.END_GAME :
         		break;

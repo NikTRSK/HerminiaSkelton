@@ -7,7 +7,7 @@ import javafx.util.Duration;
 import utilities.Constants;
 
 public class BackgroundMusic{
-	private Media battlemusic, casualmusic, startmusic, finalmusic, waitmusic, endmusic;
+	private Media battlemusic, casualmusic, startmusic, finalmusic, waitmusic, endmusic,healmusic;
 	private boolean musicFound;
 	private static MediaPlayer myBGM;
 	private JFXPanel fxPanel;
@@ -31,6 +31,8 @@ public class BackgroundMusic{
 		waitmusic = new Media(waitMusicFilePath.toURI().toString());
 		File endMusicFilePath = new File(Constants.resourceFolderbgm + Constants.endmusic);
 		endmusic = new Media(endMusicFilePath.toURI().toString());
+		File healMusicFilePath = new File(Constants.resourceFolderbgm + Constants.healmusic);
+		healmusic = new Media(healMusicFilePath.toURI().toString());
 	}
 	
 	protected void gamestart(){
@@ -101,6 +103,18 @@ public class BackgroundMusic{
 			    	   myBGM.seek(Duration.ZERO);
 			       }
 			   });
+			myBGM.play();
+		}	
+	}
+	
+	protected void healstart(){
+		if(musicFound){
+			myBGM = new MediaPlayer(healmusic);
+			/*myBGM.setOnEndOfMedia(new Runnable() {
+			       public void run() {
+			    	   myBGM.seek(Duration.ZERO);
+			       }
+			   });*/
 			myBGM.play();
 		}	
 	}

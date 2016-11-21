@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
 
+import client.Player;
 import utilities.DataPacket;
 import utilities.GameInstance;
 import utilities.PlayerInstance;
@@ -61,10 +62,19 @@ public class ServerListener {
 		} catch (SQLException e) { e.printStackTrace(); return false; }
 	}
 	
+	protected void addPlayerToGameInstance(Player player, String playerUsername) {
+		for (GameInstance gameInstance : gameInstances) {
+			ArrayList<String> players = gameInstance.getPlayerUsernames();
+			if (players.contains(playerUsername)) {
+				gameInstance.addPlayerToFinalBattle(player);
+			}
+		}
+	}
+	
 	protected void addPlayerToQueue(Integer ID) {
 		// add player to the queue
 		if (playerThreads.get(ID).getGameType() == 0) {
-			PlayerInstance P1 = new PlayerInstance(playerThreads.get(ID).getUserName());
+			PlayerInstance P1 = new PlayerInstance(playerThreads.get(ID).getUserName(), playerThreads.get(ID));
 			GameInstance gi = new GameInstance(P1, null, instanceID++);
 			gameInstances.add(gi);
 			gameServerGUI.addGameInstance(gi);
@@ -89,8 +99,8 @@ public class ServerListener {
 			Integer p2 = playerQueue.peek(); playerQueue.remove();
 			
 			// create palyer instances
-			PlayerInstance P1 = new PlayerInstance(playerThreads.get(p1).getUserName());
-			PlayerInstance P2 = new PlayerInstance(playerThreads.get(p2).getUserName());
+			PlayerInstance P1 = new PlayerInstance(playerThreads.get(p1).getUserName(), playerThreads.get(p1));
+			PlayerInstance P2 = new PlayerInstance(playerThreads.get(p2).getUserName(), playerThreads.get(p2));
 			GameInstance gi = new GameInstance(P1, P2, instanceID++);
 			System.out.println("Starting multiplayer ");
 			gameInstances.add(gi);
@@ -129,9 +139,10 @@ public class ServerListener {
 	public void startGame(GameInstance gameInstance) {
 		ArrayList<String> players = gameInstance.getPlayerUsernames();
 //  for (ServerClientCommunicator pt : playerThreads) {
-		for (ServerClientCommunicator player : playerThreads.values()) {
-			if (players.contains(player.getUserName()))
-				player.startGame(gameInstance);
+		for (Integer i = 0; i < playerThreads.size(); i++) {
+//		for (ServerClientCommunicator player : playerThreads.values()) {
+			if (players.contains(playerThreads.get(i).getUserName()))
+				playerThreads.get(i).startGame(i);
 		}
 	}
 	

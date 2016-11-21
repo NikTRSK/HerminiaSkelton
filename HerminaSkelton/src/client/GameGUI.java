@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -24,6 +22,7 @@ import javax.swing.JPanel;
 
 import AllCPs.CP;
 import utilities.BackGroundPanel;
+import utilities.FinalBattleState;
 
 public class GameGUI extends JFrame{
 	private static final long serialVersionUID = -8312855782342576917L;
@@ -37,17 +36,25 @@ public class GameGUI extends JFrame{
 	private JMenu menu;
 	GridBagConstraints gbc;
 	Player beta;
-	private JDialog finalBattle;
 	
 	private map.MapScreen map;
 	private BattleScreen battle;
+<<<<<<< HEAD
 	
 	private BackgroundMusic music;
+=======
+	private FinalBattleScreen finalBattle;
+	
+	private BackgroundMusic bgm;
+	private JLabel time;
+>>>>>>> 70d835e276a737d08bcfe8017100bc13e0d9e83b
 
 	public GameGUI(GameClientListener listener){
 		super("Game");
 		clientListener = listener;
 		setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
+		bgm = new BackgroundMusic();
+		bgm.casualstart();
 		initializeComponents();
 		createGUI();
 		
@@ -57,7 +64,7 @@ public class GameGUI extends JFrame{
 //		gd.setFullScreenWindow(this);
 		
 		setVisible(true);
-		switchToMap(false);
+		switchToMap(false, beta);
 		
 		//GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         //this.setUndecorated(true);
@@ -65,7 +72,7 @@ public class GameGUI extends JFrame{
 	}
 	
 	private void initializeComponents(){
-		
+		time = new JLabel();
 		rightPanel = new JPanel();		
 		
 		beta = new Player("Elgin");
@@ -74,8 +81,6 @@ public class GameGUI extends JFrame{
 		gbc = new GridBagConstraints();
 		//cards = new CardLayout();
 		centerPanel = new JPanel(new CardLayout());
-		
-		finalBattle = new JDialog();
 		
 		menuBar = new JMenuBar();
 		menu = new JMenu("Inventory");
@@ -102,6 +107,7 @@ public class GameGUI extends JFrame{
 		chat.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 5));
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		rightPanel.setBackground(Constants.BACKGROUND_COLOR);
+		rightPanel.add(time);
 		rightPanel.add(chat);
 		
 		this.add(rightPanel, BorderLayout.EAST);
@@ -120,7 +126,6 @@ public class GameGUI extends JFrame{
 				  CPHolder.setLayout(new BoxLayout(CPHolder, BoxLayout.X_AXIS));
 				  
 				  for(int i = 0; i < CPs.size(); i++){
-					  int a = i;
 					  
 					  JLabel chooseCP = new JLabel(CPs.get(i).getName()+" lvl "+CPs.get(i).getLevel());
 					  chooseCP.setBackground(Constants.BACKGROUND_COLOR2);
@@ -143,11 +148,7 @@ public class GameGUI extends JFrame{
 				  
 				  dialog.add(dialogPanel);
 				  dialog.pack();
-				  dialog.setVisible(true);
-				//JFrame showInventory = new JFrame("Inventory");
-				//showInventory.setSize(600, 600);
-				//showInventory.setVisible(true);
-				//cpInventory = beta.getCP();			
+				  dialog.setVisible(true);		
 			}
 			
 		});
@@ -157,11 +158,15 @@ public class GameGUI extends JFrame{
 	}
 	
 	public void switchToBattle(){
+		battle.newBattle(beta);
 		CardLayout cards = (CardLayout)centerPanel.getLayout();
 		cards.show(centerPanel, "card 2");
+		bgm.endMusic();
+		bgm.battlestart();
 	}
 	
-	public void switchToMap(boolean dead){
+	public void switchToMap(boolean dead, Player player){
+		this.beta = player;
 		if (dead == true){
 			map.setToCPCenter();
 			CardLayout cards = (CardLayout)centerPanel.getLayout();
@@ -175,11 +180,39 @@ public class GameGUI extends JFrame{
 		map.renderAndPaint();
 		map.setFocusable(true);
 		map.requestFocusInWindow();
+		
+		bgm.endMusic();
+		bgm.casualstart();
 	}	
 	
-	public void timerout(){
-		//finalBattle.add(new FinalBattleScreen(this, clientListener, ,));
-		finalBattle.pack();
-		finalBattle.setVisible(true);
+	public void playHealthCenter(){
+		bgm.endMusic();
+		bgm.healstart();
+	}
+	
+	public void playExplore(){
+		bgm.endMusic();
+		bgm.casualstart();
+	}
+	
+	public void updateTimer(Integer seconds){
+		int sec = seconds % 60;
+		int min = seconds / 60;
+		
+		int minutes = min % 60;
+		time.setText(minutes+":"+sec);
+	}
+	
+	public void timerOut(){
+		clientListener.prepareForFinalBattle(beta);		
+	}
+	
+	public void StartMultiPlayerFinalBattle(Integer me, FinalBattleState fbs){
+		finalBattle = new FinalBattleScreen(this, clientListener, fbs, me);
+		//TODO: display it
+	}
+	
+	public void StartSinglePlayerFinalBattle(){
+		//TODO
 	}
 }
