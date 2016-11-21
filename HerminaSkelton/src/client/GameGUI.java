@@ -2,6 +2,7 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -14,6 +15,7 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -48,27 +50,30 @@ public class GameGUI extends JFrame{
 	
 	private BackgroundMusic bgm;
 	private JLabel time;
+	
+	private JButton mute;
+	private Boolean muted;
+	private int state;
 
 	public GameGUI(GameClientListener listener){
 		super("Game");
 		clientListener = listener;
+		clientListener.setGameGUI(this);
+		
+		// For the GUI.
 		setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
-		bgm = new BackgroundMusic();
-		bgm.casualstart();
 		initializeComponents();
 		createGUI();
 		
-		// fullscreen stuff
-//		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-//		setUndecorated(true);
-//		gd.setFullScreenWindow(this);
+		// For Music.
+		bgm = new BackgroundMusic();
+		bgm.casualstart();
+		muted = false;
+		state = 1;
 		
+		// Initialize.
 		setVisible(true);
 		switchToMap(false, beta);
-		
-		//GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        //this.setUndecorated(true);
-        //gd.setFullScreenWindow(this);
 	}
 	
 	private void initializeComponents(){
@@ -97,15 +102,46 @@ public class GameGUI extends JFrame{
 		centerPanel.setBackground(Constants.BACKGROUND_COLOR);
 		centerPanel.add(map, "card 1");		
 		centerPanel.add(battle, "card 2");
-		
 		this.add(centerPanel, BorderLayout.CENTER);
+		
+		// Mute Button.
+		mute = new JButton("Mute");
+		mute.setBackground(Constants.BACKGROUND_COLOR2);
+		mute.setForeground(Constants.FONT_COLOR);
+		mute.setFont(Constants.GAMEFONT);
+		mute.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(mute.getText().equals("Mute")){
+					bgm.endMusic();
+					mute.setText("Un-Mute");
+					muted = true;
+					map.setFocusable(true);
+					map.requestFocusInWindow();
+				}
+				else{
+					mute.setText("Mute");
+					muted = false;
+					if(state==1)bgm.casualstart();
+					if(state==2)bgm.battlestart();
+					map.setFocusable(true);
+					map.requestFocusInWindow();
+				}
+			}
+			
+		});
+		
+		
 		chat.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 5));
+		time.setPreferredSize(new Dimension(100,100));
+		
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		rightPanel.setPreferredSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4,(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
 		rightPanel.setBackground(Constants.BACKGROUND_COLOR);
-		time.setPreferredSize(new Dimension(100,100));
 		rightPanel.add(time);
 		rightPanel.add(chat);
+		rightPanel.add(mute);
 		
 		chat.setFocusable(true);
 		chat.addFocusListener(new FocusAdapter(){
@@ -157,7 +193,21 @@ public class GameGUI extends JFrame{
 			
 		});
 		
+		JMenu options = new JMenu("Options");
+		
+		JMenuItem quit = new JMenuItem("Quit");
+		quit.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				clientListener.logout();	
+			}
+			
+		});
+		
 		menu.add(inventory);
+		menuBar.add(options);
+		options.add(quit);
 		setJMenuBar(menuBar);
 		this.pack();
 	}
@@ -166,8 +216,11 @@ public class GameGUI extends JFrame{
 		battle.newBattle(beta);
 		CardLayout cards = (CardLayout)centerPanel.getLayout();
 		cards.show(centerPanel, "card 2");
-		bgm.endMusic();
-		bgm.battlestart();
+		if(!muted){
+			bgm.endMusic();
+			bgm.battlestart();
+		}
+		state=2;
 	}
 	
 	public void switchToMap(boolean dead, Player player){
@@ -186,18 +239,25 @@ public class GameGUI extends JFrame{
 		map.setFocusable(true);
 		map.requestFocusInWindow();
 		
-		bgm.endMusic();
-		bgm.casualstart();
+		if(!muted){
+			bgm.endMusic();
+			bgm.casualstart();
+		}
+		state = 2 ;
 	}	
 	
 	public void playHealthCenter(){
-		bgm.endMusic();
-		bgm.healstart();
+		if(!muted){
+			bgm.endMusic();
+			bgm.healstart();
+		}
 	}
 	
 	public void playExplore(){
-		bgm.endMusic();
-		bgm.casualstart();
+		if(!muted){
+			bgm.endMusic();
+			bgm.casualstart();
+		}
 	}
 	
 	public void updateTimer(Integer seconds){
@@ -214,7 +274,10 @@ public class GameGUI extends JFrame{
 	
 	public void StartMultiPlayerFinalBattle(Integer me, FinalBattleState fbs){
 		finalBattle = new FinalBattleScreen(this, clientListener, fbs, me);
-		//TODO: display it
+		centerPanel.add(finalBattle, "card 3");
+		
+		CardLayout cards = (CardLayout)centerPanel.getLayout();
+		cards.show(centerPanel, "card 3");
 	}
 	
 	public void StartSinglePlayerFinalBattle(){
