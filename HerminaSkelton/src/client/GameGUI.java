@@ -72,14 +72,14 @@ public class GameGUI extends JFrame{
 	private void createGUI(){
 		setLayout(new GridBagLayout());
 		map = new map.MapScreen(this,new Dimension(Toolkit.getDefaultToolkit().getScreenSize()),beta);
-		//battle  = new BattleScreen(beta);
+		battle  = new BattleScreen(beta);
 		
 		MapScreen.add(map);
 		int width = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		int height = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		MapScreen.setPreferredSize(new Dimension((2*width)/3,height));
 		BattleScreen.setPreferredSize(new Dimension((2*width)/3,height));
-		//BattleScreen.add(battle);
+		BattleScreen.add(battle);
 		centerPanel.add(MapScreen, "card 1");		
 		centerPanel.add(BattleScreen, "card 2");
 		
