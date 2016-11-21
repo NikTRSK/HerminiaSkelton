@@ -73,11 +73,9 @@ public class MapScreen extends JPanel implements KeyListener {
 			System.out.println("" + createImage(mWidth, mHeight));
 		}
 		if(mImage != null) {
-			System.out.println("mImage not null");
 			mGraphics = mImage.getGraphics();
 		} else return;
 		if(mGraphics == null) {
-			System.out.println("graphics null");
 			return;
 		}
 		
