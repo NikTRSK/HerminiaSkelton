@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -46,7 +48,13 @@ public class GameGUI extends JFrame{
 		setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
 		initializeComponents();
 		createGUI();
+		
+		// fullscreen stuff
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		setUndecorated(true);
+		gd.setFullScreenWindow(this);
 		setVisible(true);
+		
 		switchToMap(false);
 	}
 	
