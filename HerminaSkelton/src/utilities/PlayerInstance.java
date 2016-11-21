@@ -42,6 +42,14 @@ public class PlayerInstance implements Serializable {
 		playerThread.sendData(new DataPacket<Integer>(utilities.Commands.TIME_UPDATE, time));
 	}
 	
+	public void startFinalBattle() {
+		playerThread.sendData(new DataPacket<Boolean>utilities.Commands.FINAL_BATTLE, true)
+	}
+	
+	public void sendData(DataPacket<?> dp) {
+		playerThread.sendData(dp);
+	}
+	
 	public void clearMadeAMove() {
 		this.madeAMove = false;
 	}

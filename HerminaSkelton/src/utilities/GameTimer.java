@@ -23,6 +23,6 @@ public class GameTimer extends Thread implements Serializable {
 				Thread.sleep(1000);
 			} catch (InterruptedException ie) { utilities.Util.printExceptionToCommand(ie);	}
 		}
-		gameInstance.startFinalBattle();
+		gameInstance.timerOut();
 	}
 }
