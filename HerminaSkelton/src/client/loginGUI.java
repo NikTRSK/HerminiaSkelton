@@ -468,7 +468,7 @@ public class loginGUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String name = username.getText().trim();
-				String password = userpassword.getPassword().toString();
+				String password = String.valueOf(userpassword.getPassword());
 				User createUser = new User(name, password);
 				if (gameClient != null) {
 					gameClient.create(createUser);
