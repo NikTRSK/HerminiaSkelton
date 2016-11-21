@@ -23,22 +23,21 @@ import javax.swing.JTextField;
 import AllCPs.CP;
 
 public class GameGUI extends JFrame{
+	private static final long serialVersionUID = -8312855782342576917L;
+	
 	private JPanel centerPanel;
 	private JPanel rightPanel;
-	private JPanel MapScreen;
-	private JPanel BattleScreen;
 	//private JPanel miniMap;
-	private JPanel scoreDisplay;
+	
 	private ChatPanel chat;
-	private JTextField score;
 	private GameClientListener clientListener;
 	private JMenuBar menuBar;
 	private JMenu menu;
 	GridBagConstraints gbc;
-	CardLayout cards;
+	//CardLayout cards;
 	Player beta;
 	private JDialog finalBattle;
-	private Vector<CP> cpInventory;
+	//private Vector<CP> cpInventory;
 	
 	private map.MapScreen map;//
 	private BattleScreen battle;//
@@ -50,93 +49,100 @@ public class GameGUI extends JFrame{
 		initializeComponents();
 		createGUI();
 		setVisible(true);
+		switchToMap(false);
 	}
 	
 	private void initializeComponents(){
 		
 		rightPanel = new JPanel();		
-		MapScreen = new JPanel();
-		BattleScreen = new JPanel();
-		//miniMap = new JPanel();
-		scoreDisplay = new JPanel();
-		chat = new ChatPanel(clientListener);
-		score = new JTextField();
-		gbc = new GridBagConstraints();
-		cards = new CardLayout();
-		centerPanel = new JPanel(cards);
+		
 		beta = new Player("Elgin");
+		
+		chat = new ChatPanel(clientListener);
+		gbc = new GridBagConstraints();
+		//cards = new CardLayout();
+		centerPanel = new JPanel(new CardLayout());
+		
 		finalBattle = new JDialog();
+		
 		menuBar = new JMenuBar();
 		menu = new JMenu("Inventory");
 	}
 	
 	private void createGUI(){
-		setLayout(new GridBagLayout());
+		//this.setLayout(new GridBagLayout());
+		this.setLayout(new BorderLayout());
+		
+		// Map Stuff.
 		map = new map.MapScreen(this,new Dimension(Toolkit.getDefaultToolkit().getScreenSize()),beta);
-		battle  = new BattleScreen(beta, this);
+		//int width = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		//int height = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		//map.setPreferredSize(new Dimension((2*width)/3,height));
 		
-		MapScreen.add(map);
-		int width = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-		int height = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-		MapScreen.setPreferredSize(new Dimension((2*width)/3,height));
-		BattleScreen.setPreferredSize(new Dimension((2*width)/3,height));
-		BattleScreen.add(battle);
-		centerPanel.add(MapScreen, "card 1");		
-		centerPanel.add(BattleScreen, "card 2");
+		// Battle Stuff.
+		battle  = new BattleScreen(beta, this);		
+		//battle.setPreferredSize(new Dimension((2*width)/3,height));
+		centerPanel.add(map, "card 1");		
+		centerPanel.add(battle, "card 2");
 		
-		gbc.gridx = 0;
+		/*gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = .75;
 		gbc.gridwidth = GridBagConstraints.RELATIVE;	
 		gbc.gridheight = GridBagConstraints.REMAINDER;
-		centerPanel.setLayout(new CardLayout());
-		add(centerPanel, gbc);
+		add(centerPanel, gbc);*/
+		this.add(centerPanel, BorderLayout.CENTER);
 		
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-		//rightPanel.add(miniMap);
-		//rightPanel.add(scoreDisplay);
 		rightPanel.add(chat);
 		
-		gbc.fill = GridBagConstraints.BOTH;
+		/*gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = GridBagConstraints.RELATIVE;
 		gbc.gridy = 0;
 		gbc.weightx = .25;
 		gbc.gridheight = GridBagConstraints.REMAINDER;
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
 				
-		add(rightPanel, gbc);
+		add(rightPanel, gbc);*/
+		this.add(rightPanel, BorderLayout.EAST);
 		
 		menuBar.add(menu);
 		JMenuItem inventory = new JMenuItem("Show Inventory");
-		inventory.addActionListener(new ActionListener(){
+		/*inventory.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFrame showInventory = new JFrame("Inventory");
 				showInventory.setSize(600, 600);
 				showInventory.setVisible(true);
-				cpInventory = beta.getCP();			
+				//cpInventory = beta.getCP();			
 			}
 			
-		});
+		});*/
+		
 		menu.add(inventory);
 		setJMenuBar(menuBar);
-	
-		cards.show(centerPanel, "card 1");
 	}
 	
 	public void switchToBattle(){
+		CardLayout cards = (CardLayout)centerPanel.getLayout();
 		cards.show(centerPanel, "card 2");
 	}
 	
 	public void switchToMap(boolean dead){
 		if (dead == true){
 			map.setToCPCenter();
+			CardLayout cards = (CardLayout)centerPanel.getLayout();
+			cards.show(centerPanel, "card 1");
 		}
 		else{
 			map.renderAndPaint();
+			CardLayout cards = (CardLayout)centerPanel.getLayout();
 			cards.show(centerPanel, "card 1");
 		}
+		map.renderAndPaint();
+		map.setFocusable(true);
+		map.requestFocusInWindow();
 	}	
 	
 	public void timerout(){
