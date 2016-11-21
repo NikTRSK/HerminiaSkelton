@@ -25,6 +25,8 @@ public class Player extends MapNode implements Serializable{
 		assignmentsLeft = Constants.StartingAssignments;
 
 		CPs = new Vector<CP>();
+		CPs.add(Constants.generateCP(Constants.rand.nextInt(Constants.numCPs)));
+		
 		x = 5;
 		y = 5;
 		
