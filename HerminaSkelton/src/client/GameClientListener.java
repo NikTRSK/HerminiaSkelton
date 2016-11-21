@@ -1,23 +1,19 @@
 package client;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
-import javax.swing.JFrame;
-import javax.swing.text.Utilities;
-
-import server.ServerListener;
+import utilities.CPRequest;
 import utilities.DataPacket;
+import utilities.DeadSwitch;
+import utilities.FinalBattleState;
+import utilities.PlayerAction;
 import utilities.User;
-import utilities.Util;
 
 public class GameClientListener extends Thread{
 	private String userName;
@@ -34,8 +30,12 @@ public class GameClientListener extends Thread{
 	private Condition userCondition;
 	///////////
 	
+	private Integer me;
+	private FinalBattleScreen fbs;
+	
 	public GameClientListener(Socket socket){
 		mSocket = socket;
+		fbs=null;
 //		userLock = new ReentrantLock();
 //		userCondition = userLock.newCondition();
 		
@@ -74,8 +74,12 @@ public class GameClientListener extends Thread{
 		this.loginGUI = null;
 	}
 	
-	public void sendAction(){
-		
+	public void sendAction(PlayerAction pa){
+		sendData(new DataPacket<PlayerAction>(utilities.Commands.PLAYER_ACTION, pa));
+	}
+
+	public void sendDeadSwitch(DeadSwitch ds){
+		sendData(new DataPacket<DeadSwitch>(utilities.Commands.PLAYER_ACTION, ds));
 	}
 	
 	public String getUser(){
@@ -105,6 +109,10 @@ public class GameClientListener extends Thread{
 		sendData(new DataPacket<User>(utilities.Commands.CREATE_USER, user));
 	}
 	
+	public void prepareForFinalBattle(Player p){
+		sendData(new DataPacket<Player>(utilities.Commands.PLAYER_BEFORE_FB, p));
+	}
+	
 	public void logout() {
 		try {
 			ois.close();
@@ -125,6 +133,26 @@ public class GameClientListener extends Thread{
 				String streamContent = input.getCommand();
 				System.out.println("COMMAND::: " + streamContent);
 				
+				if(streamContent.equals(utilities.Commands.TIMER_OUT)){
+					mGameGUI.timerOut();
+				}
+				
+				if (streamContent.equals(utilities.Commands.FINAL_BATTLE)){
+					if(input.getData() instanceof FinalBattleState){
+						if(fbs==null){
+							mGameGUI.StartMultiPlayerFinalBattle(me, (FinalBattleState)input.getData());
+						}else{
+							fbs.recieveMessage((FinalBattleState)input.getData());
+						}
+					}else if(input.getData() instanceof CPRequest){
+						if(fbs==null){
+							System.out.print("We screwed up");
+						}else{
+							fbs.replaceDead();
+						}
+					}
+					
+				}
 				if (streamContent.equals(utilities.Commands.END_GAME)){
 					
 				}
@@ -141,6 +169,7 @@ public class GameClientListener extends Thread{
 					loginGUI.processCreateAccount(create);
 				}
 				else if(streamContent.equals(utilities.Commands.START_GAME)){
+					me = (Integer)input.getData();
 					waitgui.startGame();
 				}
 				else if(streamContent.equals(utilities.Commands.GAME_SCORES)){
@@ -172,4 +201,7 @@ public class GameClientListener extends Thread{
 		return true;
 	}
 	
+	public void setFBS(FinalBattleScreen fbs){
+		this.fbs = fbs;
+	}
 }
