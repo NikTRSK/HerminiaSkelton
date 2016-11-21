@@ -3,6 +3,8 @@ package client;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -45,6 +47,7 @@ public class ChatPanel extends JPanel {
 	private void createGUI(){
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
+		
 		chatText.setEditable(false);
 		chatText.setText("Start chatting");
 		chatText.setLineWrap(true);
@@ -63,7 +66,7 @@ public class ChatPanel extends JPanel {
 				ChatMessage msg = new ChatMessage(string, mListener.getUser());
 				chatText.append("\n"+string);
 				writeMsgArea.setText("");
-				mListener.sendData(new DataPacket<ChatMessage>(utilities.Commands.CHAT_MESSAGE, msg));			
+				mListener.sendChat(msg);		
 			}
 			
 		});

@@ -134,9 +134,9 @@ public class ServerClientCommunicator extends Thread {
         		
         	case utilities.Commands.PLAYER_ACTION :
         		if (input.getData() instanceof PlayerAction)
-        			receiveAction((PlayerAction)input.getData());
+        			serverListener.receiveActionToFinalBattleManager((PlayerAction)input.getData(), userName);
         		else if (input.getData() instanceof DeadSwitch)
-        			receiveDeadSwitch((DeadSwitch)input.getData());
+        			serverListener.receiveDeadSwitchToFinalBattleManager((DeadSwitch)input.getData(), userName);
         		break;
         	
         	case utilities.Commands.FINAL_BATTLE :

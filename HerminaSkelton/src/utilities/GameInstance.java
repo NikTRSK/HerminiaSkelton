@@ -97,4 +97,12 @@ public class GameInstance implements Serializable {
 		for (PlayerInstance player : players)
 			player.updateTimer(time);
 	}
+	
+	public void FBMReceiveAction(PlayerAction pa) {
+		this.finalBattleManager.recieveAction(pa);
+	}
+	
+	public void FBMReceiveDeadSwitch(DeadSwitch ds) {
+		this.finalBattleManager.recieveDeadSwitch(ds);
+	}
 }
