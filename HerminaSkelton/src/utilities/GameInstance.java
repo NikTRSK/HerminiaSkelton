@@ -21,9 +21,10 @@ public class GameInstance implements Serializable {
 	
 	public GameInstance(PlayerInstance p1, PlayerInstance p2, Integer id) {
 		players.add(p1);
+		gameMode = 0;
 		if (p2 != null) {
 			players.add(p2);
-			gameMode = 0;
+			gameMode = 1;
 		}
 		FBPlayers = new ArrayList<Player>();
 		gameID = id;
@@ -45,7 +46,9 @@ public class GameInstance implements Serializable {
 	}
 	
 	public void addPlayerToFinalBattle(Player p) {
+		System.out.println("Adding player to finalbattle");
 		FBPlayers.add(p);
+		System.out.println("Size " + FBPlayers.size());
 		if (FBPlayers.size() == players.size())
 			startFinalBattle();
 	}
@@ -87,9 +90,11 @@ public class GameInstance implements Serializable {
 	}
 	
 	public void startFinalBattle() {
+		System.out.println("In startFinalBattle: ");
 		if (gameMode == 0) {
 			// TODO
 		} else {
+			System.out.println("Sending new battle: ");
 			finalBattleManager = new FinalBattleManager(FBPlayers.get(0), FBPlayers.get(1), this);
 			for (PlayerInstance player : players)
 				player.startFinalBattle();

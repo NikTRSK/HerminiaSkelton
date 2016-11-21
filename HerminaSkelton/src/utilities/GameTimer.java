@@ -10,7 +10,7 @@ public class GameTimer extends Thread implements Serializable {
 	
 	public GameTimer(GameInstance gi) {
 //		timer = utilities.Constants.GAME_TIME*60; // 300 sec
-		timer = 30; // 300 sec
+		timer = 10; // 300 sec
 		this.gameInstance = gi;
 	}
 	

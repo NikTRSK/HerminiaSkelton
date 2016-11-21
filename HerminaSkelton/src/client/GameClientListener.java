@@ -3,6 +3,7 @@ package client;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
@@ -15,8 +16,10 @@ import utilities.DeadSwitch;
 import utilities.FinalBattleState;
 import utilities.PlayerAction;
 import utilities.User;
+import client.Player;
 
-public class GameClientListener extends Thread{
+public class GameClientListener extends Thread implements Serializable {
+	private static final long serialVersionUID = 6902042676702904127L;
 	private String userName;
 	private Socket mSocket;
 	private ObjectInputStream ois;
