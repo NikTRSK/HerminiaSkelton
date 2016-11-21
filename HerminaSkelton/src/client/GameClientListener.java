@@ -78,6 +78,10 @@ public class GameClientListener extends Thread{
 		
 	}
 	
+	public String getUser(){
+		return userName;
+	}
+	
 	//send msg to clientListener, doesn't send data that requires/expects a response from server
 	public void sendMessage(DataPacket<?> data) {
 		try{
@@ -146,7 +150,7 @@ public class GameClientListener extends Thread{
 						System.out.println("Score: " + t);
 				}
 				else if(streamContent.equals(utilities.Commands.TIME_UPDATE)) {
-					mGameGUI.updateTimer((Intger)input.getData());
+					mGameGUI.updateTimer((Integer)input.getData());
 				}
 			}
 		}catch(IOException ioe){
