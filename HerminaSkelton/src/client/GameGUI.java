@@ -41,6 +41,7 @@ public class GameGUI extends JFrame{
 	private BattleScreen battle;
 	
 	private BackgroundMusic bgm;
+	private JLabel time;
 
 	public GameGUI(GameClientListener listener){
 		super("Game");
@@ -65,7 +66,7 @@ public class GameGUI extends JFrame{
 	}
 	
 	private void initializeComponents(){
-		
+		time = new JLabel();
 		rightPanel = new JPanel();		
 		
 		beta = new Player("Elgin");
@@ -102,6 +103,7 @@ public class GameGUI extends JFrame{
 		chat.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 5));
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		rightPanel.setBackground(Constants.BACKGROUND_COLOR);
+		rightPanel.add(time);
 		rightPanel.add(chat);
 		
 		this.add(rightPanel, BorderLayout.EAST);
@@ -196,6 +198,9 @@ public class GameGUI extends JFrame{
 	public void updateTimer(Integer seconds){
 		int sec = seconds % 60;
 		int min = seconds / 60;
+		
+		int minutes = min % 60;
+		time.setText(minutes+":"+sec);
 	}
 	
 	public void timerout(){
