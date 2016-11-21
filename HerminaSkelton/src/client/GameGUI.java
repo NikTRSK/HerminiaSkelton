@@ -47,6 +47,11 @@ public class GameGUI extends JFrame{
 		setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
 		initializeComponents();
 		createGUI();
+		
+		// fullscreen stuff
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		setUndecorated(true);
+		gd.setFullScreenWindow(this);
 		setVisible(true);
 		
 		switchToMap(false);
