@@ -194,17 +194,13 @@ public class GameGUI extends JFrame{
 	}
 	
 	public void updateTimer(Integer seconds){
-		
+		int sec = seconds % 60;
+		int min = seconds / 60;
 	}
 	
 	public void timerout(){
 		//finalBattle.add(new FinalBattleScreen(this, clientListener, ,));
 		finalBattle.pack();
 		finalBattle.setVisible(true);
-	}
-
-	public void updateTimer(Intger data) {
-		// TODO Auto-generated method stub
-		
 	}
 }
