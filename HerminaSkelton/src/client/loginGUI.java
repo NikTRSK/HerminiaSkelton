@@ -107,7 +107,6 @@ public class loginGUI extends JFrame{
 		username.setForeground(Color.gray);
 		username.setEditable(false);
 		userpassword = new JPasswordField("password");
-		userpassword.setEchoChar('*');
 		userpassword.setFont(new Font("Serif", Font.BOLD, 15));
 		userpassword.setForeground(Color.gray);
 		userpassword.setEditable(false);
@@ -457,7 +456,7 @@ public class loginGUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("LOGIN CLICKED");
 				String name = username.getText().trim();
-				String password = userpassword.getPassword().toString();
+				String password = String.valueOf(userpassword.getPassword());
 				User loginUser = new User(name, password);
 				if (gameClient != null) {
 					gameClient.login(loginUser);
@@ -512,6 +511,7 @@ public class loginGUI extends JFrame{
 						connectionIcon.setIcon(connectionicon);
 						gameClient = new GameClientListener(socket); // initialize the game client
 						gameClient.setLoginGUI(loginGUI.this);
+						userpassword.setEchoChar('*');
 					} catch (IOException ioe) {
 						error.setText(utilities.Constants.PORT_ERROR_MESSAGE);
 						Util.printExceptionToCommand(ioe);
