@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -65,7 +63,7 @@ public class BattleScreen extends JPanel{
 	private JTextArea CPUpdates2;
 	
 	
-	public BattleScreen(Player currPlayer/*, GameGUI mainGUI*/){
+	public BattleScreen(Player currPlayer, GameGUI mainGUI){
 		//TODO uncomment
 		//this.mainGUI = mainGUI;
 		player = currPlayer;
@@ -214,8 +212,9 @@ public class BattleScreen extends JPanel{
 	
 	private void initializeChooseAttack(){
 		chooseAttack = new JPanel();
-		chooseAttack.setLayout(new FlowLayout());
+		chooseAttack.setLayout(new GridLayout(1, 3));
 		chooseAttack.setBackground(Constants.BACKGROUND_COLOR);
+		
 		JButton backButton = new JButton("<< Back");
 		backButton.setBackground(Constants.BACKGROUND_COLOR2);
 		backButton.setForeground(Constants.FONT_COLOR);
@@ -315,7 +314,7 @@ public class BattleScreen extends JPanel{
 		}
 		
 		chooseSwitch = new JPanel();
-		chooseSwitch.setLayout(new FlowLayout());
+		chooseSwitch.setLayout(new GridLayout(1, switchOption.length+1));
 		chooseSwitch.setBackground(Constants.BACKGROUND_COLOR);
 		chooseSwitch.add(backButton);
 		for(int i = 0; i< switchOption.length; i++){
@@ -434,7 +433,7 @@ public class BattleScreen extends JPanel{
 				  
 			  });
 			  
-			  JPanel CP = new JPanel();
+			  JPanel CP = new BackGroundPanel(Constants.TYPE_BACKGROUNDS[playerCPs.get(i).getType()-1]);
 			  CP.setLayout(new BorderLayout());
 			  CP.add(new JLabel(playerCPs.get(i).getSprite()), BorderLayout.CENTER);
 			  CP.add(chooseCP, BorderLayout.SOUTH);
@@ -468,7 +467,7 @@ public class BattleScreen extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();
-				battleOver();
+				battleOver(false);
 			}
 			
 		});
@@ -504,7 +503,7 @@ public class BattleScreen extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();
 				playerCPs.remove(runner);
-				battleOver();
+				battleOver(true);
 				//TODO: teleport player to health center
 				//Player.setx(Constants.HealthCenterX);
 				//Player.sety(Constants.HealthCenterY);
@@ -544,7 +543,7 @@ public class BattleScreen extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();
 				activeCP.addXP(wildCP.getLevel());
-				battleOver();
+				battleOver(false);
 			}
 			
 		});
@@ -575,14 +574,14 @@ public class BattleScreen extends JPanel{
 			return true;
 		}
 		else{
-			Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(2)-1]].move(wildCP, activeCP, CPUpdates2);
+			Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(2)]].move(wildCP, activeCP, CPUpdates2);
 			redraw();
 			if(activeCP.getHealth()<=0)deadCP();
 			return false;
 		}	
 	}
 	
-	private void battleOver(){
+	private void battleOver(boolean lost){
 		if(activeCP.levelUp()){
 			JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL);
 			
@@ -613,13 +612,13 @@ public class BattleScreen extends JPanel{
 			dialog.add(levelUpPanel);
 			dialog.pack();
 			dialog.setVisible(true);
-			//MainGUI.addToChat(activeCP.getName() + " grew to level "+activeCP.getLevel());
-			//MainGUI.addToChat("Current Stats: HP = " + activeCP.getMaxHealth() + 
+			//mainGUI.addToChat(activeCP.getName() + " grew to level "+activeCP.getLevel());
+			//mainGUI.addToChat("Current Stats: HP = " + activeCP.getMaxHealth() + 
 			//					", Attack = " +activeCP.getAttack() + ", Speed = " +
-			//					activeCP.getSpeed()";
+			//					activeCP.getSpeed();
 		}
-		//MainGUI.switchToMap();
-		newBattle(player);
+		mainGUI.switchToMap(lost);
+		//newBattle(player);
 	}
 
 }
