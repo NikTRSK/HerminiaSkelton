@@ -41,15 +41,12 @@ public class GameGUI extends JFrame{
 	
 	private map.MapScreen map;
 	private BattleScreen battle;
-<<<<<<< HEAD
 	
 	private BackgroundMusic music;
-=======
 	private FinalBattleScreen finalBattle;
 	
 	private BackgroundMusic bgm;
 	private JLabel time;
->>>>>>> 70d835e276a737d08bcfe8017100bc13e0d9e83b
 
 	public GameGUI(GameClientListener listener){
 		super("Game");
@@ -103,7 +100,9 @@ public class GameGUI extends JFrame{
 		this.add(centerPanel, BorderLayout.CENTER);
 		chat.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 5));
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-		rightPanel.setPreferredSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4,(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+		int preferredWidth = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4;
+		int preferredHeight = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		rightPanel.setPreferredSize(new Dimension(preferredWidth,preferredHeight));
 		rightPanel.setBackground(Constants.BACKGROUND_COLOR);
 		time.setPreferredSize(new Dimension(100,100));
 		rightPanel.add(time);
