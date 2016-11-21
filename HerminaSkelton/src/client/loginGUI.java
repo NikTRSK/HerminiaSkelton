@@ -446,6 +446,15 @@ public class loginGUI extends JFrame{
 					userpassword.setText("password");
 					userpassword.setForeground(Color.gray);
 				}
+				else{
+					int num = userpassword.getText().length();
+					String temp = "";
+					while(num != 0){
+						temp += "*";
+						num--;
+					}
+					userpassword.setText(temp);
+				}
 			}
 			
 		});
@@ -576,6 +585,10 @@ public class loginGUI extends JFrame{
 		} else {
 			error.setText("Account Successfully created");
 		}
+	}
+	
+	public static void main(String[] args){
+		new loginGUI().setVisible(true);
 	}
 	
 }

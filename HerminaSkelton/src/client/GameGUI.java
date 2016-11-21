@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -56,6 +55,10 @@ public class GameGUI extends JFrame{
 		
 		setVisible(true);
 		switchToMap(false);
+		
+		//GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        //this.setUndecorated(true);
+        //gd.setFullScreenWindow(this);
 	}
 	
 	private void initializeComponents(){
