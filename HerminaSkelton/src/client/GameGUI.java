@@ -193,9 +193,18 @@ public class GameGUI extends JFrame{
 		bgm.casualstart();
 	}
 	
+	public void updateTimer(Integer seconds){
+		
+	}
+	
 	public void timerout(){
 		//finalBattle.add(new FinalBattleScreen(this, clientListener, ,));
 		finalBattle.pack();
 		finalBattle.setVisible(true);
+	}
+
+	public void updateTimer(Intger data) {
+		// TODO Auto-generated method stub
+		
 	}
 }
