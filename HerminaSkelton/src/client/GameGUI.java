@@ -2,45 +2,43 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import AllCPs.CP;
+import utilities.BackGroundPanel;
 
 public class GameGUI extends JFrame{
 	private static final long serialVersionUID = -8312855782342576917L;
 	
 	private JPanel centerPanel;
 	private JPanel rightPanel;
-	//private JPanel miniMap;
 	
 	private ChatPanel chat;
 	private GameClientListener clientListener;
 	private JMenuBar menuBar;
 	private JMenu menu;
 	GridBagConstraints gbc;
-	//CardLayout cards;
 	Player beta;
 	private JDialog finalBattle;
-	//private Vector<CP> cpInventory;
 	
-	private map.MapScreen map;//
-	private BattleScreen battle;//
+	private map.MapScreen map;
+	private BattleScreen battle;
 
 	public GameGUI(GameClientListener listener){
 		super("Game");
@@ -85,40 +83,58 @@ public class GameGUI extends JFrame{
 		centerPanel.add(map, "card 1");		
 		centerPanel.add(battle, "card 2");
 		
-		/*gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = .75;
-		gbc.gridwidth = GridBagConstraints.RELATIVE;	
-		gbc.gridheight = GridBagConstraints.REMAINDER;
-		add(centerPanel, gbc);*/
 		this.add(centerPanel, BorderLayout.CENTER);
 		
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		rightPanel.add(chat);
 		
-		/*gbc.fill = GridBagConstraints.BOTH;
-		gbc.gridx = GridBagConstraints.RELATIVE;
-		gbc.gridy = 0;
-		gbc.weightx = .25;
-		gbc.gridheight = GridBagConstraints.REMAINDER;
-		gbc.gridwidth = GridBagConstraints.REMAINDER;
-				
-		add(rightPanel, gbc);*/
 		this.add(rightPanel, BorderLayout.EAST);
 		
 		menuBar.add(menu);
 		JMenuItem inventory = new JMenuItem("Show Inventory");
-		/*inventory.addActionListener(new ActionListener(){
+		inventory.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFrame showInventory = new JFrame("Inventory");
-				showInventory.setSize(600, 600);
-				showInventory.setVisible(true);
+				JDialog dialog = new JDialog(GameGUI.this, Dialog.ModalityType.APPLICATION_MODAL);  
+				
+				Vector<CP> CPs = beta.getCP();
+				
+				JPanel CPHolder = new JPanel();
+				  CPHolder.setLayout(new BoxLayout(CPHolder, BoxLayout.X_AXIS));
+				  
+				  for(int i = 0; i < CPs.size(); i++){
+					  int a = i;
+					  
+					  JLabel chooseCP = new JLabel(CPs.get(i).getName()+" lvl "+CPs.get(i).getLevel());
+					  chooseCP.setBackground(Constants.BACKGROUND_COLOR2);
+					  chooseCP.setForeground(Constants.FONT_COLOR);
+					  chooseCP.setFont(Constants.GAMEFONT);
+					  
+					  JPanel CP = new BackGroundPanel(Constants.TYPE_BACKGROUNDS[CPs.get(i).getType()-1]);
+					  CP.setLayout(new BorderLayout());
+					  CP.add(new JLabel(CPs.get(i).getSprite()), BorderLayout.CENTER);
+					  CP.add(chooseCP, BorderLayout.SOUTH);
+					  CPHolder.add(CP);
+				  }
+				  
+				  
+				  JPanel dialogPanel = new JPanel();
+				  dialogPanel.setLayout(new BorderLayout());
+				  dialogPanel.setBackground(Constants.BACKGROUND_COLOR);
+				  dialogPanel.add(CPHolder, BorderLayout.CENTER);
+				  dialogPanel.add(new JLabel("Your CPs"), BorderLayout.NORTH);
+				  
+				  dialog.add(dialogPanel);
+				  dialog.pack();
+				  dialog.setVisible(true);
+				//JFrame showInventory = new JFrame("Inventory");
+				//showInventory.setSize(600, 600);
+				//showInventory.setVisible(true);
 				//cpInventory = beta.getCP();			
 			}
 			
-		});*/
+		});
 		
 		menu.add(inventory);
 		setJMenuBar(menuBar);
