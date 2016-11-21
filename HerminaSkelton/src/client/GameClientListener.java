@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
-import utilities.CPRequest;
 import utilities.ChatMessage;
 //import utilities.CPRequest;
 import utilities.DataPacket;
@@ -146,7 +145,7 @@ public class GameClientListener extends Thread{
 						}else{
 							fbs.recieveMessage((FinalBattleState)input.getData());
 						}
-					}else if(input.getData() instanceof CPRequest){
+					}else if(true){//input.getData() instanceof CPRequest){
 						if(fbs==null){
 							System.out.print("We screwed up");
 						}else{
