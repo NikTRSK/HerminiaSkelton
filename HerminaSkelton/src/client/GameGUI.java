@@ -39,15 +39,12 @@ public class GameGUI extends JFrame{
 	
 	private map.MapScreen map;
 	private BattleScreen battle;
-<<<<<<< HEAD
 	
 	private BackgroundMusic music;
-=======
 	private FinalBattleScreen finalBattle;
 	
 	private BackgroundMusic bgm;
 	private JLabel time;
->>>>>>> 70d835e276a737d08bcfe8017100bc13e0d9e83b
 
 	public GameGUI(GameClientListener listener){
 		super("Game");
