@@ -41,6 +41,8 @@ public class GameGUI extends JFrame{
 	
 	private map.MapScreen map;
 	private BattleScreen battle;
+	
+	private BackgroundMusic music;
 
 	public GameGUI(GameClientListener listener){
 		super("Game");
