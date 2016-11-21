@@ -212,13 +212,10 @@ public class FinalBattleManager {
 	
 	private void sendUpdate(){
 		gi.sendFinalBattleUpdate(new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players, state));
-		//sl.sendFinalBattleUpdate(1, new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players[0], state[0]), gi);
-		//sl.sendFinalBattleUpdate(2, new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players[1], state[0]), gi);
 	}
 
 	private void replaceCP(int player){
-		//TODO
-		//cl.sendCPRequest(player);
+		//gi.sendCPRequest(player);
 	}
 	
 	private void endGame(int result){
