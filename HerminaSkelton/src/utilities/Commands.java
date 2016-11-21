@@ -18,4 +18,6 @@ public class Commands {
 	public static final String PLAYER_ACTION = "PLAYER_ACTION"; // PlayerAction
 	public static final String GAME_MODE = "GAME_MODE"; // Integer ( 0 - single, 1 - multiplayer )
 	public static final String TIME_UPDATE = "TIME_UPDATE"; // Integer
+	public static final String FINAL_BATTLE = "FINAL_BATTLE"; // Integer
+	public static final String PLAYER_BEFORE_FB = "PLAYER_BEFORE_FB";
 }

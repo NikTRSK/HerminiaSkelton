@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 
 import AllCPs.CP;
 import utilities.BackGroundPanel;
+import utilities.FinalBattleState;
 
 public class GameGUI extends JFrame{
 	private static final long serialVersionUID = -8312855782342576917L;
@@ -35,10 +36,10 @@ public class GameGUI extends JFrame{
 	private JMenu menu;
 	GridBagConstraints gbc;
 	Player beta;
-	private JDialog finalBattle;
 	
 	private map.MapScreen map;
 	private BattleScreen battle;
+	private FinalBattleScreen finalBattle;
 	
 	private BackgroundMusic bgm;
 	private JLabel time;
@@ -75,8 +76,6 @@ public class GameGUI extends JFrame{
 		gbc = new GridBagConstraints();
 		//cards = new CardLayout();
 		centerPanel = new JPanel(new CardLayout());
-		
-		finalBattle = new JDialog();
 		
 		menuBar = new JMenuBar();
 		menu = new JMenu("Inventory");
@@ -144,11 +143,7 @@ public class GameGUI extends JFrame{
 				  
 				  dialog.add(dialogPanel);
 				  dialog.pack();
-				  dialog.setVisible(true);
-				//JFrame showInventory = new JFrame("Inventory");
-				//showInventory.setSize(600, 600);
-				//showInventory.setVisible(true);
-				//cpInventory = beta.getCP();			
+				  dialog.setVisible(true);		
 			}
 			
 		});
@@ -203,9 +198,16 @@ public class GameGUI extends JFrame{
 		time.setText(minutes+":"+sec);
 	}
 	
-	public void timerout(){
-		//finalBattle.add(new FinalBattleScreen(this, clientListener, ,));
-		finalBattle.pack();
-		finalBattle.setVisible(true);
+	public void timerOut(){
+		clientListener.prepareForFinalBattle(beta);		
+	}
+	
+	public void StartMultiPlayerFinalBattle(Integer me, FinalBattleState fbs){
+		finalBattle = new FinalBattleScreen(this, clientListener, fbs, me);
+		//TODO: display it
+	}
+	
+	public void StartSinglePlayerFinalBattle(){
+		//TODO
 	}
 }
