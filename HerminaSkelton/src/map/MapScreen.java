@@ -48,13 +48,18 @@ public class MapScreen extends JPanel implements KeyListener {
 		zoneY = MapConstants.STARTZONE_Y;
 //		currZone = new MapZone(MapConstants.A1, mWidth, mHeight); // choose where player starts
 		
-		// TODO initialize map zones
+		// initialize map zones
 		zones = new MapZone[4][3];
 		for(int i = 0; i < 4; i++) {
 			for(int j = 0; j < 3; j++) {
 				zones[i][j] = new MapZone(MapConstants.ZONES[j][i], mWidth, mHeight);
 			}
 		}
+		// labels
+		for(NodeLabel label : MapConstants.LABELS) {
+			zones[label.zoneX][label.zoneY].getNodes()[label.x][label.y].setLabel(label.label);
+		}
+		
 		
 		currZone = zones[zoneX][zoneY];
 		
