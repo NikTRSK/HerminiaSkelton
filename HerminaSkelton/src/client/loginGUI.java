@@ -404,6 +404,9 @@ public class loginGUI extends JFrame{
 		        	close();
 		        }
 		    }
+		    public void windowOpened( WindowEvent e ){
+		    	mute.requestFocus();
+		    }
 		});
 		username.setFocusable(true);
 		username.addFocusListener(new FocusListener(){
@@ -468,10 +471,6 @@ public class loginGUI extends JFrame{
 				if (gameClient != null) {
 					gameClient.create(createUser);
 				}
-//				if(!gameclient.sendPacket(loginUser)){
-//					error.setVisible(true);
-//					error.setText("User name already in the system");
-//				}
 			}
 			
 		});
@@ -579,7 +578,4 @@ public class loginGUI extends JFrame{
 		}
 	}
 	
-	public static void main(String[] args){
-		new loginGUI().setVisible(true);
-	}
 }
