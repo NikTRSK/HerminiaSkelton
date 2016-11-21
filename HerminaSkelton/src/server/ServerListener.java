@@ -14,6 +14,7 @@ import client.Player;
 import utilities.DataPacket;
 import utilities.DeadSwitch;
 import utilities.GameInstance;
+import utilities.GameTimer;
 import utilities.PlayerAction;
 import utilities.PlayerInstance;
 import utilities.User;
@@ -95,11 +96,13 @@ public class ServerListener {
 	}
 	
 	public void checkQueue() {
+		System.out.println("Checking Queue");
 		// if queue has 2 players start game instance
 		if (playerQueue.size() == utilities.Constants.GAME_SIZE) {
 			Integer p1 = playerQueue.peek(); playerQueue.remove();
 			Integer p2 = playerQueue.peek(); playerQueue.remove();
 			
+			System.out.println("GettingPlayers: " + playerThreads.get(p1).getUserName() + "| " + playerThreads.get(p2).getUserName());
 			// create palyer instances
 			PlayerInstance P1 = new PlayerInstance(playerThreads.get(p1).getUserName(), playerThreads.get(p1));
 			PlayerInstance P2 = new PlayerInstance(playerThreads.get(p2).getUserName(), playerThreads.get(p2));
@@ -108,6 +111,7 @@ public class ServerListener {
 			gameInstances.add(gi);
 			startGame(gi);
 			gameServerGUI.addGameInstance(gi);
+//			gi.startTimer();
 		}
 	}
 	
@@ -141,11 +145,23 @@ public class ServerListener {
 	public void startGame(GameInstance gameInstance) {
 		ArrayList<String> players = gameInstance.getPlayerUsernames();
 //  for (ServerClientCommunicator pt : playerThreads) {
-		for (Integer i = 0; i < playerThreads.size(); i++) {
-//		for (ServerClientCommunicator player : playerThreads.values()) {
-			if (players.contains(playerThreads.get(i).getUserName()))
-				playerThreads.get(i).startGame(i);
+//		for (Integer i = 0; i < playerThreads.size(); i++) {
+		int i = 0;
+		GameTimer timer = gameInstance.getTimer();
+		for (ServerClientCommunicator player : playerThreads.values()) {
+			if (players.contains(player.getUserName()))
+				player.startGame(i++);
+//				player.sendData(new DataPacket<GameTimer>(utilities.Commands.TIME_UPDATE, timer));
 		}
+		timer.start();
+		// new stuff
+
+//		timer.start();
+//		//
+//		for (ServerClientCommunicator player : playerThreads.values()) {
+//			if (players.contains(player.getUserName()))
+//				player.startGame(i++);
+//		}
 	}
 	
 	public void receiveActionToFinalBattleManager(PlayerAction pa, String username) {
