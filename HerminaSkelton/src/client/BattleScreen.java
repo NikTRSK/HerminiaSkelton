@@ -64,8 +64,7 @@ public class BattleScreen extends JPanel{
 	
 	
 	public BattleScreen(Player currPlayer, GameGUI mainGUI){
-		//TODO uncomment
-		//this.mainGUI = mainGUI;
+		this.mainGUI = mainGUI;
 		player = currPlayer;
 		
 		initializeVariables();
