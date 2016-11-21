@@ -110,11 +110,11 @@ public class BackgroundMusic{
 	protected void healstart(){
 		if(musicFound){
 			myBGM = new MediaPlayer(healmusic);
-			myBGM.setOnEndOfMedia(new Runnable() {
+			/*myBGM.setOnEndOfMedia(new Runnable() {
 			       public void run() {
 			    	   myBGM.seek(Duration.ZERO);
 			       }
-			   });
+			   });*/
 			myBGM.play();
 		}	
 	}

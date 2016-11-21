@@ -154,8 +154,10 @@ public class MapScreen extends JPanel implements KeyListener {
 		}
 		
 		if(currZone.getNodes()[mPlayer.getX()][mPlayer.getY()] instanceof CPCenter) {
+			mGUI.playHealthCenter();
 			JOptionPane.showMessageDialog(mGUI, "Your CPs were healed!");
 			mPlayer.healAll();
+			mGUI.playExplore();
 		}
 	}
 	
