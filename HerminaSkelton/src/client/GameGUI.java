@@ -284,4 +284,8 @@ public class GameGUI extends JFrame{
 	public void StartSinglePlayerFinalBattle(){
 		//TODO
 	}
+	
+	public void appendToChat(String user, String message) {
+		chat.appendText(user, message);
+	}
 }
