@@ -53,7 +53,7 @@ public class GameGUI extends JFrame{
 	}
 	
 	private void initializeComponents(){
-		centerPanel = new JPanel();
+		
 		rightPanel = new JPanel();		
 		MapScreen = new JPanel();
 		BattleScreen = new JPanel();
@@ -63,6 +63,7 @@ public class GameGUI extends JFrame{
 		score = new JTextField();
 		gbc = new GridBagConstraints();
 		cards = new CardLayout();
+		centerPanel = new JPanel(cards);
 		beta = new Player("Elgin");
 		finalBattle = new JDialog();
 		menuBar = new JMenuBar();
