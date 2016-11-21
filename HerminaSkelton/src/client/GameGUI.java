@@ -193,6 +193,11 @@ public class GameGUI extends JFrame{
 		bgm.casualstart();
 	}
 	
+	public void updateTimer(Integer seconds){
+		int sec = seconds % 60;
+		int min = seconds / 60;
+	}
+	
 	public void timerout(){
 		//finalBattle.add(new FinalBattleScreen(this, clientListener, ,));
 		finalBattle.pack();
