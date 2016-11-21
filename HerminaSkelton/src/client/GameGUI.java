@@ -103,6 +103,7 @@ public class GameGUI extends JFrame{
 		chat.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 5));
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		rightPanel.setBackground(Constants.BACKGROUND_COLOR);
+		rightPanel.add(time);
 		rightPanel.add(chat);
 		
 		this.add(rightPanel, BorderLayout.EAST);
