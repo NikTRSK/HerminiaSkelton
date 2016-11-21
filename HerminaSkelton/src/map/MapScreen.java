@@ -13,11 +13,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import client.Constants;
+import client.GameGUI;
 import client.Player;
 
 public class MapScreen extends JPanel implements KeyListener {
 	
-	private JFrame mFrame;
+	private GameGUI mGUI;
 	
 	private MapZone currZone;
 	private int mWidth = 0;
@@ -36,9 +37,9 @@ public class MapScreen extends JPanel implements KeyListener {
 		paint();
 	}
 	
-	public MapScreen(JFrame frame, Dimension fullScreenDimensions, Player player) {
+	public MapScreen(GameGUI gui, Dimension fullScreenDimensions, Player player) {
 		super();
-		mFrame = frame;
+		mGUI = gui;
 		
 		mWidth = (int)(2 * fullScreenDimensions.getWidth() / 3); // map is 2/3 or fullscreen
 		mHeight = (int)(fullScreenDimensions.getHeight());       // map is full height
@@ -149,8 +150,8 @@ public class MapScreen extends JPanel implements KeyListener {
 		
 		if(currZone.getNodes()[mPlayer.getX()][mPlayer.getY()] instanceof GrassNode) {
 			if(encounteredCP()) {
-				JOptionPane.showMessageDialog(mFrame, "CP found!");
-//				mFrame.switchToBattle();
+				JOptionPane.showMessageDialog(mGUI, "CP found!");
+				mGUI.switchToBattle();
 			}
 		}
 	}
