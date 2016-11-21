@@ -72,6 +72,7 @@ public class GameGUI extends JFrame{
 		state = 1;
 		
 		// Initialize.
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
 		switchToMap(false, beta);
 	}
