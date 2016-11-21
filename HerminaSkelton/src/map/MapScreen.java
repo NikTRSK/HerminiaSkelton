@@ -8,16 +8,16 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import client.Constants;
 import client.GameGUI;
 import client.Player;
 
 public class MapScreen extends JPanel implements KeyListener {
-	
+
+	private static final long serialVersionUID = 8928637684914321732L;
+
 	private GameGUI mGUI;
 	
 	private MapZone currZone;

@@ -486,10 +486,17 @@ public class BattleScreen extends JPanel{
 	
 	private void lostBattle(){
 		JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL);
-		int runner = Constants.rand.nextInt(playerCPs.size());
+		JLabel info;
 		
-		JLabel info = new JLabel("All of your CPs have fainted! "+playerCPs.get(runner).getName()
-								+" doesn't trust you anymore and ran away!");
+		if(playerCPs.size()>1){
+			int runner = Constants.rand.nextInt(playerCPs.size());
+			info = new JLabel("All of your CPs have fainted! "+playerCPs.get(runner).getName()
+									+" doesn't trust you anymore and ran away!");
+			playerCPs.remove(runner);
+		}
+		else{
+			info = new JLabel("You lost, and will be returned to the health center");
+		}
 		info.setForeground(Constants.FONT_COLOR);
 		info.setBackground(Constants.BACKGROUND_COLOR2);
 		info.setFont(Constants.GAMEFONT);
@@ -502,7 +509,6 @@ public class BattleScreen extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();
-				playerCPs.remove(runner);
 				battleOver(true);
 				//TODO: teleport player to health center
 				//Player.setx(Constants.HealthCenterX);
@@ -517,7 +523,7 @@ public class BattleScreen extends JPanel{
 		result.setLayout(new BorderLayout());
 		result.setBackground(Constants.BACKGROUND_COLOR);
 		result.add(info, BorderLayout.NORTH);
-		result.add(new JLabel(playerCPs.get(runner).getSprite()), BorderLayout.CENTER);
+		//result.add(new JLabel(playerCPs.get(runner).getSprite()), BorderLayout.CENTER);
 		result.add(okay, BorderLayout.SOUTH);
 		
 		dialog.add(result);
