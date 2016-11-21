@@ -152,6 +152,11 @@ public class MapScreen extends JPanel implements KeyListener {
 				mGUI.switchToBattle();
 			}
 		}
+		
+		if(currZone.getNodes()[mPlayer.getX()][mPlayer.getY()] instanceof CPCenter) {
+			JOptionPane.showMessageDialog(mGUI, "Your CPs were healed!");
+			mPlayer.healAll();
+		}
 	}
 	
 	private boolean encounteredCP() {
