@@ -469,6 +469,7 @@ public class BattleScreen extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				player.addCP(wildCP);
 				dialog.dispose();
 				battleOver(false);
 			}
@@ -512,6 +513,7 @@ public class BattleScreen extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();
+				player.healAll();
 				battleOver(true);
 				//TODO: teleport player to health center
 				//Player.setx(Constants.HealthCenterX);
@@ -551,7 +553,9 @@ public class BattleScreen extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();
+				System.out.println("a"+activeCP.getXP());
 				activeCP.addXP(wildCP.getLevel());
+				System.out.println("b"+activeCP.getXP());
 				battleOver(false);
 			}
 			
