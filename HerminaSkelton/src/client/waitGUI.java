@@ -153,7 +153,7 @@ public class waitGUI extends JFrame{
 		        		,JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,ObjButtons,ObjButtons[1]);
 		        if(PromptResult==JOptionPane.YES_OPTION)
 		        {
-		        	gameClient.logout();
+		        	gameListener.logout();
 		        	close();
 		            //gameclientlistener...
 		        }
