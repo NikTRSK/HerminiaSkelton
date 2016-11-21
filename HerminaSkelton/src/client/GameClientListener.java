@@ -92,16 +92,12 @@ public class GameClientListener extends Thread{
 	}
 
 	public void login(User user) {
-		ans = null;
 		userName = user.getUsername();
 		sendData(new DataPacket<User>(utilities.Commands.LOGIN_USER, user));
 	}
 	
-	public boolean create(User user) {
-		ans = null;
-		sendData(new DataPacket<User>(utilities.Commands.LOGIN_USER, user));
-		while (ans == null) {}
-		return ans;
+	public void create(User user) {
+		sendData(new DataPacket<User>(utilities.Commands.CREATE_USER, user));
 	}
 	
 	public void logout() {

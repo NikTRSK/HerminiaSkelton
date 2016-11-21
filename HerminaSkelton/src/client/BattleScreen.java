@@ -84,6 +84,7 @@ public class BattleScreen extends JPanel{
 	
 	private void initializeVariables(){
 		playerCPs = player.getCP();
+		System.out.println("CP SIZES " + player.getCP().size());
 		activeCP = playerCPs.get(Constants.rand.nextInt(playerCPs.size()));
 		while(activeCP.getHealth()<=0){
 			activeCP = playerCPs.get(Constants.rand.nextInt(playerCPs.size()));
