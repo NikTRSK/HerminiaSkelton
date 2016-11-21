@@ -28,9 +28,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import utilities.Constants;
 import utilities.User;
 import utilities.Util;
@@ -46,7 +48,7 @@ public class loginGUI extends JFrame{
 	private JLabel loginLable;
 	private JLabel error;
 	private JTextField username;
-	private JTextField userpassword;
+	private JPasswordField userpassword;
 	private JTextField port;
 	private JTextField host;
 	private JLabel connectionIcon;
@@ -104,7 +106,8 @@ public class loginGUI extends JFrame{
 		username.setFont(new Font("Serif", Font.BOLD, 15));
 		username.setForeground(Color.gray);
 		username.setEditable(false);
-		userpassword = new JTextField("password");
+		userpassword = new JPasswordField("password");
+		userpassword.setEchoChar('*');
 		userpassword.setFont(new Font("Serif", Font.BOLD, 15));
 		userpassword.setForeground(Color.gray);
 		userpassword.setEditable(false);
@@ -273,7 +276,7 @@ public class loginGUI extends JFrame{
 	
 	private boolean havePassword(){
 		checkPassword = true;
-		if (userpassword.getText().trim().equals("")){
+		if (userpassword.getPassword().equals("")){
 			checkPassword = false;
 		}
 		return checkPassword;
@@ -433,7 +436,7 @@ public class loginGUI extends JFrame{
 
 			@Override
 			public void focusGained(FocusEvent e) {
-				if(userpassword.getText().equals("password")){
+				if(userpassword.getPassword().equals("password")){
 					userpassword.setText("");
 					userpassword.setForeground(Color.black);
 					error.setText("");
@@ -442,18 +445,9 @@ public class loginGUI extends JFrame{
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(userpassword.getText().equals("")){
+				if(userpassword.getPassword().equals("")){
 					userpassword.setText("password");
 					userpassword.setForeground(Color.gray);
-				}
-				else{
-					int num = userpassword.getText().length();
-					String temp = "";
-					while(num != 0){
-						temp += "*";
-						num--;
-					}
-					userpassword.setText(temp);
 				}
 			}
 			
@@ -463,7 +457,7 @@ public class loginGUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("LOGIN CLICKED");
 				String name = username.getText().trim();
-				String password = userpassword.getText().trim();
+				String password = userpassword.getPassword().toString();
 				User loginUser = new User(name, password);
 				if (gameClient != null) {
 					gameClient.login(loginUser);
@@ -475,7 +469,7 @@ public class loginGUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String name = username.getText().trim();
-				String password = userpassword.getText().trim();
+				String password = userpassword.getPassword().toString();
 				User createUser = new User(name, password);
 				if (gameClient != null) {
 					gameClient.create(createUser);
