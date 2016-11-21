@@ -44,6 +44,7 @@ public class PlayerInstance implements Serializable {
 	}
 	
 	public void startFinalBattle() {
+		System.out.println("Sending final battle for " + userName);
 		playerThread.sendData(new DataPacket<Boolean>(utilities.Commands.FINAL_BATTLE, true));
 	}
 	

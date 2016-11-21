@@ -18,6 +18,7 @@ public class Player extends MapNode implements Serializable{
 	private Integer y;
 	private Integer steps;
 	
+	
 	public Player(String name){
 		super(0, 0, 0, 0);
 		

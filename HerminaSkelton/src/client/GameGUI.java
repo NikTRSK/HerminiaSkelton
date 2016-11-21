@@ -274,6 +274,7 @@ public class GameGUI extends JFrame{
 	}
 	
 	public void StartMultiPlayerFinalBattle(Integer me, FinalBattleState fbs){
+		System.out.println(fbs == null);
 		finalBattle = new FinalBattleScreen(this, clientListener, fbs, me);
 		centerPanel.add(finalBattle, "card 3");
 		

@@ -5,11 +5,16 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.Serializable;
 
-public abstract class MapNode {
-	
-	protected Image mImage = null;
+public abstract class MapNode implements Serializable {
+	private static final long serialVersionUID = -8834981432066089520L;
+	transient protected Image mImage = null;
 	protected String mLabel = "";
+	
+	protected MapNode() {
+		
+	}
 	
 	protected MapNode(int inX, int inY, int inWidth, int inHeight) {
 		width = inWidth;

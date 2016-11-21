@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -68,7 +69,9 @@ public class ServerListener {
 	protected void addPlayerToGameInstance(Player player, String playerUsername) {
 		for (GameInstance gameInstance : gameInstances) {
 			ArrayList<String> players = gameInstance.getPlayerUsernames();
+			System.out.println("Adding players to instance" + players.size());
 			if (players.contains(playerUsername)) {
+				System.out.println("Players in instance");
 				gameInstance.addPlayerToFinalBattle(player);
 			}
 		}

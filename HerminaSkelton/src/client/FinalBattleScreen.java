@@ -101,7 +101,11 @@ public class FinalBattleScreen extends JPanel{
 		healthLabels = new JLabel[4];
 		
 		// Setting image labels.
+		System.out.println("CPS " + CPs.length);
 		for(int i = 0; i<4; i++){
+			System.out.println("CP i " + i);
+			if (CPs[i] == null)
+				System.out.println("null");
 			ImageIcon sprite = CPs[i].getSprite();
 			Image img = sprite.getImage();
 			Image nwImg = img.getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);

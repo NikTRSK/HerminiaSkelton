@@ -59,6 +59,7 @@ public abstract class CP implements Serializable{
 		return currHealth;
 	}
 	public ImageIcon getSprite(){
+//		System.out.println(spiete == null);
 		return sprite;
 	}
 	
