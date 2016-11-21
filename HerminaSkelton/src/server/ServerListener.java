@@ -12,7 +12,9 @@ import java.util.Vector;
 
 import client.Player;
 import utilities.DataPacket;
+import utilities.DeadSwitch;
 import utilities.GameInstance;
+import utilities.PlayerAction;
 import utilities.PlayerInstance;
 import utilities.User;
 import utilities.Util;
@@ -143,6 +145,28 @@ public class ServerListener {
 //		for (ServerClientCommunicator player : playerThreads.values()) {
 			if (players.contains(playerThreads.get(i).getUserName()))
 				playerThreads.get(i).startGame(i);
+		}
+	}
+	
+	public void receiveActionToFinalBattleManager(PlayerAction pa, String username) {
+		for (GameInstance gameInstance : gameInstances) {
+			ArrayList<String> playersInInstance = gameInstance.getPlayerUsernames();
+			for (ServerClientCommunicator player : playerThreads.values()) {
+				if (playersInInstance.contains(player.getUserName())) {
+					gameInstance.FBMReceiveAction(pa);
+				}
+			}
+		}
+	}
+	
+	public void receiveDeadSwitchToFinalBattleManager(DeadSwitch ds, String username) {
+		for (GameInstance gameInstance : gameInstances) {
+			ArrayList<String> playersInInstance = gameInstance.getPlayerUsernames();
+			for (ServerClientCommunicator player : playerThreads.values()) {
+				if (playersInInstance.contains(player.getUserName())) {
+					gameInstance.FBMReceiveDeadSwitch(ds);
+				}
+			}
 		}
 	}
 	

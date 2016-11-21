@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import utilities.Constants;
+import utilities.DataPacket;
 
 public class waitGUI extends JFrame{
 	private static final long serialVersionUID = 1L;
@@ -215,6 +216,10 @@ public class waitGUI extends JFrame{
 								JOptionPane.ERROR_MESSAGE);
 					}
 				}
+				
+				// testing
+				gameListener.sendData(new DataPacket<Integer>(utilities.Commands.GAME_SCORES, 500));
+				// testing
 			}
 			
 		});
