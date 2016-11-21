@@ -17,4 +17,5 @@ public class Commands {
 	public static final String TIMER_OUT = "TIMER_OUT"; // Boolean
 	public static final String PLAYER_ACTION = "PLAYER_ACTION"; // PlayerAction
 	public static final String GAME_MODE = "GAME_MODE"; // Integer ( 0 - single, 1 - multiplayer )
+	public static final String TIME_UPDATE = "TIME_UPDATE"; // Integer
 }

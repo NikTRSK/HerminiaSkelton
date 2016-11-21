@@ -65,12 +65,17 @@ public class DatabaseLogic {
 		try {
 			scoreStatement.setString(1, username);
 			rs = scoreStatement.executeQuery();
+			System.out.println("FETCH SIZE: " + rs.getFetchSize() + " USERNAME: " + username);
 			int i = 1;
 			while (rs.next()) {
 				scores.add(rs.getInt("score" + i++));
 			}
 			// add the new score and sort the array list
 			scores.add(newScore);
+//			for (int scoreID = scores.size(); scoreID < 5; i++) {
+//				scores.add(-1);
+//			}
+			
 			Collections.sort(scores, Collections.reverseOrder());
 			// TESTING ONLY
 			System.out.println("Checking sorting****");
@@ -83,12 +88,18 @@ public class DatabaseLogic {
 			
 			// update scores in database
 			for (int scoreID = 0; scoreID < scores.size(); scoreID++) {
-				updateScoresStatement.setInt(i+1, scores.get(scoreID));
+				updateScoresStatement.setInt(scoreID+1, scores.get(scoreID));
 			}
 			updateScoresStatement.setString(6, username);
-			rs = updateScoresStatement.executeQuery();
+			updateScoresStatement.executeUpdate();
 			
 		} catch (SQLException sqle) { utilities.Util.printExceptionToCommand(sqle);	}
+		// remove all instances of -1
+		for (int i = 0; i < scores.size(); i++) {
+			if (scores.get(i) == -1)
+				scores.remove(i);
+		}
+		// return all scores
 		return scores;
 	}
 	
