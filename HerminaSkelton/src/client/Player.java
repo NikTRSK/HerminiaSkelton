@@ -76,6 +76,13 @@ public class Player extends MapNode implements Serializable{
 		//TODO
 	}
 	
+	//heals all CPs
+	public void healAll(){
+		for(int i = 0; i < CPs.size(); i++){
+			CPs.get(i).heal();
+		}
+	}
+	
 	//movement stuff
 	private void calculatePosition() {
 		trueX = x * width;

@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -86,12 +87,14 @@ public class GameGUI extends JFrame{
 		// Battle Stuff.
 		battle  = new BattleScreen(beta, this);		
 		//battle.setPreferredSize(new Dimension((2*width)/3,height));
+		centerPanel.setBackground(Constants.BACKGROUND_COLOR);
 		centerPanel.add(map, "card 1");		
 		centerPanel.add(battle, "card 2");
 		
 		this.add(centerPanel, BorderLayout.CENTER);
-		
+		chat.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 5));
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+		rightPanel.setBackground(Constants.BACKGROUND_COLOR);
 		rightPanel.add(chat);
 		
 		this.add(rightPanel, BorderLayout.EAST);
