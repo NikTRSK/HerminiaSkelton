@@ -29,11 +29,19 @@ public class GameInstance implements Serializable {
 		gameID = id;
 		timerExpired = false;
 		timer = new GameTimer(this);
-		timer.start();
+//		timer.start();
 	}
 	
 	public ArrayList<PlayerInstance> getPlayers() {
 		return this.players;
+	}
+	
+	public void startTimer() {
+		timer.start();
+	}
+	
+	public GameTimer getTimer() {
+		return timer;
 	}
 	
 	public void addPlayerToFinalBattle(Player p) {
@@ -94,6 +102,7 @@ public class GameInstance implements Serializable {
 	}
 	
 	public void updatePlayerTimers(Integer time) {
+		System.out.println("TIMER " + time);
 		for (PlayerInstance player : players)
 			player.updateTimer(time);
 	}

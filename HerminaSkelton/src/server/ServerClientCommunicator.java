@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -14,7 +15,11 @@ import utilities.GameInstance;
 import utilities.PlayerAction;
 import utilities.User;
 
-public class ServerClientCommunicator extends Thread {
+public class ServerClientCommunicator extends Thread implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2902489247828430845L;
 	protected Socket socket;
 	protected ObjectOutputStream oos;
 	protected ObjectInputStream ois;

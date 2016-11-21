@@ -1,5 +1,7 @@
 package utilities;
 
-public class CPRequest {
+import java.io.Serializable;
+
+public class CPRequest implements Serializable {
 	//TODO
 }
