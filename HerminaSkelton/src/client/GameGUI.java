@@ -199,7 +199,7 @@ public class GameGUI extends JFrame{
 		int sec = seconds % 60;
 		int min = seconds / 60;
 		
-		int minutes = min /60;
+		int minutes = min % 60;
 		time.setText(minutes+":"+sec);
 	}
 	
