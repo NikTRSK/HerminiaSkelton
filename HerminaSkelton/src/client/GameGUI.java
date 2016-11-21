@@ -50,11 +50,11 @@ public class GameGUI extends JFrame{
 		createGUI();
 		
 		// fullscreen stuff
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		setUndecorated(true);
-		gd.setFullScreenWindow(this);
-		setVisible(true);
+//		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+//		setUndecorated(true);
+//		gd.setFullScreenWindow(this);
 		
+		setVisible(true);
 		switchToMap(false);
 	}
 	
