@@ -42,7 +42,7 @@ public class MapScreen extends JPanel implements KeyListener {
 		mGUI = gui;
 		
 		mWidth = (int)(2 * fullScreenDimensions.getWidth() / 3); // map is 2/3 or fullscreen
-		mHeight = (int)(fullScreenDimensions.getHeight());       // map is full height
+		mHeight = (int)(fullScreenDimensions.getHeight()) - MapConstants.FIXED_HEIGHT;       // map is full height
 		
 		zoneX = MapConstants.STARTZONE_X;
 		zoneY = MapConstants.STARTZONE_Y;
