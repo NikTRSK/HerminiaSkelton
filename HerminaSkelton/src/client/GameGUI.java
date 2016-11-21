@@ -72,7 +72,7 @@ public class GameGUI extends JFrame{
 	private void createGUI(){
 		setLayout(new GridBagLayout());
 		map = new map.MapScreen(this,new Dimension(Toolkit.getDefaultToolkit().getScreenSize()),beta);
-		battle  = new BattleScreen(beta);
+		battle  = new BattleScreen(beta, this);
 		
 		MapScreen.add(map);
 		int width = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
@@ -114,16 +114,14 @@ public class GameGUI extends JFrame{
 				JFrame showInventory = new JFrame("Inventory");
 				showInventory.setSize(600, 600);
 				showInventory.setVisible(true);
-				cpInventory = beta.getCP();
-				
-				
+				cpInventory = beta.getCP();			
 			}
 			
 		});
 		menu.add(inventory);
 		setJMenuBar(menuBar);
 	
-		//cards.show(centerPanel, "card 1");
+		cards.show(centerPanel, "card 1");
 	}
 	
 	public void switchToBattle(){
