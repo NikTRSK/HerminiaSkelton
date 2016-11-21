@@ -34,6 +34,9 @@ public abstract class CP implements Serializable{
 	public String getName(){
 		return name;
 	}
+	public int getXP(){
+		return experience;
+	}
 	public int getType(){
 		return type;
 	}
@@ -70,15 +73,16 @@ public abstract class CP implements Serializable{
 	
 	//XP, level and stat Modifiers
 	public void addXP(int exp){
-		experience=+exp;
+		experience+=exp;
 	}
 	public boolean levelUp(){
 		//Max level is 10
 		if(level==10)return false;
 		
 		//If current xp is higher than the threshold for that level, level up
-		if(experience>=Constants.levelThresholds[level]){
+		if(experience>=Constants.levelThresholds[level+1]){
 			level++;
+			this.updateStats();
 			return true;
 		}else{
 			return false;
