@@ -11,19 +11,14 @@ import client.Player;
 import utilities.ChatMessage;
 import utilities.DataPacket;
 import utilities.DeadSwitch;
-import utilities.GameInstance;
 import utilities.PlayerAction;
 import utilities.User;
 
 public class ServerClientCommunicator extends Thread implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2902489247828430845L;
 	protected Socket socket;
 	protected ObjectOutputStream oos;
 	protected ObjectInputStream ois;
-//	private BufferedReader br;
 	private ServerListener serverListener;
 	
 	private String userName;
@@ -36,7 +31,6 @@ public class ServerClientCommunicator extends Thread implements Serializable {
 		this.gameType = -1;
 		this.oos = new ObjectOutputStream(socket.getOutputStream());
 		this.ois = new ObjectInputStream(socket.getInputStream());
-//		this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	}
 	
 	public void sendData(DataPacket<?> dp) {

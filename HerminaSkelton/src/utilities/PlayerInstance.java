@@ -38,10 +38,9 @@ public class PlayerInstance implements Serializable {
 		this.madeAMove = true;
 	}*/
 	
-	public void updateTimer(int time) {
-		System.out.println("UPDATING TIMER " + time);
-		Integer timer = new Integer(time);
-		playerThread.sendData(new DataPacket<Integer>(utilities.Commands.TIME_UPDATE, timer));
+	public void updateTimer(Integer time) {
+//		Integer timer = new Integer(time);
+		playerThread.sendData(new DataPacket<Integer>(utilities.Commands.TIME_UPDATE, time));
 	}
 	
 	public void startFinalBattle() {

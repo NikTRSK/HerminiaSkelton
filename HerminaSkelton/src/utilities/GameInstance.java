@@ -102,7 +102,6 @@ public class GameInstance implements Serializable {
 	}
 	
 	public void updatePlayerTimers(Integer time) {
-		System.out.println("TIMER " + time);
 		for (PlayerInstance player : players)
 			player.updateTimer(time);
 	}
