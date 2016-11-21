@@ -182,8 +182,8 @@ public class MapConstants {
 	};
 	
 	// labels
-	public static NodeLabel[] = {new NodeLabel};
-	public static NodeLabel CPCenter = new NodeLabel()
+//	public static NodeLabel[] = {new NodeLabel};
+//	public static NodeLabel CPCenter = new NodeLabel();
 	
 	// images
 	public static final String IMAGES_FOLDER = "assets/";

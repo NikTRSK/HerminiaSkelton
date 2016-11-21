@@ -120,7 +120,7 @@ public class MapScreen extends JPanel implements KeyListener {
 	
 	
 	public void setToCPCenter() {
-		currZone = zones[MapConstants.STARTZONE_X][MapConstants.START_Y]; //TODO set to constants
+		currZone = zones[MapConstants.STARTZONE_X][MapConstants.STARTZONE_Y]; //TODO set to constants
 		mPlayer.setX(MapConstants.START_X);
 		mPlayer.setY(MapConstants.START_Y);
 		
