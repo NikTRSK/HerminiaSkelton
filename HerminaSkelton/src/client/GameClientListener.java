@@ -29,10 +29,6 @@ public class GameClientListener extends Thread implements Serializable {
 	private waitGUI waitgui;
 	private loginGUI loginGUI;
 	private Boolean ans = null;
-	// added this
-	private Lock userLock;
-	private Condition userCondition;
-	///////////
 	
 	private Integer me;
 	private FinalBattleScreen fbs;
@@ -40,8 +36,6 @@ public class GameClientListener extends Thread implements Serializable {
 	public GameClientListener(Socket socket){
 		mSocket = socket;
 		fbs=null;
-//		userLock = new ReentrantLock();
-//		userCondition = userLock.newCondition();
 		
 		boolean socketReady = initializeVariables();
 		if (socketReady){
@@ -158,7 +152,7 @@ public class GameClientListener extends Thread implements Serializable {
 					
 				}
 				if (streamContent.equals(utilities.Commands.END_GAME)){
-					
+					//mainGUI.endOfGame();
 				}
 				else if(streamContent.equals(utilities.Commands.LOGOUT_USER)){
 					User user = (User)input.getData();

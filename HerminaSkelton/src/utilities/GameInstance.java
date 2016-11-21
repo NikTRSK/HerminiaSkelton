@@ -118,4 +118,14 @@ public class GameInstance implements Serializable {
 	public void FBMReceiveDeadSwitch(DeadSwitch ds) {
 		this.finalBattleManager.recieveDeadSwitch(ds);
 	}
+	
+	public void endGame(Boolean won){
+		for (PlayerInstance player : players)
+			player.sendData(new DataPacket<Boolean>(utilities.Commands.FINAL_BATTLE, won));
+	}
+	
+	public void sendCPRequest(Player play){
+		for (PlayerInstance player : players)
+			player.sendData(new DataPacket<Player>(utilities.Commands.FINAL_BATTLE, play));
+	}
 }
