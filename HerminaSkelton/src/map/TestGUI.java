@@ -45,7 +45,7 @@ public class TestGUI extends JFrame {
 //		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 //		test.setUndecorated(true);
 //		gd.setFullScreenWindow(test);
-		com.apple.eawt.FullScreenUtilities.setWindowCanFullScreen(test,true);
-		com.apple.eawt.Application.getApplication().requestToggleFullScreen(test);
+//		com.apple.eawt.FullScreenUtilities.setWindowCanFullScreen(test,true);
+//		com.apple.eawt.Application.getApplication().requestToggleFullScreen(test);
 	}
 }

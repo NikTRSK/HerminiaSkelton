@@ -1,5 +1,7 @@
 package map;
 
+import java.awt.Font;
+
 import client.Constants;
 
 public class MapConstants {
@@ -179,6 +181,10 @@ public class MapConstants {
 			{C1, C2, C3, C4},
 	};
 	
+	// labels
+	public static NodeLabel[] = {new NodeLabel};
+	public static NodeLabel CPCenter = new NodeLabel()
+	
 	// images
 	public static final String IMAGES_FOLDER = "assets/";
 	public static final String GRASS_IMAGE = IMAGES_FOLDER + "grass.jpg";
@@ -186,4 +192,7 @@ public class MapConstants {
 	public static final String WALL_IMAGE = IMAGES_FOLDER + "wall.jpg";
 	public static final String CPCENTER_IMAGE = IMAGES_FOLDER + "cpcenter1.png";
 	public static final String AVATAR = IMAGES_FOLDER + "mario.png";
+	
+	//fonts
+	public static final Font NODEFONT = new Font("Courier", Font.BOLD, 18);
 }

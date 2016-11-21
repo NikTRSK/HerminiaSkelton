@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 public abstract class MapNode {
 	
 	protected Image mImage = null;
+	protected String mLabel = "";
 	
 	protected MapNode(int inX, int inY, int inWidth, int inHeight) {
 		width = inWidth;
@@ -31,6 +32,10 @@ public abstract class MapNode {
 	public void draw(Graphics g) {
 		g.setColor(Color.black);
 		g.drawImage(mImage, trueX, trueY, width, height, null);
+		if(! mLabel.equals("")) {
+			g.setFont(MapConstants.NODEFONT);
+			g.drawString(mLabel, trueX + width/2 - g.getFontMetrics().stringWidth(mLabel) / 2, trueY + height/2);
+		}
 	}
 	
 	//Scale the object for rendering
