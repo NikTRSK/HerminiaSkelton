@@ -44,7 +44,7 @@ public class Constants {
 
 
 	//Constants for CP growth rate
-	public static int levelThresholds[] = {1,3,6,10,15,21,28,36,45,55};
+	public static int levelThresholds[] = {2,4,7,11,16,22,29,37,46,56};
 	public static int min = 5;
 	public static int low = 12;
 	public static int medium = 25;

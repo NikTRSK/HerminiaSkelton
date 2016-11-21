@@ -64,4 +64,9 @@ public class GameInstance implements Serializable {
 	public void startFinalBattle() {
 		System.out.println("Starting final battle");
 	}
+	
+	public void updatePlayerTimers(Integer time) {
+		for (PlayerInstance player : players)
+			player.updateTimer(time);
+	}
 }
