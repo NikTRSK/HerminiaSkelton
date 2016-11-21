@@ -43,7 +43,7 @@ public class PlayerInstance implements Serializable {
 	}
 	
 	public void startFinalBattle() {
-		playerThread.sendData(new DataPacket<Boolean>utilities.Commands.FINAL_BATTLE, true)
+		playerThread.sendData(new DataPacket<Boolean>(utilities.Commands.FINAL_BATTLE, true));
 	}
 	
 	public void sendData(DataPacket<?> dp) {
