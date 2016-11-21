@@ -4,6 +4,8 @@ import client.Constants;
 
 public class MapConstants {
 	
+	public static int FIXED_HEIGHT = 110;
+	
 	public static int STARTZONE_X = 1;
 	public static int STARTZONE_Y = 1;
 	public static int START_X = 7;
