@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -41,11 +39,15 @@ public class GameGUI extends JFrame{
 	
 	private map.MapScreen map;
 	private BattleScreen battle;
+	
+	private BackgroundMusic bgm;
 
 	public GameGUI(GameClientListener listener){
 		super("Game");
 		clientListener = listener;
 		setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
+		bgm = new BackgroundMusic();
+		bgm.casualstart();
 		initializeComponents();
 		createGUI();
 		
@@ -155,8 +157,11 @@ public class GameGUI extends JFrame{
 	}
 	
 	public void switchToBattle(){
+		battle.newBattle(beta);
 		CardLayout cards = (CardLayout)centerPanel.getLayout();
 		cards.show(centerPanel, "card 2");
+		bgm.endMusic();
+		bgm.battlestart();
 	}
 	
 	public void switchToMap(boolean dead){
@@ -173,7 +178,20 @@ public class GameGUI extends JFrame{
 		map.renderAndPaint();
 		map.setFocusable(true);
 		map.requestFocusInWindow();
+		
+		bgm.endMusic();
+		bgm.casualstart();
 	}	
+	
+	public void playHealthCenter(){
+		bgm.endMusic();
+		bgm.healstart();
+	}
+	
+	public void playExplore(){
+		bgm.endMusic();
+		bgm.casualstart();
+	}
 	
 	public void timerout(){
 		//finalBattle.add(new FinalBattleScreen(this, clientListener, ,));
