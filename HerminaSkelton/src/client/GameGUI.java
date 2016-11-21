@@ -89,7 +89,6 @@ public class GameGUI extends JFrame{
 		gbc.weightx = .75;
 		gbc.gridwidth = GridBagConstraints.RELATIVE;	
 		gbc.gridheight = GridBagConstraints.REMAINDER;
-		centerPanel.setLayout(new CardLayout());
 		add(centerPanel, gbc);
 		
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
@@ -119,6 +118,7 @@ public class GameGUI extends JFrame{
 			}
 			
 		});
+	
 		menu.add(inventory);
 		setJMenuBar(menuBar);
 	

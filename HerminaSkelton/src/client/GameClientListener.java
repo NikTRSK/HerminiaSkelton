@@ -116,6 +116,10 @@ public class GameClientListener extends Thread{
 		sendData(new DataPacket<Integer>(utilities.Commands.GAME_MODE, type));
 	}
 	
+	public String getUser(){
+		return userName;
+	}
+	
 	public void run(){		
 		try{
 			while(true){
