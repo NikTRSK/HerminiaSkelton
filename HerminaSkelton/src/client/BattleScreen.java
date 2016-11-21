@@ -626,7 +626,7 @@ public class BattleScreen extends JPanel{
 			//					", Attack = " +activeCP.getAttack() + ", Speed = " +
 			//					activeCP.getSpeed();
 		}
-		mainGUI.switchToMap(lost);
+		mainGUI.switchToMap(lost, player);
 		//newBattle(player);
 	}
 

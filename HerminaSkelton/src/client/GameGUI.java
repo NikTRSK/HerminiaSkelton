@@ -57,7 +57,7 @@ public class GameGUI extends JFrame{
 //		gd.setFullScreenWindow(this);
 		
 		setVisible(true);
-		switchToMap(false);
+		switchToMap(false, beta);
 		
 		//GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         //this.setUndecorated(true);
@@ -120,7 +120,6 @@ public class GameGUI extends JFrame{
 				  CPHolder.setLayout(new BoxLayout(CPHolder, BoxLayout.X_AXIS));
 				  
 				  for(int i = 0; i < CPs.size(); i++){
-					  int a = i;
 					  
 					  JLabel chooseCP = new JLabel(CPs.get(i).getName()+" lvl "+CPs.get(i).getLevel());
 					  chooseCP.setBackground(Constants.BACKGROUND_COLOR2);
@@ -164,7 +163,8 @@ public class GameGUI extends JFrame{
 		bgm.battlestart();
 	}
 	
-	public void switchToMap(boolean dead){
+	public void switchToMap(boolean dead, Player player){
+		this.beta = player;
 		if (dead == true){
 			map.setToCPCenter();
 			CardLayout cards = (CardLayout)centerPanel.getLayout();
