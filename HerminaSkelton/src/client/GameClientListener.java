@@ -180,7 +180,9 @@ public class GameClientListener extends Thread{
 						System.out.println("Score: " + t);
 				}
 				else if(streamContent.equals(utilities.Commands.TIME_UPDATE)) {
-					mGameGUI.updateTimer((Integer)input.getData());
+					if (input.getData() != null) {
+						mGameGUI.updateTimer((Integer)input.getData());
+					}
 				}
 			}
 		}catch(IOException ioe){
