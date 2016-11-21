@@ -31,7 +31,7 @@ public class ServerClientCommunicator extends Thread {
 //		this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	}
 	
-	protected void sendData(DataPacket<?> dp) {
+	public void sendData(DataPacket<?> dp) {
 		try {
 			oos.writeObject(dp);
 			oos.flush();

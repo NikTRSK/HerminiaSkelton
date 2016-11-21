@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -78,7 +79,7 @@ public class GameClientListener extends Thread{
 	}
 	
 	//send msg to clientListener, doesn't send data that requires/expects a response from server
-	public void sendMessage(DataPacket<?> data){
+	public void sendMessage(DataPacket<?> data) {
 		try{
 			oos.writeObject(data);
 			oos.flush();
@@ -137,6 +138,15 @@ public class GameClientListener extends Thread{
 				}
 				else if(streamContent.equals(utilities.Commands.START_GAME)){
 					waitgui.startGame();
+				}
+				else if(streamContent.equals(utilities.Commands.GAME_SCORES)){
+					@SuppressWarnings("unchecked")
+					ArrayList<Integer> test = (ArrayList<Integer>)input.getData();
+					for (Integer t : test)
+						System.out.println("Score: " + t);
+				}
+				else if(streamContent.equals(utilities.Commands.TIME_UPDATE)) {
+					mGameGUI.updateTimer((Intger)input.getData());
 				}
 			}
 		}catch(IOException ioe){

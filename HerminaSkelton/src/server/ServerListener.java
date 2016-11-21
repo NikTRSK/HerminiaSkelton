@@ -64,7 +64,7 @@ public class ServerListener {
 	protected void addPlayerToQueue(Integer ID) {
 		// add player to the queue
 		if (playerThreads.get(ID).getGameType() == 0) {
-			PlayerInstance P1 = new PlayerInstance(playerThreads.get(ID).getUserName());
+			PlayerInstance P1 = new PlayerInstance(playerThreads.get(ID).getUserName(), playerThreads.get(ID));
 			GameInstance gi = new GameInstance(P1, null, instanceID++);
 			gameInstances.add(gi);
 			gameServerGUI.addGameInstance(gi);
@@ -89,8 +89,8 @@ public class ServerListener {
 			Integer p2 = playerQueue.peek(); playerQueue.remove();
 			
 			// create palyer instances
-			PlayerInstance P1 = new PlayerInstance(playerThreads.get(p1).getUserName());
-			PlayerInstance P2 = new PlayerInstance(playerThreads.get(p2).getUserName());
+			PlayerInstance P1 = new PlayerInstance(playerThreads.get(p1).getUserName(), playerThreads.get(p1));
+			PlayerInstance P2 = new PlayerInstance(playerThreads.get(p2).getUserName(), playerThreads.get(p2));
 			GameInstance gi = new GameInstance(P1, P2, instanceID++);
 			System.out.println("Starting multiplayer ");
 			gameInstances.add(gi);
