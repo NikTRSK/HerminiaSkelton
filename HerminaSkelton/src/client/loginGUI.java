@@ -401,6 +401,7 @@ public class loginGUI extends JFrame{
 		        if(PromptResult==JOptionPane.YES_OPTION)
 		        {
 		        	gameClient.logout();
+		        	close();
 		        }
 		    }
 		});

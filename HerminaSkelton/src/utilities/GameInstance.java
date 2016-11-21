@@ -1,8 +1,13 @@
 package utilities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GameInstance {
+public class GameInstance implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1709672852475896413L;
 	ArrayList<PlayerInstance> players = new ArrayList<PlayerInstance>();
 	Integer gameID;
 	GameTimer timer;
@@ -27,8 +32,8 @@ public class GameInstance {
 	
 	public ArrayList<String> getPlayerUsernames() {
 		ArrayList<String> p = new ArrayList<String>();
-		p.add(players.get(0).getUsername());
-		p.add(players.get(1).getUsername());
+		for (int i = 0; i < players.size(); i++)
+			p.add(players.get(i).getUsername());
 		return p;
 	}
 	

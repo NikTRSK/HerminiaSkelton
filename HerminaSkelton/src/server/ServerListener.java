@@ -53,14 +53,26 @@ public class ServerListener {
 		try {
 			// check if user is valid
 			if (db.loginUser(userInfo.getUsername(), userInfo.getPassword())) {
-				// add player to the queue
-				playerQueue.add(ID);
 				gameServerGUI.addUserToUsersTable(userInfo.getUsername());
 				return true;
 			}
 			else
 				return false;
 		} catch (SQLException e) { e.printStackTrace(); return false; }
+	}
+	
+	protected void addPlayerToQueue(Integer ID) {
+		// add player to the queue
+		if (playerThreads.get(ID).getGameType() == 0) {
+			PlayerInstance P1 = new PlayerInstance(playerThreads.get(ID).getUserName());
+			GameInstance gi = new GameInstance(P1, null, instanceID++);
+			gameInstances.add(gi);
+			gameServerGUI.addGameInstance(gi);
+			startGame(gi);
+		} else {
+			playerQueue.add(ID);
+			checkQueue();
+		}
 	}
 	
 	protected boolean createUser(User userInfo) {
@@ -71,38 +83,19 @@ public class ServerListener {
 	}
 	
 	public void checkQueue() {
-		GameInstance gi = null;
 		// if queue has 2 players start game instance
-		if (playerQueue.size() >= utilities.Constants.GAME_SIZE) {
-			// get usernames
-//			String p1 = playerQueue.peek(); playerQueue.remove();
-//			String p2 = playerQueue.peek(); playerQueue.remove();
+		if (playerQueue.size() == utilities.Constants.GAME_SIZE) {
 			Integer p1 = playerQueue.peek(); playerQueue.remove();
-			while (playerThreads.get(p1).getGameType() != -1) {
-				playerQueue.add(p1);
-				p1 = playerQueue.peek(); playerQueue.remove();
-			}
-			// single player
-			if (playerThreads.get(p1).getGameType() == 0) {
-				PlayerInstance P1 = new PlayerInstance(playerThreads.get(p1).getUserName());
-				gi = new GameInstance(P1, null, instanceID++);
-			} else {
-				// check queue again
-				playerQueue.add(p1);
-				return;
-			}
-//			if () 
-//			// create palyer instances
-//			PlayerInstance P1 = new PlayerInstance(p1);
-//			PlayerInstance P2 = new PlayerInstance(p2);
-//			GameInstance gi = new GameInstance(P1, P2, instanceID++);
-//			gameInstances.add(gi);
-			if (gi != null) {
-				// signal players to start the game
-				startGame(gi);
-				// update server table
-				gameServerGUI.addGameInstance(gi);
-			}
+			Integer p2 = playerQueue.peek(); playerQueue.remove();
+			
+			// create palyer instances
+			PlayerInstance P1 = new PlayerInstance(playerThreads.get(p1).getUserName());
+			PlayerInstance P2 = new PlayerInstance(playerThreads.get(p2).getUserName());
+			GameInstance gi = new GameInstance(P1, P2, instanceID++);
+			System.out.println("Starting multiplayer ");
+			gameInstances.add(gi);
+			startGame(gi);
+			gameServerGUI.addGameInstance(gi);
 		}
 	}
 	
@@ -134,9 +127,11 @@ public class ServerListener {
 	}
 	
 	public void startGame(GameInstance gameInstance) {
+		ArrayList<String> players = gameInstance.getPlayerUsernames();
 //  for (ServerClientCommunicator pt : playerThreads) {
 		for (ServerClientCommunicator player : playerThreads.values()) {
-			player.startGame(gameInstance);
+			if (players.contains(player.getUserName()))
+				player.startGame(gameInstance);
 		}
 	}
 	
@@ -193,7 +188,7 @@ public class ServerListener {
 				playerThreads.put(clientID, player);
 				player.start();
 				
-				checkQueue();
+//				checkQueue();
 				
 			} catch (IOException e) {
 				e.printStackTrace();

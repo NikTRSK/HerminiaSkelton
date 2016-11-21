@@ -46,6 +46,7 @@ public class waitGUI extends JFrame{
 		this.gameListener = gameListener;
 		this.host = host;
 		this.port = port;
+		gameListener.setWaitGUI(this);
 		initializeComponents();
 		setIcon();
 		createGUI();
@@ -152,7 +153,8 @@ public class waitGUI extends JFrame{
 		        		,JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,ObjButtons,ObjButtons[1]);
 		        if(PromptResult==JOptionPane.YES_OPTION)
 		        {
-		            System.exit(0);
+		        	gameClient.logout();
+		        	close();
 		            //gameclientlistener...
 		        }
 		    }
@@ -176,7 +178,7 @@ public class waitGUI extends JFrame{
 				singlePlayer.setEnabled(false);
 				multiPlayer.setEnabled(false);
 				gameListener.sendGameMode(1);
-				sel.setText("Multi-player mode selected");
+				sel.setText("Waiting for other player to join");
 			}
 			
 		});
@@ -218,6 +220,10 @@ public class waitGUI extends JFrame{
 		});
 	}
 	
+	protected void close(){
+		 System.exit(0);
+	}
+	
 	private void setBackground(){
 		try {
 		    final Image backgroundImage = javax.imageio.ImageIO.read(new File(Constants.resourceFolderbg + "wait.jpg"));
@@ -237,7 +243,8 @@ public class waitGUI extends JFrame{
 		}
 	}
 	
-	public static void main(String[] args){
-		new waitGUI(null, Constants.DEFUALT_HOST, Integer.toString(Constants.DEFAULT_PORT)).setVisible(true);
-	}	
+	protected void startGame(){
+		new GameGUI(gameListener).setVisible(true);
+		dispose();
+	}
 }
