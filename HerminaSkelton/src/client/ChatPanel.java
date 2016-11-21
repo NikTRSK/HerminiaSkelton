@@ -47,13 +47,14 @@ public class ChatPanel extends JPanel {
 	private void createGUI(){
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		
 		chatText.setEditable(false);
 		chatText.setText("Start chatting");
 		chatText.setLineWrap(true);
 		chatText.setWrapStyleWord(true);
-		//chatText.setPreferredSize(new Dimension(300,100));
-		//scrollArea.setPreferredSize(new Dimension(300,100));
+		chatText.setBackground(Constants.BACKGROUND_COLOR2);
+		chatText.setForeground(Constants.BACKGROUND_COLOR);
+		chatText.setFont(Constants.GAMEFONT);
+		
 		scrollArea.getViewport().setView(chatText);
 		scrollArea.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
