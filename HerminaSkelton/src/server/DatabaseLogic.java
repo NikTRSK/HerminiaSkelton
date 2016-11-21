@@ -63,6 +63,19 @@ public class DatabaseLogic {
 	protected ArrayList<Integer> getScores(String username, Integer newScore) {
 		ArrayList<Integer> scores = new ArrayList<Integer>();
 		try {
+			// test
+			loginStatement.setString(1, username);
+			rs = loginStatement.executeQuery();
+			rs.next();
+			System.out.println("Results: " + rs.getInt("score1"));
+			System.out.println("Results: " + rs.getInt("score2"));
+			System.out.println("Results: " + rs.getInt("score3"));
+			System.out.println("Results: " + rs.getInt("score4"));
+			System.out.println("Results: " + rs.getInt("score5"));
+			System.out.println("FETCH SIZE: " + rs.getFetchSize() + " USERNAME: " + username);
+//			rs.row
+			// test
+			
 			scoreStatement.setString(1, username);
 			rs = scoreStatement.executeQuery();
 			System.out.println("FETCH SIZE: " + rs.getFetchSize() + " USERNAME: " + username);
