@@ -1,7 +1,5 @@
 package AllCPs;
 
-import javax.swing.ImageIcon;
-
 import client.Constants;
 
 public class KeerthanHarish extends CP{

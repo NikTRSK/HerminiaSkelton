@@ -173,8 +173,7 @@ public class GameClientListener extends Thread implements Serializable {
 					endGUI.setVisible(true);
 				}
 				else if(streamContent.equals(utilities.Commands.LOGOUT_USER)){
-					User user = (User)input.getData();
-					// call the logout on the gui
+					System.exit(0);
 				}
 				else if(streamContent.equals(utilities.Commands.AUTH_RESPONSE)){
 					boolean authenticate = (boolean)input.getData();

@@ -30,12 +30,8 @@ public abstract class MapNode implements Serializable {
 	protected int trueX = 0, trueY = 0;
 	protected int width = 0, height = 0;
 	
-	private double mXScale;
-	private double mYScale;
-	
 	//The location and size used for rendering
 	protected Rectangle renderBounds = new Rectangle(0,0,0,0);
-	private int mapBorderSize = 0;
 	
 	public void draw(Graphics g) {
 		g.setColor(Color.black);

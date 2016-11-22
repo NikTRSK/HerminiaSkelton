@@ -10,6 +10,7 @@ public class BackgroundMusic{
 	private Media battlemusic, casualmusic, startmusic, finalmusic, waitmusic, endmusic,healmusic;
 	private boolean musicFound;
 	private static MediaPlayer myBGM;
+	@SuppressWarnings("unused")
 	private JFXPanel fxPanel;
 	
 	public BackgroundMusic(){

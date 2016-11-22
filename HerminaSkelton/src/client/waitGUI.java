@@ -24,7 +24,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import utilities.Constants;
-import utilities.DataPacket;
 
 public class waitGUI extends JFrame{
 	private static final long serialVersionUID = 1L;
@@ -35,7 +34,6 @@ public class waitGUI extends JFrame{
 	private GridBagConstraints mGridBagConst;
 	private JLabel notice;
 	private JLabel sel;
-	private int select = -1;
 	private boolean pause = false;
 	private BackgroundMusic music;
 	private JButton portInfo;
@@ -163,7 +161,6 @@ public class waitGUI extends JFrame{
 		singlePlayer.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				select = 0;
 				singlePlayer.setEnabled(false);
 				multiPlayer.setEnabled(false);
 				sel.setText("Single player mode selected");
@@ -175,7 +172,6 @@ public class waitGUI extends JFrame{
 		multiPlayer.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				select = 1;
 				singlePlayer.setEnabled(false);
 				multiPlayer.setEnabled(false);
 				gameListener.sendGameMode(1);

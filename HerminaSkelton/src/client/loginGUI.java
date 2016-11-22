@@ -55,8 +55,8 @@ public class loginGUI extends JFrame{
 	private boolean haveHost = false;
 	private boolean havePort = false;
 	private ImageIcon connectionicon, disconnectionicon;
-	private Lock hostAndPortLock, userLock;
-	private Condition hostAndPortCondition, userCondition;
+	private Lock hostAndPortLock;
+	private Condition hostAndPortCondition;
 	private Socket socket;
 	private GameClientListener gameClient;
 	private JButton mute;
@@ -79,9 +79,6 @@ public class loginGUI extends JFrame{
 		hostAndPortLock = new ReentrantLock();
 		hostAndPortCondition = hostAndPortLock.newCondition();
 
-		// added for user
-		userLock = new ReentrantLock();
-		userCondition = userLock.newCondition();
 		// added for user
 		//appearance settings
 		mute = new JButton();
