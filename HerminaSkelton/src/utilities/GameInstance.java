@@ -7,9 +7,6 @@ import client.Player;
 import server.FinalBattleManager;
 
 public class GameInstance implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1709672852475896413L;
 	ArrayList<PlayerInstance> players = new ArrayList<PlayerInstance>();
 	Integer gameID;
@@ -46,9 +43,7 @@ public class GameInstance implements Serializable {
 	}
 	
 	public void addPlayerToFinalBattle(Player p) {
-		System.out.println("Adding player to finalbattle");
 		FBPlayers.add(p);
-		System.out.println("Size " + FBPlayers.size());
 		if (FBPlayers.size() == players.size())
 			startFinalBattle();
 	}
@@ -91,7 +86,7 @@ public class GameInstance implements Serializable {
 	
 	public void startFinalBattle() {
 		if (gameMode == 0) {
-			// Will never happen
+			players.get(0).sendData(new DataPacket<Integer>(utilities.Commands.SINGLE_FINAL_BATTLE, null));
 		} else {
 			finalBattleManager = new FinalBattleManager(FBPlayers.get(0), FBPlayers.get(1), this);
 		}
