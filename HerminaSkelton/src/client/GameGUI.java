@@ -287,7 +287,7 @@ public class GameGUI extends JFrame implements MouseListener {
 	}
 	
 	public void StartSinglePlayerFinalBattle(){
-		centerPanel.add(new SinglePlayerFinalBattleScreen(beta, this), "card3");
+		centerPanel.add(new SinglePlayerFinalBattleScreen(beta, this), "card 3");
 		
 		CardLayout cards = (CardLayout)centerPanel.getLayout();
 		cards.show(centerPanel, "card 3");
