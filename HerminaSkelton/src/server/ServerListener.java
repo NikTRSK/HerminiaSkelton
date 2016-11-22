@@ -53,11 +53,14 @@ public class ServerListener {
 			playerThread.sendData(dp);
 	}
 	
-	// FIGURE OUT HOW TO ADD THE USERNAME
 	protected boolean loginUser(User userInfo, Integer ID) {
 		try {
 			// check if user is valid
 			if (db.loginUser(userInfo.getUsername(), userInfo.getPassword())) {
+				for(ServerClientCommunicator player : playerThreads.values()) {
+					if (player.getUserName()!=null && player.getUserName().equalsIgnoreCase(userInfo.getUsername()))
+						return false;
+				}
 				gameServerGUI.addUserToUsersTable(userInfo.getUsername());
 				return true;
 			}
@@ -173,6 +176,8 @@ public class ServerListener {
 			for (ServerClientCommunicator player : playerThreads.values()) {
 				if (playersInInstance.contains(player.getUserName())) {
 					gameInstance.FBMReceiveAction(pa);
+					System.out.println("sent to FBM");
+					return;
 				}
 			}
 		}

@@ -65,7 +65,7 @@ public abstract class CP implements Serializable{
 	
 	//Health Modifiers
 	public void changeHealth(int change){
-		currHealth+=change;
+		currHealth+=new Integer(change);
 		if(currHealth<0)currHealth = 0;
 	}
 	public void heal(){

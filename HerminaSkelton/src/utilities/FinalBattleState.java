@@ -13,6 +13,7 @@ public class FinalBattleState implements Serializable{
 	public CP cp2; // Player 2.
 	public CP cp3; // Miller 1.
 	public CP cp4; // Miller 2.
+	public Integer[] CPHealth; // Health wasn't sending
 	
 	// In case the Player wants/needs to switch CP.
 	public Player[] players;
@@ -23,6 +24,8 @@ public class FinalBattleState implements Serializable{
 	// 4 if miller is dead (win the game)
 	public Integer[] gameStates;
 	
+	
+	
 	// Constructor.
 	public FinalBattleState(CP cp1, CP cp2, CP cp3, CP cp4, Player[] players, Integer[] states) {
 		if (cp1 == null)
@@ -31,6 +34,12 @@ public class FinalBattleState implements Serializable{
 		this.cp2 = cp2;
 		this.cp3 = cp3;
 		this.cp4 = cp4;
+		
+		this.CPHealth = new Integer[4];
+		CPHealth[0] = cp1.getHealth();
+		CPHealth[1] = cp2.getHealth();
+		CPHealth[2] = cp3.getHealth();
+		CPHealth[3] = cp4.getHealth();
 		
 		this.gameStates = states;
 		
