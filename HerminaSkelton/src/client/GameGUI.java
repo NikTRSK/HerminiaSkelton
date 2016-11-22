@@ -147,7 +147,7 @@ public class GameGUI extends JFrame implements MouseListener {
 		time.setPreferredSize(new Dimension(100,100));
 		
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-		rightPanel.setPreferredSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()/4,(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+		rightPanel.setPreferredSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()/3,(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
 		rightPanel.setBackground(Constants.BACKGROUND_COLOR);
 		rightPanel.add(time);
 		rightPanel.add(chat);
