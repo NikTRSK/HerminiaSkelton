@@ -38,10 +38,6 @@ import utilities.User;
 import utilities.Util;
 
 public class loginGUI extends JFrame{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private BackgroundMusic music;
 	private boolean pause = false;

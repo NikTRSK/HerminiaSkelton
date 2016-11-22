@@ -2,8 +2,6 @@ package map;
 
 import java.awt.Font;
 
-import client.Constants;
-
 public class MapConstants {
 	
 	public static int FIXED_HEIGHT = 110;

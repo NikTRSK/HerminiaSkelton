@@ -11,6 +11,7 @@ import client.Player;
 import utilities.ChatMessage;
 import utilities.DataPacket;
 import utilities.DeadSwitch;
+import utilities.GameScore;
 import utilities.PlayerAction;
 import utilities.User;
 
@@ -75,8 +76,8 @@ public class ServerClientCommunicator extends Thread implements Serializable {
 	}
 	
 	// takes in the current score from the player and returns the top 5 scores
-	public ArrayList<Integer> getTopScores(Integer playerScore) {
-		ArrayList<Integer> scores = serverListener.updateScores(userName, playerScore);
+	public ArrayList<GameScore> getTopScores(Integer playerScore) {
+		ArrayList<GameScore> scores = serverListener.updateScores(userName, playerScore);
 		
 		return scores;
 	}
@@ -112,16 +113,15 @@ public class ServerClientCommunicator extends Thread implements Serializable {
         		sendData(new DataPacket<Boolean>(utilities.Commands.CREATE_RESPONSE, createUserResponse));
         		break;
         		
-        	case utilities.Commands.GAME_SCORES :
+        	case utilities.Commands.SEND_SCORE :
         		Integer playerScore = (Integer)input.getData();
-        		ArrayList<Integer> topScores = getTopScores(playerScore);
-        		sendData(new DataPacket<ArrayList<Integer>>(utilities.Commands.GAME_SCORES, topScores));
+        		ArrayList<GameScore> topScores = getTopScores(playerScore);
+        		sendData(new DataPacket<ArrayList<GameScore>>(utilities.Commands.TOP_SCORES, topScores));
         		break;
         		
         	case utilities.Commands.CHAT_MESSAGE :
         		ChatMessage cm = (ChatMessage)input.getData();
         		cm.setUsername(userName);
-//        		serverListener.sendToAllClients(new DataPacket<ChatMessage>(utilities.Commands.CHAT_MESSAGE, cm));
         		serverListener.sendToAllClients(input);
         		break;
         		
@@ -141,10 +141,6 @@ public class ServerClientCommunicator extends Thread implements Serializable {
         		}
         		else if (input.getData() instanceof DeadSwitch)
         			serverListener.receiveDeadSwitchToFinalBattleManager((DeadSwitch)input.getData(), userName);
-        		break;
-        	
-        	case utilities.Commands.FINAL_BATTLE :
-//        		if (input.getData() instanceof )
         		break;
         		
         	case utilities.Commands.PLAYER_BEFORE_FB :

@@ -26,7 +26,6 @@ public class GameServerGUI extends JFrame {
 		super("Game waiting room");
 		initializeVariables();
 		createGUI();
-		addEvents();
 		setVisible(true);
 	}
 	
@@ -85,12 +84,7 @@ public class GameServerGUI extends JFrame {
 		add(tabbedPanel);
 		
 
-	}
-	
-	private void addEvents() {
-		
-	}
-	
+	}	
 	
 	// TABLE UPDATES
 	protected void addGameInstance(GameInstance gi) {
@@ -104,12 +98,6 @@ public class GameServerGUI extends JFrame {
 		gamesModel.addRow(new Object [] {"Game " + gi.getInstanceID(), playerList});
 		
 		updateUsersTable(gi.getInstanceID(), players);
-//		gi.getPlayerUsernames()
-	}
-	
-	protected void updateGamesTable() {
-		DefaultTableModel gamesModel = (DefaultTableModel) gamesTable.getModel();
-		gamesModel.addRow(new Object [] {"Game 5", "User 3"});
 	}
 	
 	protected void addUserToUsersTable(String user) {
