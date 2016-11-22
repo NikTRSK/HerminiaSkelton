@@ -13,7 +13,7 @@ public class PriyankaShah extends CP{
 		name = "Priyanka Shah";
 		type = 2;
 		updateStats();
-		sprite = new ImageIcon(Constants.CPImage[2]);
+		sprite = Constants.CPImage[2];
 	}
 
 	// low health, high attack, high speed

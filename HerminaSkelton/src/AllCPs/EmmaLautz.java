@@ -13,7 +13,7 @@ public class EmmaLautz extends CP{
 		name = "Emma Lautz";
 		type = 3;
 		updateStats();
-		sprite = new ImageIcon(Constants.CPImage[1]);
+		sprite = Constants.CPImage[1];
 	}
 
 	//Medium health, medium attack, high speed

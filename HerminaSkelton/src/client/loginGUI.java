@@ -479,7 +479,10 @@ public class loginGUI extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//gameclient.setGuest(true);
+				GameGUI game = new GameGUI(new GameClientListener(new Socket()));
+				game.hideChat();
+				music.endMusic();
+				loginGUI.this.dispose();
 			}
 			
 		});

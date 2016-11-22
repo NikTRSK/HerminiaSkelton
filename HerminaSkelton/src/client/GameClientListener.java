@@ -5,11 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 
-import AllCPs.CP;
 import utilities.ChatMessage;
 //import utilities.CPRequest;
 import utilities.DataPacket;
@@ -17,7 +13,6 @@ import utilities.DeadSwitch;
 import utilities.FinalBattleState;
 import utilities.PlayerAction;
 import utilities.User;
-import client.Player;
 
 public class GameClientListener extends Thread implements Serializable {
 	private static final long serialVersionUID = 6902042676702904127L;

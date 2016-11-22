@@ -9,6 +9,7 @@ import AllCPs.EdgarLugo;
 import AllCPs.EmmaLautz;
 import AllCPs.JimmyChen;
 import AllCPs.KeerthanHarish;
+import AllCPs.KienNguyen;
 import AllCPs.PriyankaShah;
 import AllMoves.AttackMove;
 import AllMoves.BasicMove;
@@ -52,12 +53,13 @@ public class Constants {
 	public static int max = 60;
 	
 	//CP generator
-	public static int numCPs = 5;
+	public static int numCPs = 6;
 	public static CP generateCP(int cp){
 		if(cp==0)return new EdgarLugo(1);
 		else if(cp==1)return new EmmaLautz(1);
 		else if(cp==2)return new PriyankaShah(1);
 		else if(cp==3)return new KeerthanHarish(1);
+		else if(cp==4)return new KienNguyen(1);
 		else return new JimmyChen(1);
 	}
 

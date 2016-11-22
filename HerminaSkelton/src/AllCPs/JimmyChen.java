@@ -13,7 +13,7 @@ public class JimmyChen extends CP{
 		name = "Jimmy Chen";
 		type = 3;
 		updateStats();
-		sprite = new ImageIcon(Constants.CPImage[4]);
+		sprite = Constants.CPImage[4];
 	}
 
 	// high health, high attack, min speed
