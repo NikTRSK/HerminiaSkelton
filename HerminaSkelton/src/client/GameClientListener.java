@@ -163,8 +163,19 @@ public class GameClientListener extends Thread implements Serializable {
 					}
 					
 				}
+				if(streamContent.equals(utilities.Commands.SINGLE_FINAL_BATTLE)) { //TODO change to command
+					mGameGUI.StartSinglePlayerFinalBattle();
+				}
+				
 				if (streamContent.equals(utilities.Commands.END_GAME)){
 					//mainGUI.endOfGame();
+					sendData(new DataPacket<Integer>(utilities.Commands.SEND_SCORE, mGameGUI.getPlayerScore()));
+//					EndGameGUI endGUI = new EndGameGUI(0, userName, "Name2", client.Constants.generateCP(1), 200, 300, true, this);
+//					endGUI.setVisible(true);
+				} else if (streamContent.equals(utilities.Commands.TOP_SCORES)){
+					//mainGUI.endOfGame();
+					EndGameGUI endGUI = new EndGameGUI(0, userName, "Name2", client.Constants.generateCP(1), 200, 300, true, this);
+					endGUI.setVisible(true);
 				}
 				else if(streamContent.equals(utilities.Commands.LOGOUT_USER)){
 					User user = (User)input.getData();
