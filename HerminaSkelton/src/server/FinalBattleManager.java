@@ -220,6 +220,6 @@ public class FinalBattleManager {
 	
 	private void endGame(int result){
 		//TODO
-		//sl.endGame(result, gi);
+		//gi.endGame(result, gi);
 	}
 }

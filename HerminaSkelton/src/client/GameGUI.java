@@ -2,7 +2,6 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -63,7 +62,7 @@ public class GameGUI extends JFrame implements MouseListener {
 		clientListener.setGameGUI(this);
 		
 		// For the GUI.
-		setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
+		this.setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
 		initializeComponents();
 		createGUI();
 		
@@ -75,6 +74,8 @@ public class GameGUI extends JFrame implements MouseListener {
 		
 		// Initialize.
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);		
 		setVisible(true);
 		switchToMap(false, beta);
 	}
@@ -87,7 +88,7 @@ public class GameGUI extends JFrame implements MouseListener {
 		
 		chat = new ChatPanel(clientListener);
 		gbc = new GridBagConstraints();
-		//cards = new CardLayout();
+
 		centerPanel = new JPanel(new CardLayout());
 		
 		menuBar = new JMenuBar();
@@ -277,6 +278,7 @@ public class GameGUI extends JFrame implements MouseListener {
 	}
 	
 	public void StartMultiPlayerFinalBattle(Integer me, FinalBattleState fbs){
+		System.out.println(fbs == null);
 		finalBattle = new FinalBattleScreen(this, clientListener, fbs, me);
 		centerPanel.add(finalBattle, "card 3");
 		
@@ -285,7 +287,23 @@ public class GameGUI extends JFrame implements MouseListener {
 	}
 	
 	public void StartSinglePlayerFinalBattle(){
-		//TODO
+		centerPanel.add(new SinglePlayerFinalBattleScreen(beta, this), "card3");
+		
+		CardLayout cards = (CardLayout)centerPanel.getLayout();
+		cards.show(centerPanel, "card 3");
+	}
+	
+	public void endOfGame(){
+		int maxLevel = 0;
+		int index = 0;
+		for(int i = 0; i < beta.getCP().size(); i++){
+			if(beta.getCP().get(i).getLevel()>maxLevel){
+				maxLevel = beta.getCP().get(i).getLevel();
+				index = i;
+			}
+		}
+		CP friend  = beta.getCP().get(index);
+		//new endGameGUI();
 	}
 	
 	public void appendToChat(String user, String message) {

@@ -16,7 +16,7 @@ public class Miller {
 		name = "Jeffrey Miller, PhD";
 		sprite = new ImageIcon(Constants.millerImage);
 		CPs = new Vector<CP>();
-		generateCPs(difficulty);
+		generateCPs(1);
 	}
 	
 	//Generates Miller's CP army

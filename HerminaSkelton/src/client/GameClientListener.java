@@ -3,6 +3,7 @@ package client;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
@@ -16,8 +17,10 @@ import utilities.DeadSwitch;
 import utilities.FinalBattleState;
 import utilities.PlayerAction;
 import utilities.User;
+import client.Player;
 
-public class GameClientListener extends Thread{
+public class GameClientListener extends Thread implements Serializable {
+	private static final long serialVersionUID = 6902042676702904127L;
 	private String userName;
 	private Socket mSocket;
 	private ObjectInputStream ois;
@@ -27,10 +30,6 @@ public class GameClientListener extends Thread{
 	private waitGUI waitgui;
 	private loginGUI loginGUI;
 	private Boolean ans = null;
-	// added this
-	private Lock userLock;
-	private Condition userCondition;
-	///////////
 	
 	private Integer me;
 	private FinalBattleScreen fbs;
@@ -38,8 +37,6 @@ public class GameClientListener extends Thread{
 	public GameClientListener(Socket socket){
 		mSocket = socket;
 		fbs=null;
-//		userLock = new ReentrantLock();
-//		userCondition = userLock.newCondition();
 		
 		boolean socketReady = initializeVariables();
 		if (socketReady){
@@ -156,7 +153,7 @@ public class GameClientListener extends Thread{
 					
 				}
 				if (streamContent.equals(utilities.Commands.END_GAME)){
-					
+					//mainGUI.endOfGame();
 				}
 				else if(streamContent.equals(utilities.Commands.LOGOUT_USER)){
 					User user = (User)input.getData();

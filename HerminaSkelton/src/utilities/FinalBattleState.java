@@ -25,6 +25,8 @@ public class FinalBattleState implements Serializable{
 	
 	// Constructor.
 	public FinalBattleState(CP cp1, CP cp2, CP cp3, CP cp4, Player[] players, Integer[] states) {
+		if (cp1 == null)
+			System.out.println("cp1 null");
 		this.cp1 = cp1;
 		this.cp2 = cp2;
 		this.cp3 = cp3;

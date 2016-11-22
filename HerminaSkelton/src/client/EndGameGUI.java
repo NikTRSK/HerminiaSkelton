@@ -280,7 +280,7 @@ public class EndGameGUI extends JFrame{
 		 System.exit(0);
 	}
 	
-	public static void main(String[] args){
-		new EndGameGUI(2,"Nick","Matt", new EmmaLautz(3), 2000,3000,true, null).setVisible(true);
-	}
+	//public static void main(String[] args){
+	//	new EndGameGUI(2,"Nick","Matt", new EmmaLautz(3), 2000,3000,true, null).setVisible(true);
+	//}
 }

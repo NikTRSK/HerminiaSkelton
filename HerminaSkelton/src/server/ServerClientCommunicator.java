@@ -90,6 +90,7 @@ public class ServerClientCommunicator extends Thread implements Serializable {
     while (listenForConnections) {
       try {
         DataPacket<?> input = (DataPacket<?>)ois.readObject();
+//        System.out.println("Command: " + input.getCommand());
         switch (input.getCommand()) {
         	case utilities.Commands.LOGIN_USER :
         		System.out.println("Logging in user id" + socket.getPort());
@@ -139,10 +140,11 @@ public class ServerClientCommunicator extends Thread implements Serializable {
         		break;
         	
         	case utilities.Commands.FINAL_BATTLE :
-        		// Do stuff
+//        		if (input.getData() instanceof )
         		break;
         		
         	case utilities.Commands.PLAYER_BEFORE_FB :
+        		
         		Player player = (Player)input.getData();
         		serverListener.addPlayerToGameInstance(player, userName);
         		
@@ -150,6 +152,7 @@ public class ServerClientCommunicator extends Thread implements Serializable {
         		break;
         }
       } catch (IOException ioe) {
+      	ioe.printStackTrace();
         System.out.println("ioe in run(): " + ioe.getMessage()); break;
       } catch (ClassNotFoundException cnfe) {
         System.out.println("cnfe in run(): " + cnfe.getMessage()); break;
