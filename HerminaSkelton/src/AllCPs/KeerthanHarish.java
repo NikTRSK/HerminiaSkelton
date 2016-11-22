@@ -13,7 +13,7 @@ public class KeerthanHarish extends CP{
 		name = "Keerthan Harish";
 		type = 2;
 		updateStats();
-		sprite = new ImageIcon(Constants.CPImage[3]);
+		sprite = Constants.CPImage[3];
 	}
 
 	// min health, max attack, high speed

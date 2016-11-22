@@ -13,7 +13,7 @@ public class KienNguyen extends CP{
 			name = "Kien Nguyen";
 			type = 1;
 			updateStats();
-			sprite = new ImageIcon(Constants.CPImage[5]);
+			sprite = Constants.CPImage[5];
 		}
 
 		// medium health, medium attack, high speed

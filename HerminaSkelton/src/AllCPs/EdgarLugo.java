@@ -12,7 +12,7 @@ public class EdgarLugo extends CP {
 		name = "Edgar Lugo";
 		type = 1;
 		updateStats();
-		sprite = new ImageIcon(Constants.CPImage[0]);
+		sprite = Constants.CPImage[0];
 	}
 
 	// very high health, medium attack, low speed

@@ -309,6 +309,10 @@ public class GameGUI extends JFrame implements MouseListener {
 		//new endGameGUI();
 	}
 	
+	public void hideChat(){
+		getContentPane().getLayout().removeLayoutComponent(rightPanel);
+	}
+	
 	public void appendToChat(String user, String message) {
 		chat.appendText(user, message);
 	}

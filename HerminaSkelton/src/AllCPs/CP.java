@@ -9,7 +9,7 @@ import client.Constants;
 public abstract class CP implements Serializable{
 	private static final long serialVersionUID = 3562524123400148447L;
 	protected String name;
-	protected ImageIcon sprite;
+	protected String sprite;
 	protected Integer type;
 	protected Integer level;
 	protected Integer experience;
@@ -59,8 +59,7 @@ public abstract class CP implements Serializable{
 		return currHealth;
 	}
 	public ImageIcon getSprite(){
-//		System.out.println(spiete == null);
-		return sprite;
+		return new ImageIcon(sprite);
 	}
 	
 	//Health Modifiers

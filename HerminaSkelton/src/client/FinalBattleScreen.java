@@ -74,6 +74,8 @@ public class FinalBattleScreen extends JPanel{
 
 	public FinalBattleScreen(GameGUI mainGUI, GameClientListener cl, FinalBattleState fbs, Integer me){
 		this.cl = cl;
+		if(me==0)me=1;
+		else if(me==1)me=0;
 		this.me = me;
 		this.myAttack = null;
 		this.state = 1;

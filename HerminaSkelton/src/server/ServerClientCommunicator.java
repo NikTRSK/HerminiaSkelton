@@ -38,7 +38,7 @@ public class ServerClientCommunicator extends Thread implements Serializable {
 		try {
 			oos.writeObject(dp);
 			oos.flush();
-		} catch (IOException ioe) { utilities.Util.printExceptionToCommand(ioe); }
+		} catch (IOException ioe) { utilities.Util.printExceptionToCommand(ioe);ioe.printStackTrace(); }
 	}
 	
 //	protected void startGame(GameInstance gameInstance) {
