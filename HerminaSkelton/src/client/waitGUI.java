@@ -216,10 +216,6 @@ public class waitGUI extends JFrame{
 								JOptionPane.ERROR_MESSAGE);
 					}
 				}
-				
-				// testing
-				gameListener.sendData(new DataPacket<Integer>(utilities.Commands.GAME_SCORES, 500));
-				// testing
 			}
 			
 		});
