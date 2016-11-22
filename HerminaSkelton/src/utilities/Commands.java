@@ -20,4 +20,5 @@ public class Commands {
 	public static final String TIME_UPDATE = "TIME_UPDATE"; // Integer
 	public static final String FINAL_BATTLE = "FINAL_BATTLE"; // Integer
 	public static final String PLAYER_BEFORE_FB = "PLAYER_BEFORE_FB";
+	public static final String SEND_SCORE = "SEND_SCORE"; // sends player score
 }
