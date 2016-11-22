@@ -156,6 +156,7 @@ public class GameClientListener extends Thread{
 					
 				}
 				if (streamContent.equals(utilities.Commands.END_GAME)){
+					
 					sendData(new DataPacket<Integer>(utilities.Commands.CHAT_MESSAGE, mGameGUI.getPlayerScore()));
 					EndGameGUI endGUI = new EndGameGUI(0, userName, "Name2", client.Constants.generateCP(1), 200, 300, true, this);
 					endGUI.setVisible(true);
