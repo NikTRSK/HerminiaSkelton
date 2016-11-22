@@ -44,8 +44,6 @@ public class GameGUI extends JFrame implements MouseListener {
 	
 	private map.MapScreen map;
 	private BattleScreen battle;
-	
-	private BackgroundMusic music;
 
 	private FinalBattleScreen finalBattle;
 	
@@ -130,6 +128,7 @@ public class GameGUI extends JFrame implements MouseListener {
 					muted = false;
 					if(state==1)bgm.casualstart();
 					if(state==2)bgm.battlestart();
+					if(state==3)bgm.finalstart();
 					map.setFocusable(true);
 					map.requestFocusInWindow();
 				}
@@ -278,7 +277,11 @@ public class GameGUI extends JFrame implements MouseListener {
 	}
 	
 	public void StartMultiPlayerFinalBattle(Integer me, FinalBattleState fbs){
-		System.out.println(fbs == null);
+		if(!muted){
+			bgm.endMusic();
+			bgm.finalstart();
+		}
+		state=3;
 		finalBattle = new FinalBattleScreen(this, clientListener, fbs, me);
 		centerPanel.add(finalBattle, "card 3");
 		

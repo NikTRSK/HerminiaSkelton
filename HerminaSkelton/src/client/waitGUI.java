@@ -249,6 +249,7 @@ public class waitGUI extends JFrame{
 	}
 	
 	protected void startGame(){
+		music.endMusic();
 		new GameGUI(gameListener).setVisible(true);
 		dispose();
 	}

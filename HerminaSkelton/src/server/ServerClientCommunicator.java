@@ -133,8 +133,12 @@ public class ServerClientCommunicator extends Thread implements Serializable {
         		break;
         		
         	case utilities.Commands.PLAYER_ACTION :
-        		if (input.getData() instanceof PlayerAction)
+        		if (input.getData() instanceof PlayerAction){
+        			System.out.println("SCL got PlayerAction");
+        			if(input.getData()==null)System.out.println("PlayerAction is null in SCL");
         			serverListener.receiveActionToFinalBattleManager((PlayerAction)input.getData(), userName);
+        			System.out.println("SCL sent PA to SL");
+        		}
         		else if (input.getData() instanceof DeadSwitch)
         			serverListener.receiveDeadSwitchToFinalBattleManager((DeadSwitch)input.getData(), userName);
         		break;

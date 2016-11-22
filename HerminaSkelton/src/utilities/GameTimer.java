@@ -9,14 +9,14 @@ public class GameTimer extends Thread implements Serializable {
 	GameInstance gameInstance;
 	
 	public GameTimer(GameInstance gi) {
-		timer = utilities.Constants.GAME_TIME*60; // 300 sec
+		timer = utilities.Constants.GAME_TIME*2; // TODO: change
 //		timer = 10; // 300 sec
 		this.gameInstance = gi;
 	}
 	
 	@Override
 	public void run() {
-		while (timer >= 0) {
+		while (timer >= 1) {
 			try {
 				timer--;
 				gameInstance.updatePlayerTimers(timer);

@@ -90,18 +90,14 @@ public class GameInstance implements Serializable {
 	}
 	
 	public void startFinalBattle() {
-		System.out.println("In startFinalBattle: ");
 		if (gameMode == 0) {
-			// TODO
+			// Will never happen
 		} else {
-			System.out.println("Sending new battle: ");
 			finalBattleManager = new FinalBattleManager(FBPlayers.get(0), FBPlayers.get(1), this);
-			for (PlayerInstance player : players)
-				player.startFinalBattle();
 		}
 	}
 	
-	public void sendFinalBattleUpdate(FinalBattleState fbs) {
+	public void sendFinalBattleUpdate(FinalBattleState fbs) {		
 		for (PlayerInstance player : players)
 			player.sendData(new DataPacket<FinalBattleState>(utilities.Commands.FINAL_BATTLE, fbs));
 	}
@@ -124,8 +120,13 @@ public class GameInstance implements Serializable {
 			player.sendData(new DataPacket<Boolean>(utilities.Commands.FINAL_BATTLE, won));
 	}
 	
-	public void sendCPRequest(Player play){
+	public void sendCPRequest(Integer play){
 		for (PlayerInstance player : players)
-			player.sendData(new DataPacket<Player>(utilities.Commands.FINAL_BATTLE, play));
+			player.sendData(new DataPacket<Integer>(utilities.Commands.FINAL_BATTLE, play));
+	}
+	
+	public void endGame(boolean won){
+		for (PlayerInstance player : players)
+			player.sendData(new DataPacket<Boolean>(utilities.Commands.END_GAME, new Boolean(won)));
 	}
 }

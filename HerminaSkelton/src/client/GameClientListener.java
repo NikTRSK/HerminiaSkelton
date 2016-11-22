@@ -74,7 +74,9 @@ public class GameClientListener extends Thread implements Serializable {
 	}
 	
 	public void sendAction(PlayerAction pa){
+		if(pa==null)System.out.println("pa is null in GCL");
 		sendData(new DataPacket<PlayerAction>(utilities.Commands.PLAYER_ACTION, pa));
+		System.out.println("pa sent from GCL");
 	}
 
 	public void sendDeadSwitch(DeadSwitch ds){
@@ -141,13 +143,22 @@ public class GameClientListener extends Thread implements Serializable {
 						if(fbs==null){
 							mGameGUI.StartMultiPlayerFinalBattle(me, (FinalBattleState)input.getData());
 						}else{
+							//TODO remove
+							FinalBattleState newFBS = (FinalBattleState)input.getData();
+							System.out.println("Health in GCL");
+							System.out.println("CP 1 health: "+newFBS.cp1.getHealth());
+							System.out.println("CP 2 health: "+newFBS.cp2.getHealth());
+							System.out.println("CP 3 health: "+newFBS.cp3.getHealth());
+							System.out.println("CP 4 health: "+newFBS.cp4.getHealth());
 							fbs.recieveMessage((FinalBattleState)input.getData());
 						}
-					}else if(true){//input.getData() instanceof CPRequest){
+					}else if(input.getData() instanceof Integer){
 						if(fbs==null){
 							System.out.print("We screwed up");
 						}else{
-							fbs.replaceDead();
+							Integer temp = (Integer)input.getData();
+							if(temp==me)
+								fbs.replaceDead();
 						}
 					}
 					

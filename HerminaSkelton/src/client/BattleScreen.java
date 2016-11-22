@@ -105,10 +105,6 @@ public class BattleScreen extends JPanel{
 	}
 	
 	private void initializeBattlePanel(){
-		//healthLabel1 = new JLabel(activeCP.getHealth()+"/"+activeCP.getMaxHealth());
-		//healthLabel1.setFont(new Font("Courier", Font.BOLD, 35));
-		//healthLabel1.setHorizontalTextPosition(JLabel.CENTER);
-		//TODO: green-red health panels
 		healthPanel1 = new HealthPanel(activeCP);
 		healthPanel1.setPreferredSize(new Dimension(0, 50));
 		
@@ -310,7 +306,7 @@ public class BattleScreen extends JPanel{
 					executeSwitch(playerCPs.get(a));
 					CardLayout layout = (CardLayout)cardHolder.getLayout();
 					layout.show(cardHolder, "card 1");
-					if(activeCP.getHealth()<=0)deadCP();
+					if(activeCP.getHealth()<=0)	deadCP();
 				}
 			});
 			switchOption[i] = CP;
@@ -515,10 +511,6 @@ public class BattleScreen extends JPanel{
 				dialog.dispose();
 				player.healAll();
 				battleOver(true);
-				//TODO: teleport player to health center
-				//Player.setx(Constants.HealthCenterX);
-				//Player.sety(Constants.HealthCenterY);
-				//Player.setZone(Constants.HealthCenterZone);
 			}
 			
 		});
@@ -589,7 +581,14 @@ public class BattleScreen extends JPanel{
 		else{
 			Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(2)]].move(wildCP, activeCP, CPUpdates2);
 			redraw();
-			if(activeCP.getHealth()<=0)deadCP();
+			if(activeCP.getHealth()<=0){
+				boolean allDead = true;
+				for(int i = 0; i < playerCPs.size(); i++){
+					if(playerCPs.get(i).getHealth()>0)allDead=false;
+				}
+				if(allDead)lostBattle();
+				else deadCP();
+			}
 			return false;
 		}	
 	}
