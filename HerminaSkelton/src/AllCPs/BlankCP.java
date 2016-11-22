@@ -9,7 +9,7 @@ public class BlankCP extends CP{
 			super(level);
 			name = "";
 			type = 1;
-			sprite = new ImageIcon("");
+			sprite = "";
 			this.real = false;
 			this.currHealth = 0;
 			this.healthPoints = 0;
