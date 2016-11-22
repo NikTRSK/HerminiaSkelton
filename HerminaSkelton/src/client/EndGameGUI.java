@@ -48,6 +48,7 @@ public class EndGameGUI extends JFrame{
 	private GridBagConstraints mGridBagConst;
 	private BackgroundMusic music;
 	private JButton mute;
+	
 	public EndGameGUI(int gamemode, String name1, String name2, CP bestfriend, int score1, int score2, boolean win, GameClientListener mlistener){
 		//gamemode 0 as guest, gamemmode 1 as singleplayer, gameode 2 as multiplayer
 		this.gamemode = gamemode;
