@@ -24,7 +24,7 @@ import AllCPs.CP;
 import utilities.BackGroundPanel;
 import utilities.HealthPanel;
 
-public class BattleScreen extends JPanel{
+public class SinglePlayerFinalBattleScreen extends JPanel{
 	private static final long serialVersionUID = 538889179893602549L;
 	
 	private GameGUI mainGUI;
@@ -65,7 +65,7 @@ public class BattleScreen extends JPanel{
 	private JTextArea CPUpdates2;
 	
 	
-	public BattleScreen(Player currPlayer, GameGUI mainGUI){
+	public SinglePlayerFinalBattleScreen(Player currPlayer, GameGUI mainGUI){
 		this.mainGUI = mainGUI;
 		this.rand = new Random(System.currentTimeMillis());
 		player = currPlayer;
@@ -73,15 +73,6 @@ public class BattleScreen extends JPanel{
 		initializeVariables();
 		initializeComponents();
 		createGUI();
-	}
-	
-	public void newBattle(Player p){
-		player = p;
-		initializeVariables();
-		initializeChooseSwitch();
-		cardHolder.add(chooseSwitch, "card 3");
-		throwAssignment.setEnabled(true);
-		redraw();
 	}
 	
 	private void initializeVariables(){
@@ -105,6 +96,10 @@ public class BattleScreen extends JPanel{
 	}
 	
 	private void initializeBattlePanel(){
+		//healthLabel1 = new JLabel(activeCP.getHealth()+"/"+activeCP.getMaxHealth());
+		//healthLabel1.setFont(new Font("Courier", Font.BOLD, 35));
+		//healthLabel1.setHorizontalTextPosition(JLabel.CENTER);
+		//TODO: green-red health panels
 		healthPanel1 = new HealthPanel(activeCP);
 		healthPanel1.setPreferredSize(new Dimension(0, 50));
 		
@@ -187,26 +182,9 @@ public class BattleScreen extends JPanel{
 			
 		});
 		
-		throwAssignment = new JButton("Throw Assignment");
-		throwAssignment.setForeground(Constants.FONT_COLOR);
-		throwAssignment.setFont(Constants.GAMEFONT);
-		throwAssignment.setBackground(Constants.BACKGROUND_COLOR2);
-		throwAssignment.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 5));	
-		throwAssignment.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(executeCatch()){
-					caughtCP();
-				}				
-			}
-			
-		});
-		
-		chooseAction.setLayout(new GridLayout(1, 3));
+		chooseAction.setLayout(new GridLayout(1, 2));
 		chooseAction.add(attack, BorderLayout.WEST);
 		chooseAction.add(switchCP, BorderLayout.CENTER);
-		chooseAction.add(throwAssignment, BorderLayout.EAST);
 	}
 	
 	private void initializeChooseAttack(){
@@ -306,7 +284,7 @@ public class BattleScreen extends JPanel{
 					executeSwitch(playerCPs.get(a));
 					CardLayout layout = (CardLayout)cardHolder.getLayout();
 					layout.show(cardHolder, "card 1");
-					if(activeCP.getHealth()<=0)	deadCP();
+					if(activeCP.getHealth()<=0)deadCP();
 				}
 			});
 			switchOption[i] = CP;
@@ -451,39 +429,6 @@ public class BattleScreen extends JPanel{
 		  dialog.setVisible(true);
 	}
 	
-	private void caughtCP(){
-		JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL); 
-		
-		JLabel name = new JLabel(wildCP.getName()+" was caught! He/she was added to your team");
-		name.setFont(Constants.GAMEFONT);
-		name.setForeground(Constants.FONT_COLOR);
-		
-		JButton okay = new JButton("Okay");
-		okay.setForeground(Constants.FONT_COLOR);
-		okay.setBackground(Constants.BACKGROUND_COLOR2);
-		okay.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				player.addCP(wildCP);
-				dialog.dispose();
-				battleOver(false);
-			}
-			
-		});
-		
-		JPanel newCP = new JPanel();
-		newCP.setLayout(new BorderLayout());
-		newCP.setBackground(Constants.BACKGROUND_COLOR);
-		newCP.add(new JLabel(wildCP.getSprite()), BorderLayout.CENTER);
-		newCP.add(name, BorderLayout.NORTH);
-		newCP.add(okay, BorderLayout.SOUTH);
-		
-		dialog.add(newCP);
-		dialog.pack();
-		dialog.setVisible(true);
-	}
-	
 	private void lostBattle(){
 		JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL);
 		JLabel info;
@@ -511,6 +456,10 @@ public class BattleScreen extends JPanel{
 				dialog.dispose();
 				player.healAll();
 				battleOver(true);
+				//TODO: teleport player to health center
+				//Player.setx(Constants.HealthCenterX);
+				//Player.sety(Constants.HealthCenterY);
+				//Player.setZone(Constants.HealthCenterZone);
 			}
 			
 		});
@@ -566,66 +515,8 @@ public class BattleScreen extends JPanel{
 		dialog.setVisible(true);
 	}
 	
-	private boolean executeCatch(){
-		player.deductAssignment();
-		int roll = Constants.rand.nextInt(100);
-		int threshold = 70-2*(wildCP.getHealth()/wildCP.getMaxHealth());
-		
-		if(wildCP.getHealth()==0){
-			return true;
-		}		
-		if(roll>=threshold){
-			throwAssignment.setEnabled(false);
-			return true;
-		}
-		else{
-			Constants.attackMoves[wildCP.getAttackMoves()[Constants.rand.nextInt(2)]].move(wildCP, activeCP, CPUpdates2);
-			redraw();
-			if(activeCP.getHealth()<=0){
-				boolean allDead = true;
-				for(int i = 0; i < playerCPs.size(); i++){
-					if(playerCPs.get(i).getHealth()>0)allDead=false;
-				}
-				if(allDead)lostBattle();
-				else deadCP();
-			}
-			return false;
-		}	
-	}
-	
 	private void battleOver(boolean lost){
-		if(activeCP.levelUp()){
-			JDialog dialog = new JDialog(mainGUI, Dialog.ModalityType.APPLICATION_MODAL);
-			
-			JLabel info = new JLabel(activeCP.getName()+" grew to level "+activeCP.getLevel()+"!");
-			info.setFont(Constants.GAMEFONT);
-			info.setForeground(Constants.FONT_COLOR);
-			info.setHorizontalTextPosition(JLabel.CENTER);
-			
-			JButton okay = new JButton("Sweet!");
-			okay.setBackground(Constants.BACKGROUND_COLOR2);
-			okay.setForeground(Constants.FONT_COLOR);
-			okay.setFont(Constants.GAMEFONT);
-			okay.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					dialog.dispose();					
-				}
-				
-			});
-			
-			JPanel levelUpPanel = new JPanel();
-			levelUpPanel.setLayout(new BoxLayout(levelUpPanel, BoxLayout.Y_AXIS));
-			levelUpPanel.setBackground(Constants.BACKGROUND_COLOR);
-			levelUpPanel.add(info);
-			levelUpPanel.add(okay);
-			
-			dialog.add(levelUpPanel);
-			dialog.pack();
-			dialog.setVisible(true);
-		}
-		mainGUI.switchToMap(lost, player);
+		
 	}
 
 }

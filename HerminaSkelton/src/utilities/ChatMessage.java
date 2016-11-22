@@ -3,6 +3,7 @@ package utilities;
 import java.io.Serializable;
 
 public class ChatMessage implements Serializable {
+	private static final long serialVersionUID = -3200574436403461019L;
 	private String message;
 	private String user;
 	

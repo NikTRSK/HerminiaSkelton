@@ -7,127 +7,110 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
+import utilities.GameScore;
+
 public class DatabaseLogic {
-	// SQL Connection
-	Connection conn = null;
-	Statement statement = null;
-	PreparedStatement loginStatement = null;
-	PreparedStatement createStatement = null;
-	PreparedStatement scoreStatement = null;
-	PreparedStatement updateScoresStatement = null;
-	ResultSet rs = null;
-	
-	public DatabaseLogic() {
-		initDB();
-	}
-	
-	// returns true if user valid; false otherwise
-	public boolean loginUser(String username, String password) throws SQLException {
-		loginStatement.setString(1, username);
-		rs = loginStatement.executeQuery();
-		
-		// user not found
-		if (!rs.next()) {
-			return false;
-		}
-		else {
-			String pword = rs.getString("password");
-			// wrong password
-			if (!pword.equals(password))
-				return false;
-		}
-		return true;
-	}
-	
-	// return false if duplicate user; true otherwise
-	public boolean createUser(String username, String password) throws SQLException {
-		// check if user exits
-		loginStatement.setString(1, username);
-		rs = loginStatement.executeQuery();
-		if (rs.next())
-			return false;
-		else {
-			// if valid insert user
-			createStatement.setString(1, username);
-			createStatement.setString(2, password);
-			createStatement.executeUpdate();
-			return true;
-		}
-	}
-	
-	// get all scores for user
-	protected ArrayList<Integer> getScores(String username, Integer newScore) {
-		ArrayList<Integer> scores = new ArrayList<Integer>();
-		try {
-			// test
-			loginStatement.setString(1, username);
-			rs = loginStatement.executeQuery();
-			rs.next();
-			System.out.println("Results: " + rs.getInt("score1"));
-			System.out.println("Results: " + rs.getInt("score2"));
-			System.out.println("Results: " + rs.getInt("score3"));
-			System.out.println("Results: " + rs.getInt("score4"));
-			System.out.println("Results: " + rs.getInt("score5"));
-			System.out.println("FETCH SIZE: " + rs.getFetchSize() + " USERNAME: " + username);
-//			rs.row
-			// test
-			
-			scoreStatement.setString(1, username);
-			rs = scoreStatement.executeQuery();
-			System.out.println("FETCH SIZE: " + rs.getFetchSize() + " USERNAME: " + username);
-			int i = 1;
-			while (rs.next()) {
-				scores.add(rs.getInt("score" + i++));
-			}
-			// add the new score and sort the array list
-			scores.add(newScore);
-//			for (int scoreID = scores.size(); scoreID < 5; i++) {
-//				scores.add(-1);
-//			}
-			
-			Collections.sort(scores, Collections.reverseOrder());
-			// TESTING ONLY
-			System.out.println("Checking sorting****");
-			for (Integer iger : scores)
-		    System.out.println("value: " + iger);
-			// TESTING ONLY
-			
-			// remove the last (weekest) score
-			scores.remove(scores.size() - 1);
-			
-			// update scores in database
-			for (int scoreID = 0; scoreID < scores.size(); scoreID++) {
-				updateScoresStatement.setInt(scoreID+1, scores.get(scoreID));
-			}
-			updateScoresStatement.setString(6, username);
-			updateScoresStatement.executeUpdate();
-			
-		} catch (SQLException sqle) { utilities.Util.printExceptionToCommand(sqle);	}
-		// remove all instances of -1
-		for (int i = 0; i < scores.size(); i++) {
-			if (scores.get(i) == -1)
-				scores.remove(i);
-		}
-		// return all scores
-		return scores;
-	}
-	
-	private void initDB() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/HerminiaSkelton_DB?user=root&password=root&useSSL=false");
-			loginStatement = conn.prepareStatement("SELECT * FROM users WHERE username=?");
-			createStatement = conn.prepareStatement("INSERT INTO users (username, password) VALUES (?, ?)");
-			scoreStatement = conn.prepareStatement("SELECT score1,score2,score3,score4,score5 FROM users WHERE username=?");
-			updateScoresStatement = conn.prepareStatement("INSERT INTO users SET score1=?, score2=?, score3=?, score4=?, score5=? WHERE username=?");
-		} catch (SQLException sql) {
-			System.out.println("sqle: " + sql.getMessage());
-		} catch (ClassNotFoundException cnfe) {
-			System.out.println("cnfe: " + cnfe.getMessage());
-		}
-	}
+  // SQL Connection
+  Connection conn = null;
+  Statement statement = null;
+  PreparedStatement loginStatement = null;
+  PreparedStatement createStatement = null;
+  PreparedStatement scoreStatement = null;
+  PreparedStatement updateScoresStatement = null;
+  ResultSet rs = null;
+  
+  public DatabaseLogic() {
+    initDB();
+  }
+  
+  // returns true if user valid; false otherwise
+  public boolean loginUser(String username, String password) throws SQLException {
+    loginStatement.setString(1, username);
+    rs = loginStatement.executeQuery();
+    
+    // user not found
+    if (!rs.next()) {
+      return false;
+    }
+    else {
+      String pword = rs.getString("password");
+      // wrong password
+      if (!pword.equals(password))
+        return false;
+    }
+    return true;
+  }
+  
+  // return false if duplicate user; true otherwise
+  public boolean createUser(String username, String password) throws SQLException {
+    // check if user exits
+    loginStatement.setString(1, username);
+    rs = loginStatement.executeQuery();
+    if (rs.next())
+      return false;
+    else {
+      // if valid insert user
+      createStatement.setString(1, username);
+      createStatement.setString(2, password);
+      createStatement.executeUpdate();
+      return true;
+    }
+  }
+  
+  // get all scores for user
+  protected ArrayList<GameScore> getScores(String userName, Integer newScore) {
+    ArrayList<GameScore> scores = new ArrayList<GameScore>();
+    try {
+      ///
+      rs = scoreStatement.executeQuery();
+      while (rs.next()) {
+        Integer score = rs.getInt("score");
+        String user = rs.getString("username");
+        scores.add(new GameScore(user, score));
+      }
+      scores.add(new GameScore(userName, newScore));
+      
+      // Sort the list
+      Collections.sort(scores, new Comparator<GameScore>() {
+        @Override
+        public int compare(GameScore gs1, GameScore gs2) {
+          return gs2.getScore() - gs1.getScore();
+        }
+      });
+      
+      // remove the last (weekest) score
+      scores.remove(scores.size() - 1);
+      
+      // update the table
+      for (int i = 0; i < scores.size(); ++i) {
+        updateScoresStatement.setInt(1, scores.get(i).getScore());
+        updateScoresStatement.setString(2, scores.get(i).getUsername());
+        updateScoresStatement.setInt(3, i+1);
+        updateScoresStatement.addBatch();
+      }
+      // execute the update on topScores
+      updateScoresStatement.executeBatch();
+      
+    } catch (SQLException sqle) { utilities.Util.printExceptionToCommand(sqle); }
+    // return top 5 scores
+    return scores;
+  }
+  
+  private void initDB() {
+    try {
+      Class.forName("com.mysql.jdbc.Driver");
+      conn = DriverManager.getConnection("jdbc:mysql://localhost/HerminiaSkelton_DB?user=root&password=root&useSSL=false");
+      loginStatement = conn.prepareStatement("SELECT * FROM users WHERE username=?");
+      createStatement = conn.prepareStatement("INSERT INTO users (username, password) VALUES (?, ?)");
+      scoreStatement = conn.prepareStatement("SELECT * FROM topScores");
+      updateScoresStatement = conn.prepareStatement("UPDATE topScores SET score=?, username=? WHERE scoreID=?");
+    } catch (SQLException sql) {
+      System.out.println("sqle: " + sql.getMessage());
+    } catch (ClassNotFoundException cnfe) {
+      System.out.println("cnfe: " + cnfe.getMessage());
+    }
+  }
 }

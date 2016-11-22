@@ -2,7 +2,6 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -11,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -28,7 +29,7 @@ import AllCPs.CP;
 import utilities.BackGroundPanel;
 import utilities.FinalBattleState;
 
-public class GameGUI extends JFrame{
+public class GameGUI extends JFrame implements MouseListener {
 	private static final long serialVersionUID = -8312855782342576917L;
 	
 	private JPanel centerPanel;
@@ -43,8 +44,6 @@ public class GameGUI extends JFrame{
 	
 	private map.MapScreen map;
 	private BattleScreen battle;
-
-	private BackgroundMusic music;
 
 	private FinalBattleScreen finalBattle;
 	
@@ -61,7 +60,7 @@ public class GameGUI extends JFrame{
 		clientListener.setGameGUI(this);
 		
 		// For the GUI.
-		setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
+		this.setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
 		initializeComponents();
 		createGUI();
 		
@@ -73,6 +72,8 @@ public class GameGUI extends JFrame{
 		
 		// Initialize.
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);		
 		setVisible(true);
 		switchToMap(false, beta);
 	}
@@ -85,7 +86,7 @@ public class GameGUI extends JFrame{
 		
 		chat = new ChatPanel(clientListener);
 		gbc = new GridBagConstraints();
-		//cards = new CardLayout();
+
 		centerPanel = new JPanel(new CardLayout());
 		
 		menuBar = new JMenuBar();
@@ -97,6 +98,7 @@ public class GameGUI extends JFrame{
 		
 		// Map Stuff.
 		map = new map.MapScreen(this,new Dimension(Toolkit.getDefaultToolkit().getScreenSize()),beta);
+		map.addMouseListener(this);
 		
 		// Battle Stuff.
 		battle  = new BattleScreen(beta, this);		
@@ -126,6 +128,7 @@ public class GameGUI extends JFrame{
 					muted = false;
 					if(state==1)bgm.casualstart();
 					if(state==2)bgm.battlestart();
+					if(state==3)bgm.finalstart();
 					map.setFocusable(true);
 					map.requestFocusInWindow();
 				}
@@ -274,7 +277,11 @@ public class GameGUI extends JFrame{
 	}
 	
 	public void StartMultiPlayerFinalBattle(Integer me, FinalBattleState fbs){
-		System.out.println(fbs == null);
+		if(!muted){
+			bgm.endMusic();
+			bgm.finalstart();
+		}
+		state=3;
 		finalBattle = new FinalBattleScreen(this, clientListener, fbs, me);
 		centerPanel.add(finalBattle, "card 3");
 		
@@ -283,6 +290,59 @@ public class GameGUI extends JFrame{
 	}
 	
 	public void StartSinglePlayerFinalBattle(){
-		//TODO
+		centerPanel.add(new SinglePlayerFinalBattleScreen(beta, this), "card3");
+		
+		CardLayout cards = (CardLayout)centerPanel.getLayout();
+		cards.show(centerPanel, "card 3");
+	}
+	
+	public void endOfGame(){
+		int maxLevel = 0;
+		int index = 0;
+		for(int i = 0; i < beta.getCP().size(); i++){
+			if(beta.getCP().get(i).getLevel()>maxLevel){
+				maxLevel = beta.getCP().get(i).getLevel();
+				index = i;
+			}
+		}
+		CP friend  = beta.getCP().get(index);
+	}
+	
+	public void appendToChat(String user, String message) {
+		chat.appendText(user, message);
+	}
+	
+	public int getPlayerScore() {
+		return beta.generateScore();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		map.setFocusable(true);
+		map.requestFocusInWindow();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

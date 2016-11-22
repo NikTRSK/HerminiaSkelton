@@ -3,7 +3,6 @@ package utilities;
 	import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.text.DecimalFormat;
 
 import javax.swing.JPanel;
 
@@ -13,7 +12,6 @@ import AllCPs.CP;
 		private static final long serialVersionUID = -365404306118347804L;
 		private CP cp;
 		
-		private final String title = "Health Left";
 		final int border = 0;
 		
 		public HealthPanel(CP cp)
@@ -50,7 +48,6 @@ import AllCPs.CP;
 			g.setColor(client.Constants.UNHEALTHY_COLOR);
 			g.fillRect(frameX + healthyWidth, frameY, unhealthyWidth, frameH);
 			
-			Font font = client.Constants.GAMEFONT;
 			g.setFont(new Font("Courier", Font.BOLD, 20));
 			String healthLeft = (int)curr+"/"+(int)total;
 			

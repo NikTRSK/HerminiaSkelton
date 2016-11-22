@@ -1,7 +1,6 @@
 package map;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -23,6 +22,10 @@ public abstract class MapNode implements Serializable {
 		trueY = inY * height;
 	}
 	
+	public void setLabel(String label) {
+		mLabel = label;
+	}
+	
 	//The "true" location and size of the object use this for updating
 	protected int trueX = 0, trueY = 0;
 	protected int width = 0, height = 0;
@@ -39,6 +42,9 @@ public abstract class MapNode implements Serializable {
 		g.drawImage(mImage, trueX, trueY, width, height, null);
 		if(! mLabel.equals("")) {
 			g.setFont(MapConstants.NODEFONT);
+			g.setColor(Color.WHITE);
+			g.fillRect(trueX + width/2 - g.getFontMetrics().stringWidth(mLabel) / 2 - 2, trueY + height/2 - 14, g.getFontMetrics().stringWidth(mLabel) + 4, 16 + 4);
+			g.setColor(Color.BLACK);
 			g.drawString(mLabel, trueX + width/2 - g.getFontMetrics().stringWidth(mLabel) / 2, trueY + height/2);
 		}
 	}

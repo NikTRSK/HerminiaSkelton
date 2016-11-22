@@ -22,6 +22,7 @@ import AllCPs.CP;
 import utilities.BackGroundPanel;
 import utilities.DeadSwitch;
 import utilities.FinalBattleState;
+import utilities.HealthPanel;
 import utilities.PlayerAction;
 
 public class FinalBattleScreen extends JPanel{
@@ -37,8 +38,9 @@ public class FinalBattleScreen extends JPanel{
 	private Integer state;
 	
 	// Stuff for Battle Panel.
+	private JLabel[] nameLabels;
 	private JLabel[] sprites;
-	private JLabel[] healthLabels;
+	private HealthPanel[] healthLabels;
 	private BackGroundPanel battlePanel;
 		
 	// Stuff for chooseActionPanel.
@@ -65,6 +67,7 @@ public class FinalBattleScreen extends JPanel{
 	
 	// Stuff for waitPanel.
 	private JPanel waitPanel;
+	private JLabel waitMessage;
 	
 	// Stuff for deadPanel.
 	private JPanel deadPanel;
@@ -77,6 +80,7 @@ public class FinalBattleScreen extends JPanel{
 		
 		this.player = fbs.players[me];
 		this.CPs = new CP[4];
+		if(fbs.cp1==null)System.out.println("FinalBattleScreen Constructor, cp1 is null");
 		this.CPs[0] = fbs.cp1;
 		this.CPs[1] = fbs.cp2;
 		this.CPs[2] = fbs.cp3;
@@ -97,15 +101,12 @@ public class FinalBattleScreen extends JPanel{
 	
 	private void initializeBattlePanel(){
 		JPanel[] holders = new JPanel[4];
+		nameLabels = new JLabel[4];
 		sprites = new JLabel[4];
-		healthLabels = new JLabel[4];
+		healthLabels = new HealthPanel[4];
 		
 		// Setting image labels.
-		System.out.println("CPS " + CPs.length);
 		for(int i = 0; i<4; i++){
-			System.out.println("CP i " + i);
-			if (CPs[i] == null)
-				System.out.println("null");
 			ImageIcon sprite = CPs[i].getSprite();
 			Image img = sprite.getImage();
 			Image nwImg = img.getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);
@@ -115,17 +116,27 @@ public class FinalBattleScreen extends JPanel{
 		
 		// Setting health labels.
 		for(int i = 0; i < 4; i++){
-			JLabel health = new JLabel(CPs[i].getHealth()+"/"+CPs[i].getMaxHealth());
-			health.setFont(Constants.GAMEFONT);
-			health.setForeground(Constants.FONT_COLOR);
-			health.setHorizontalAlignment(JLabel.CENTER);
+			HealthPanel health = new HealthPanel(CPs[i]);
+			health.setPreferredSize(new Dimension(0, 50));
 			healthLabels[i] = health;
+		}
+		
+		// Setting name labels.
+		for(int i = 0; i < 4; i++){
+			JLabel name = new JLabel(CPs[i].getName());
+			name.setPreferredSize(new Dimension(0, 50));
+			if(i>1)name.setText("Miller's"+name.getText());
+			name.setFont(Constants.GAMEFONT);
+			name.setForeground(Constants.FONT_COLOR);
+			name.setHorizontalAlignment(JLabel.CENTER);
+			nameLabels[i] = name;
 		}
 		
 		// Setting holder panels.
 		for(int i = 0; i < 4; i++){
 			JPanel holder = new JPanel();
 			holder.setLayout(new BorderLayout());
+			holder.add(nameLabels[i]);
 			holder.add(sprites[i], BorderLayout.CENTER);
 			holder.add(healthLabels[i], BorderLayout.SOUTH);
 			holder.setOpaque(false);
@@ -261,6 +272,7 @@ public class FinalBattleScreen extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Player Action sent from player "+me);
 				sendMessage(new PlayerAction(me, 1, Constants.attackMoves[myAttack], me, 2));
 				myAttack = null;
 				CardLayout layout = (CardLayout)cardHolder.getLayout();
@@ -274,7 +286,7 @@ public class FinalBattleScreen extends JPanel{
 		holder1.setOpaque(true);
 		holder1.add(targetHealth1, BorderLayout.NORTH);
 		holder1.add(targetSprite1);
-		holder1.add(targetHealth1, BorderLayout.SOUTH);
+		holder1.add(chooseTarget1, BorderLayout.SOUTH);
 		
 		// For Miller's second CP.
 		targetHealth2 = new JLabel(CPs[3].getHealth()+"/"+CPs[3].getMaxHealth());
@@ -282,7 +294,7 @@ public class FinalBattleScreen extends JPanel{
 		targetHealth2.setBackground(Constants.BACKGROUND_COLOR2);
 		targetHealth2.setForeground(Constants.FONT_COLOR);
 		
-		sprite = CPs[2].getSprite();
+		sprite = CPs[3].getSprite();
 		img = sprite.getImage();
 		nwimg = img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
 		sprite = new ImageIcon(nwimg);
@@ -296,10 +308,12 @@ public class FinalBattleScreen extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Player Action sent from player "+me);
 				sendMessage(new PlayerAction(me, 1, Constants.attackMoves[myAttack], me, 3));
 				myAttack = null;
 				CardLayout layout = (CardLayout)cardHolder.getLayout();
 				layout.show(cardHolder, "card 5");
+				waitMessage.setText("Waiting for the other player to make their move...");
 			}
 			
 		});
@@ -349,6 +363,7 @@ public class FinalBattleScreen extends JPanel{
 					sendMessage(new PlayerAction(me, new Integer(2), null, me, a));
 					CardLayout layout = (CardLayout)cardHolder.getLayout();
 					layout.show(cardHolder, "card 5");
+					waitMessage.setText("Waiting for other player to make their move...");
 				}
 				
 			});
@@ -360,6 +375,7 @@ public class FinalBattleScreen extends JPanel{
 		switchPanel.setBackground(Constants.BACKGROUND_COLOR);
 		switchPanel.setLayout(new GridLayout(1, switchOptions.length));
 		
+		switchPanel.add(backButton);
 		for(int i = 0; i < switchOptions.length; i++){
 			switchPanel.add(switchOptions[i]);
 		}
@@ -367,7 +383,7 @@ public class FinalBattleScreen extends JPanel{
 	}
 	
 	private void initializeWaitPanel(){
-		JLabel waitMessage = new JLabel("Waiting for other player...");
+		waitMessage = new JLabel("Waiting for other player...");
 		waitMessage.setFont(Constants.GAMEFONT);
 		waitMessage.setForeground(Constants.FONT_COLOR);
 		
@@ -417,7 +433,42 @@ public class FinalBattleScreen extends JPanel{
 		this.CPs[3] = fbs.cp4;
 		this.state = fbs.gameStates[me];
 		
+		for(int i = 0; i< CPs.length; i++){
+			System.out.println("CP"+i+"'s health: "+fbs.CPHealth[i]);
+			CPs[i].changeHealth(fbs.CPHealth[i]-CPs[i].getHealth());
+		}
+		
 		update();
+		
+		if(CPs[me].getHealth()<=0){
+			boolean allDead=true;
+			for(int i = 0; i < player.getCP().size(); i++){
+				if(player.getCP().get(i).getHealth()>0)allDead=false;
+			}
+			if(allDead)return;
+			else{
+				replaceDead();
+				CardLayout layout = (CardLayout)cardHolder.getLayout();
+				layout.show(cardHolder, "card 5");
+				waitMessage.setText("Choose a new CP to switch in");
+				return;
+			}
+		}
+		
+		int otherPlayer = 0;
+		if(otherPlayer==me)otherPlayer = 1;
+		Player other = fbs.players[otherPlayer];
+		if(CPs[otherPlayer].getHealth()==0){
+			boolean allDead=true;
+			for(int i = 0; i < other.getCP().size(); i++){
+				if(other.getCP().get(i).getHealth()>0)allDead=false;
+			}
+			if(allDead)return;
+			CardLayout layout = (CardLayout)cardHolder.getLayout();
+			layout.show(cardHolder, "card 5");
+			waitMessage.setText("Waiting for other player to replace their CP");
+		}
+		
 	}
 	
 	public void replaceDead(){
@@ -476,13 +527,20 @@ public class FinalBattleScreen extends JPanel{
 		
 		// Battle Panel.
 		for(int i = 0; i < 4; i++){
-			sprites[i].setIcon(CPs[i].getSprite());
-			healthLabels[i].setText(CPs[i].getHealth()+"/"+CPs[i].getMaxHealth());
+			ImageIcon sprite = CPs[i].getSprite();
+			Image img = sprite.getImage();
+			Image nwImg = img.getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);
+			sprite = new ImageIcon(nwImg);
+			nameLabels[i].setText(CPs[i].getName());
+			if(i>1)nameLabels[i].setText("Miller's"+nameLabels[i].getText());
+			sprites[i].setIcon(sprite);
+			healthLabels[i].refresh(CPs[i]);
+			//healthLabels[i].setText(CPs[i].getHealth()+"(change)/"+CPs[i].getMaxHealth());
 		}
 		
 		if(state==2){
 			sprites[me].setIcon(new ImageIcon(""));
-			healthLabels[me].setText("");
+			//healthLabels[me].setText("");
 			CardLayout layout = (CardLayout)cardHolder.getLayout();
 			layout.show(cardHolder, "card 6");
 		}

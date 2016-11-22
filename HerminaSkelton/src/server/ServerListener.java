@@ -5,7 +5,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -15,6 +14,7 @@ import client.Player;
 import utilities.DataPacket;
 import utilities.DeadSwitch;
 import utilities.GameInstance;
+import utilities.GameScore;
 import utilities.GameTimer;
 import utilities.PlayerAction;
 import utilities.PlayerInstance;
@@ -23,12 +23,10 @@ import utilities.Util;
 
 public class ServerListener {
 	private ServerSocket serverSocket;
-//	private Vector<ServerClientCommunicator> playerThreads;
 	private HashMap<Integer, ServerClientCommunicator> playerThreads;
 	private GameServerGUI gameServerGUI;
 	
 	private DatabaseLogic db;
-//	private Queue<String> playerQueue;
 	private Queue<Integer> playerQueue;
 	private Vector<GameInstance> gameInstances;
 	
@@ -39,10 +37,8 @@ public class ServerListener {
 		this.serverSocket = serverSocket;
 		this.gameServerGUI = gsg;
 		this.instanceID = 1;
-//		this.playerThreads = new Vector<ServerClientCommunicator>();
 		this.playerThreads = new HashMap<Integer, ServerClientCommunicator>();
 		this.db = new DatabaseLogic();
-//		this.playerQueue = new LinkedList<String>();
 		this.playerQueue = new LinkedList<Integer>();
 		this.gameInstances = new Vector<GameInstance>();
 		new Thread().start();
@@ -53,11 +49,14 @@ public class ServerListener {
 			playerThread.sendData(dp);
 	}
 	
-	// FIGURE OUT HOW TO ADD THE USERNAME
 	protected boolean loginUser(User userInfo, Integer ID) {
 		try {
 			// check if user is valid
 			if (db.loginUser(userInfo.getUsername(), userInfo.getPassword())) {
+				for(ServerClientCommunicator player : playerThreads.values()) {
+					if (player.getUserName()!=null && player.getUserName().equalsIgnoreCase(userInfo.getUsername()))
+						return false;
+				}
 				gameServerGUI.addUserToUsersTable(userInfo.getUsername());
 				return true;
 			}
@@ -69,9 +68,7 @@ public class ServerListener {
 	protected void addPlayerToGameInstance(Player player, String playerUsername) {
 		for (GameInstance gameInstance : gameInstances) {
 			ArrayList<String> players = gameInstance.getPlayerUsernames();
-			System.out.println("Adding players to instance" + players.size());
 			if (players.contains(playerUsername)) {
-				System.out.println("Players in instance");
 				gameInstance.addPlayerToFinalBattle(player);
 			}
 		}
@@ -99,22 +96,17 @@ public class ServerListener {
 	}
 	
 	public void checkQueue() {
-		System.out.println("Checking Queue");
 		// if queue has 2 players start game instance
 		if (playerQueue.size() == utilities.Constants.GAME_SIZE) {
 			Integer p1 = playerQueue.peek(); playerQueue.remove();
 			Integer p2 = playerQueue.peek(); playerQueue.remove();
-			
-			System.out.println("GettingPlayers: " + playerThreads.get(p1).getUserName() + "| " + playerThreads.get(p2).getUserName());
 			// create palyer instances
 			PlayerInstance P1 = new PlayerInstance(playerThreads.get(p1).getUserName(), playerThreads.get(p1));
 			PlayerInstance P2 = new PlayerInstance(playerThreads.get(p2).getUserName(), playerThreads.get(p2));
 			GameInstance gi = new GameInstance(P1, P2, instanceID++);
-			System.out.println("Starting multiplayer ");
 			gameInstances.add(gi);
 			startGame(gi);
 			gameServerGUI.addGameInstance(gi);
-//			gi.startTimer();
 		}
 	}
 	
@@ -157,14 +149,6 @@ public class ServerListener {
 //				player.sendData(new DataPacket<GameTimer>(utilities.Commands.TIME_UPDATE, timer));
 		}
 		timer.start();
-		// new stuff
-
-//		timer.start();
-//		//
-//		for (ServerClientCommunicator player : playerThreads.values()) {
-//			if (players.contains(player.getUserName()))
-//				player.startGame(i++);
-//		}
 	}
 	
 	public void receiveActionToFinalBattleManager(PlayerAction pa, String username) {
@@ -173,6 +157,7 @@ public class ServerListener {
 			for (ServerClientCommunicator player : playerThreads.values()) {
 				if (playersInInstance.contains(player.getUserName())) {
 					gameInstance.FBMReceiveAction(pa);
+					return;
 				}
 			}
 		}
@@ -189,37 +174,9 @@ public class ServerListener {
 		}
 	}
 	
-	public void sendGameInstance() {
-		//
-	}
-	
-	private void checkAllInstances() {
-		for (GameInstance gi : gameInstances) {
-			if (gi.allPlayersMadeAMove()) {
-				updateGameInstance(gi);
-			}
-		}
-	}
-	
-	private void updateGameInstance (GameInstance gi) {
-		// get both players
-		ArrayList<String> playersInInstance = gi.getPlayerUsernames();
-		for (ServerClientCommunicator player : playerThreads.values()) {
-//			if (player.getUserName().equalsIgnoreCase(anotherString)
-			if (playersInInstance.contains(player.getUserName())) {
-				Integer move = gi.getOtherPlayersMove(player.getUserName());
-				player.sendMove(move);
-			}
-		}
-	}
-	
-	protected ArrayList<Integer> updateScores(String username, Integer playerScore) {
+	protected ArrayList<GameScore> updateScores(String username, Integer playerScore) {
 		// pass into the database and return the top five scores
 		return db.getScores(username, playerScore);
-	}
-	
-	public void endGame(GameInstance gi) {
-		
 	}
 	
 	public void start() {
@@ -241,9 +198,6 @@ public class ServerListener {
 				player.setID(clientID); // Set the client ID. Used to identify clients.
 				playerThreads.put(clientID, player);
 				player.start();
-				
-//				checkQueue();
-				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -252,7 +206,6 @@ public class ServerListener {
     // If stop requested, close all the client connections
     try {
       serverSocket.close();
-//      for (ServerClientCommunicator pt : playerThreads) {
       for (ServerClientCommunicator pt : playerThreads.values()) {
         try {
           pt.ois.close();

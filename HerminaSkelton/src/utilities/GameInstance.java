@@ -7,9 +7,6 @@ import client.Player;
 import server.FinalBattleManager;
 
 public class GameInstance implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1709672852475896413L;
 	ArrayList<PlayerInstance> players = new ArrayList<PlayerInstance>();
 	Integer gameID;
@@ -46,9 +43,7 @@ public class GameInstance implements Serializable {
 	}
 	
 	public void addPlayerToFinalBattle(Player p) {
-		System.out.println("Adding player to finalbattle");
 		FBPlayers.add(p);
-		System.out.println("Size " + FBPlayers.size());
 		if (FBPlayers.size() == players.size())
 			startFinalBattle();
 	}
@@ -90,18 +85,14 @@ public class GameInstance implements Serializable {
 	}
 	
 	public void startFinalBattle() {
-		System.out.println("In startFinalBattle: ");
 		if (gameMode == 0) {
-			// TODO
+			players.get(0).sendData(new DataPacket<Integer>(utilities.Commands.SINGLE_FINAL_BATTLE, null));
 		} else {
-			System.out.println("Sending new battle: ");
 			finalBattleManager = new FinalBattleManager(FBPlayers.get(0), FBPlayers.get(1), this);
-			for (PlayerInstance player : players)
-				player.startFinalBattle();
 		}
 	}
 	
-	public void sendFinalBattleUpdate(FinalBattleState fbs) {
+	public void sendFinalBattleUpdate(FinalBattleState fbs) {		
 		for (PlayerInstance player : players)
 			player.sendData(new DataPacket<FinalBattleState>(utilities.Commands.FINAL_BATTLE, fbs));
 	}
@@ -117,5 +108,20 @@ public class GameInstance implements Serializable {
 	
 	public void FBMReceiveDeadSwitch(DeadSwitch ds) {
 		this.finalBattleManager.recieveDeadSwitch(ds);
+	}
+	
+	public void endGame(Boolean won){
+		for (PlayerInstance player : players)
+			player.sendData(new DataPacket<Boolean>(utilities.Commands.FINAL_BATTLE, won));
+	}
+	
+	public void sendCPRequest(Integer play){
+		for (PlayerInstance player : players)
+			player.sendData(new DataPacket<Integer>(utilities.Commands.FINAL_BATTLE, play));
+	}
+	
+	public void endGame(boolean won){
+		for (PlayerInstance player : players)
+			player.sendData(new DataPacket<Boolean>(utilities.Commands.END_GAME, new Boolean(won)));
 	}
 }

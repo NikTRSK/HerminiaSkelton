@@ -3,8 +3,6 @@ package AllCPs;
 import client.Constants;
 import javax.swing.ImageIcon;
 
-import client.Constants;
-
 public class EdgarLugo extends CP {
 	private static final long serialVersionUID = 1123012868725216369L;
 

@@ -1,13 +1,10 @@
 package client;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -16,11 +13,9 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import utilities.ChatMessage;
-import utilities.DataPacket;
-import utilities.User;
 
 public class ChatPanel extends JPanel {
-
+	private static final long serialVersionUID = -7030744577806492731L;
 	private JTextArea chatText;
 	private JScrollPane scrollArea;
 	private JTextField writeMsgArea;
@@ -33,8 +28,8 @@ public class ChatPanel extends JPanel {
 		createGUI();
 	}
 	
-	public void appendText(String text, int num){
-		
+	public void appendText(String user, String text){
+		chatText.append("\n" + user + ": " + text);
 	}
 	
 	private void initializeVariables(){
@@ -45,7 +40,8 @@ public class ChatPanel extends JPanel {
 	}
 	
 	private void createGUI(){
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setLayout(new BorderLayout());
+		setBackground(Constants.BACKGROUND_COLOR);
 		
 		chatText.setEditable(false);
 		chatText.setText("Start chatting");
@@ -55,9 +51,17 @@ public class ChatPanel extends JPanel {
 		chatText.setForeground(Constants.BACKGROUND_COLOR);
 		chatText.setFont(Constants.GAMEFONT);
 		
+		writeMsgArea.setBackground(Constants.BACKGROUND_COLOR);
+		writeMsgArea.setForeground(Constants.BACKGROUND_COLOR2);
+		writeMsgArea.setFont(Constants.GAMEFONT);
+		
 		scrollArea.getViewport().setView(chatText);
 		scrollArea.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
+		sendButton.setBackground(Constants.BACKGROUND_COLOR2);
+		sendButton.setForeground(Constants.FONT_COLOR);
+		sendButton.setFont(Constants.GAMEFONT);
+		sendButton.setPreferredSize(new Dimension(80, 0));
 		
 		sendButton.addActionListener(new ActionListener(){
 
@@ -65,16 +69,20 @@ public class ChatPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				String string = writeMsgArea.getText();
 				ChatMessage msg = new ChatMessage(string, mListener.getUser());
-				chatText.append("\n"+string);
+//				chatText.append("\n"+string);
 				writeMsgArea.setText("");
 				mListener.sendChat(msg);		
 			}
 			
 		});
 		
+		JPanel sendHolder = new JPanel();
+		sendHolder.setLayout(new BorderLayout());
+		sendHolder.add(writeMsgArea, BorderLayout.CENTER);
+		sendHolder.add(sendButton, BorderLayout.EAST);
+		sendHolder.setPreferredSize(new Dimension(0, 50));
 		
-		add(scrollArea);
-		add(writeMsgArea);
-		add(sendButton);
+		add(scrollArea, BorderLayout.CENTER);
+		add(sendHolder, BorderLayout.SOUTH);
 	}
 }

@@ -38,10 +38,6 @@ import utilities.User;
 import utilities.Util;
 
 public class loginGUI extends JFrame{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private BackgroundMusic music;
 	private boolean pause = false;
@@ -228,6 +224,8 @@ public class loginGUI extends JFrame{
 		
 		mGridBagConst.gridy = 10;
 		add(connect,mGridBagConst);
+		
+		userpassword.setEchoChar((char) 0);
 	}
 	
 	private void setBackground(){
@@ -435,11 +433,12 @@ public class loginGUI extends JFrame{
 
 			@Override
 			public void focusGained(FocusEvent e) {
-				if(userpassword.getPassword().equals("password")){
+				if(String.valueOf(userpassword.getPassword()).equals("password")){
 					userpassword.setText("");
 					userpassword.setForeground(Color.black);
 					error.setText("");
 				}
+				userpassword.setEchoChar('*');
 			}
 
 			@Override
@@ -468,7 +467,7 @@ public class loginGUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String name = username.getText().trim();
-				String password = userpassword.getPassword().toString();
+				String password = String.valueOf(userpassword.getPassword());
 				User createUser = new User(name, password);
 				if (gameClient != null) {
 					gameClient.create(createUser);
@@ -511,7 +510,6 @@ public class loginGUI extends JFrame{
 						connectionIcon.setIcon(connectionicon);
 						gameClient = new GameClientListener(socket); // initialize the game client
 						gameClient.setLoginGUI(loginGUI.this);
-						userpassword.setEchoChar('*');
 					} catch (IOException ioe) {
 						error.setText(utilities.Constants.PORT_ERROR_MESSAGE);
 						Util.printExceptionToCommand(ioe);
@@ -566,6 +564,7 @@ public class loginGUI extends JFrame{
 			error.setVisible(true);
 			error.setText("Username or password incorrect");
 		} else {
+			music.endMusic();
 			new waitGUI(gameClient,host.getText(),port.getText()).setVisible(true);
 			dispose();
 		}
@@ -579,9 +578,4 @@ public class loginGUI extends JFrame{
 			error.setText("Account Successfully created");
 		}
 	}
-	
-	public static void main(String[] args){
-		new loginGUI().setVisible(true);
-	}
-	
 }

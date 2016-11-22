@@ -44,6 +44,10 @@ public class FinalBattleManager {
 		state[1] = 1;
 		
 		this.CPs= new CP[4];
+		CPs[0] = p1.getCP().get(client.Constants.rand.nextInt(p1.getCP().size()));
+		CPs[1] = p2.getCP().get(client.Constants.rand.nextInt(p2.getCP().size()));
+		CPs[2] = millerCPs.get(client.Constants.rand.nextInt(millerCPs.size()));
+		CPs[3] = millerCPs.get(client.Constants.rand.nextInt(millerCPs.size()));
 		
 		this.gi = gi;
 		
@@ -71,7 +75,7 @@ public class FinalBattleManager {
 		int p = ds.getPlayerNum();
 		CPs[p] = players[p].getCP().get(ds.getCP());
 		
-		if(CPs[0].getHealth()>0 && CPs[1].getHealth()>0)sendUpdate();
+		//if(CPs[0].getHealth()>0 && CPs[1].getHealth()>0)sendUpdate();
 	}
 	
 	private void runTurn(){
@@ -173,7 +177,7 @@ public class FinalBattleManager {
 		if(won){
 			state[0] = 4;
 			state[1] = 4;
-			endGame(1);
+			endGame(won);
 			return;
 		}
 		if(p1lost)state[0] = 2;
@@ -181,20 +185,14 @@ public class FinalBattleManager {
 		if(p1lost&&p2lost){
 			state[0] = 3;
 			state[1] = 3;
-			endGame(0);
+			endGame(false);
 			return;
 		}
 		
 		// replacing dead CPs
-		boolean updateYet = true;
 		for(int i = 0; i < 4; i++){
 			if(CPs[i].getHealth()<=0){
-				if(i<2){
-					if(state[i]!=2){
-						replaceCP(i);
-						updateYet = false;
-					}
-				}else{
+				if(i>2){
 					Vector<Integer> liveCPs = new Vector<Integer>();
 					for(int j = 0; j<millerCPs.size(); j++){
 						CP temp = millerCPs.get(j);
@@ -207,19 +205,24 @@ public class FinalBattleManager {
 				}
 			}
 		}
-		if(updateYet)sendUpdate();
+		
+		//if(updateYet)
+		sendUpdate();
+		pa1 = null;
+		pa2 = null;
 	}
 	
 	private void sendUpdate(){
-		gi.sendFinalBattleUpdate(new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players, state));
+		FinalBattleState toSend = new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players, state);
+		gi.sendFinalBattleUpdate(toSend);
 	}
 
 	private void replaceCP(int player){
-		//gi.sendCPRequest(player);
+		Integer p = new Integer(player);
+		gi.sendCPRequest(p);
 	}
 	
-	private void endGame(int result){
-		//TODO
-		//sl.endGame(result, gi);
+	private void endGame(boolean result){
+		gi.endGame(result);
 	}
 }

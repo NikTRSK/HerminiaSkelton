@@ -1,7 +1,5 @@
 package map;
 
-import java.awt.Dimension;
-
 public class MapZone {
 	
 	private MapNode[][] nodes;
