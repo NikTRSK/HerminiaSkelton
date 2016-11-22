@@ -440,7 +440,7 @@ public class FinalBattleScreen extends JPanel{
 		
 		update();
 		
-		if(CPs[me].getHealth()<=0){
+		/*if(CPs[me].getHealth()<=0){
 			boolean allDead=true;
 			for(int i = 0; i < player.getCP().size(); i++){
 				if(player.getCP().get(i).getHealth()>0)allDead=false;
@@ -467,7 +467,7 @@ public class FinalBattleScreen extends JPanel{
 			CardLayout layout = (CardLayout)cardHolder.getLayout();
 			layout.show(cardHolder, "card 5");
 			waitMessage.setText("Waiting for other player to replace their CP");
-		}
+		}*/
 		
 	}
 	
