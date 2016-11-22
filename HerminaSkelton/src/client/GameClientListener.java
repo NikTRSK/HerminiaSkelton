@@ -193,12 +193,6 @@ public class GameClientListener extends Thread implements Serializable {
 					me = (Integer)input.getData();
 					waitgui.startGame();
 				}
-				else if(streamContent.equals(utilities.Commands.GAME_SCORES)){
-					@SuppressWarnings("unchecked")
-					ArrayList<Integer> test = (ArrayList<Integer>)input.getData();
-					for (Integer t : test)
-						System.out.println("Score: " + t);
-				}
 				else if(streamContent.equals(utilities.Commands.TIME_UPDATE)) {
 					if (input.getData() != null) {
 						mGameGUI.updateTimer((Integer)input.getData());
