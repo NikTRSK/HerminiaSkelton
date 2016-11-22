@@ -146,7 +146,7 @@ public class MapScreen extends JPanel implements KeyListener {
 			else if(e.getKeyCode() == KeyEvent.VK_DOWN)  mPlayer.moveDown();
 			else if(e.getKeyCode() == KeyEvent.VK_LEFT)  mPlayer.moveLeft();
 			else if(e.getKeyCode() == KeyEvent.VK_RIGHT) mPlayer.moveRight();
-//			mPlayer.incrementSteps();
+			mPlayer.incrementSteps();
 		}
 		     
 		renderAndPaint();

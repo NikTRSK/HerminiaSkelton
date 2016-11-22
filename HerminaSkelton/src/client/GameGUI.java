@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -27,7 +29,7 @@ import AllCPs.CP;
 import utilities.BackGroundPanel;
 import utilities.FinalBattleState;
 
-public class GameGUI extends JFrame{
+public class GameGUI extends JFrame implements MouseListener {
 	private static final long serialVersionUID = -8312855782342576917L;
 	
 	private JPanel centerPanel;
@@ -98,6 +100,7 @@ public class GameGUI extends JFrame{
 		
 		// Map Stuff.
 		map = new map.MapScreen(this,new Dimension(Toolkit.getDefaultToolkit().getScreenSize()),beta);
+		map.addMouseListener(this);
 		
 		// Battle Stuff.
 		battle  = new BattleScreen(beta, this);		
@@ -305,5 +308,39 @@ public class GameGUI extends JFrame{
 	
 	public void appendToChat(String user, String message) {
 		chat.appendText(user, message);
+	}
+	
+	public int getPlayerScore() {
+		return beta.generateScore();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		map.setFocusable(true);
+		map.requestFocusInWindow();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
