@@ -27,12 +27,10 @@ public class FinalBattleManager {
 
 	private Player[] players;
 
-	private ServerListener sl;
-
 	private GameInstance gi;
 
 	public FinalBattleManager(Player p1, Player p2, GameInstance gi) {
-		this.miller = new Miller(0); // TODO Miller Difficulty
+		this.miller = new Miller(0);
 		this.millerCPs = miller.getCP();
 
 		this.players = new Player[2];
@@ -212,7 +210,7 @@ public class FinalBattleManager {
 		}
 		if(CPs[1].getHealth()==0){
 			for(int i = 0; i< players[1].getCP().size(); i++){
-				if(players[1].getCP().get(i).getHealth()>0)CPs[0]=players[1].getCP().get(i);
+				if(players[1].getCP().get(i).getHealth()>0)CPs[1]=players[1].getCP().get(i);
 			}
 		}
 		

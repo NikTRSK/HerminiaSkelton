@@ -1,7 +1,5 @@
 package AllCPs;
 
-import javax.swing.ImageIcon;
-
 public class BlankCP extends CP{
 	private static final long serialVersionUID = -3388022880368146263L;
 
@@ -13,6 +11,7 @@ public class BlankCP extends CP{
 			this.real = false;
 			this.currHealth = 0;
 			this.healthPoints = 0;
+			updateStats();
 		}
 
 		@Override

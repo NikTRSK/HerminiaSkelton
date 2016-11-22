@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import AllCPs.CP;
-import AllCPs.EmmaLautz;
 import utilities.Constants;
 
 public class EndGameGUI extends JFrame{
@@ -33,7 +32,6 @@ public class EndGameGUI extends JFrame{
 	private String username1;
 	private String username2;
 	private String temp;
-	private JLabel message;
 	private JButton favCP;
 	private boolean win;
 	private boolean pause = false;
@@ -93,7 +91,6 @@ public class EndGameGUI extends JFrame{
 	
 	private void initializeComponents(){
 		music = new BackgroundMusic();
-		message = new JLabel("");
 		name1 = new JLabel("");
 		name1.setFont(new Font("Serif", Font.BOLD, 20));
 		name2 = new JLabel("");

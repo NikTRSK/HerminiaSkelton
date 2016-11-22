@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -24,6 +25,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import AllCPs.CP;
 import utilities.BackGroundPanel;
@@ -34,6 +36,7 @@ public class GameGUI extends JFrame implements MouseListener {
 	
 	private JPanel centerPanel;
 	private JPanel rightPanel;
+	private JPanel rightPanelCard;
 	
 	private ChatPanel chat;
 	private GameClientListener clientListener;
@@ -71,10 +74,12 @@ public class GameGUI extends JFrame implements MouseListener {
 		state = 1;
 		
 		// Initialize.
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);		
 		setVisible(true);
+		CardLayout cards = (CardLayout)rightPanelCard.getLayout();
+		cards.show(rightPanelCard, "rightpanel");
 		switchToMap(false, beta);
 	}
 	
@@ -88,6 +93,7 @@ public class GameGUI extends JFrame implements MouseListener {
 		gbc = new GridBagConstraints();
 
 		centerPanel = new JPanel(new CardLayout());
+		rightPanelCard = new JPanel(new CardLayout());
 		
 		menuBar = new JMenuBar();
 		menu = new JMenu("Inventory");
@@ -154,7 +160,8 @@ public class GameGUI extends JFrame implements MouseListener {
 			}
 		});
 		
-		this.add(rightPanel, BorderLayout.EAST);
+		rightPanelCard.add(rightPanel,  "rightpanel");
+		this.add(rightPanelCard, BorderLayout.EAST);
 		
 		menuBar.add(menu);
 		JMenuItem inventory = new JMenuItem("Show Inventory");
@@ -296,21 +303,27 @@ public class GameGUI extends JFrame implements MouseListener {
 		cards.show(centerPanel, "card 3");
 	}
 	
-	public void endOfGame(){
-		int maxLevel = 0;
-		int index = 0;
-		for(int i = 0; i < beta.getCP().size(); i++){
-			if(beta.getCP().get(i).getLevel()>maxLevel){
-				maxLevel = beta.getCP().get(i).getLevel();
-				index = i;
-			}
-		}
-		CP friend  = beta.getCP().get(index);
-		//new endGameGUI();
-	}
-	
-	public void hideChat(){
-		getContentPane().getLayout().removeLayoutComponent(rightPanel);
+	public void hideChat(){		
+		JLabel label = new JLabel("You are in Guest Mode", SwingConstants.CENTER);
+		label.setFont(new Font("Courier", Font.BOLD, 20));
+		label.setForeground(Constants.FONT_COLOR);
+		
+		JLabel label2 = new JLabel("Make an account and log in for additional features!", SwingConstants.CENTER);
+		label2.setFont(new Font("Courier", Font.BOLD, 20));
+		label2.setForeground(Constants.FONT_COLOR);
+		label2.setPreferredSize(new Dimension(0, 500));
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		panel.setBackground(Constants.BACKGROUND_COLOR2);
+		panel.setBorder(BorderFactory.createLineBorder(Constants.BACKGROUND_COLOR, 10));
+		panel.add(label, BorderLayout.CENTER);
+		panel.add(label2, BorderLayout.SOUTH);
+		panel.setPreferredSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()/3,(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+		
+		rightPanelCard.add(panel,  "alternate");
+		CardLayout cards = (CardLayout)rightPanelCard.getLayout();
+		cards.show(rightPanelCard, "alternate");
 	}
 	
 	public void appendToChat(String user, String message) {

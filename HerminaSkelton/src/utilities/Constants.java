@@ -15,7 +15,7 @@ public class Constants {
     public static final int MIN_PORT_VAL = 0;
     public static final int MAX_PORT_VAL = 65535;
     public static final int GAME_SIZE = 2;
-    public static final int GAME_TIME = 5; // in minutes
+    public static final int GAME_TIME = 3; // in minutes
     
     
     // STRINGS

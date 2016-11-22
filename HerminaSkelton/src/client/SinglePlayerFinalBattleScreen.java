@@ -46,15 +46,12 @@ public class SinglePlayerFinalBattleScreen extends JPanel{
 	
 	private JButton attack;
 	private JButton switchCP;
-	private JButton throwAssignment;
 	private JButton[] attacks;
 	private JButton[] switchOption;
 	
 	private ImageIcon sprite1;
 	private ImageIcon sprite2;
-	//private JLabel healthLabel1;
 	private HealthPanel healthPanel1;
-	//private JLabel healthLabel2;
 	private HealthPanel healthPanel2;
 	private JLabel imageLabel1;
 	private JLabel imageLabel2;
