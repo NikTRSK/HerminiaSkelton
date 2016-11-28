@@ -28,13 +28,12 @@ import javax.swing.JTextArea;
 import AllCPs.CP;
 import AllCPs.EdgarLugo;
 import AllCPs.EmmaLautz;
+import AllCPs.JimmyChen;
 import utilities.Constants;
 import utilities.GameScore;
 
 public class EndGameGUI extends JFrame{
     private static final long serialVersionUID = 1L;
-    private String username1;
-    private String username2;
     private String temp;
     private JLabel message;
     private JButton favCP;
@@ -50,14 +49,12 @@ public class EndGameGUI extends JFrame{
     private BackgroundMusic music;
     private JButton mute;
     
-    public EndGameGUI(int gamemode, String name1, String name2, CP bestfriend, ArrayList<GameScore> gs, boolean win, GameClientListener mlistener){
+    public EndGameGUI(int gamemode,CP bestfriend, ArrayList<GameScore> gs, boolean win, GameClientListener mlistener){
         //gamemode 0 as guest, gamemmode 1 as singleplayer, gameode 2 as multiplayer
         this.gamemode = gamemode;
         this.mlistener = mlistener;
         this.bestfriend = bestfriend;
         this.win = win;
-        username1 = name1;
-        username2 = name2;
         topFiveScores = gs;
         addNames();
         setBackground();
@@ -69,14 +66,18 @@ public class EndGameGUI extends JFrame{
     }
     
     private void addNames(){
-        temp = Constants.generateWord(win, username1, username2, gamemode);
+        temp = Constants.generateWord(win, gamemode);
     }
     
     private void setIcon(){
-        favCP.setIcon(bestfriend.getSprite());
         try{
             Image img3 = ImageIO.read(new File(Constants.resourceFolderbg + "unmute.png"));
+            Image img4 = bestfriend.getSprite().getImage();
+            Image img5 = img4.getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);
+            ImageIcon img6 = new ImageIcon(img5);
+            favCP.setIcon(img6);
             mute.setIcon(new ImageIcon(img3));
+            
         }
         catch (IOException e) {
             JPanel error = new JPanel();
@@ -106,7 +107,7 @@ public class EndGameGUI extends JFrame{
         }
         professorwords = new JTextArea(temp);
         professorwords.setEditable(false);
-        professorwords.setPreferredSize(new Dimension(5,5));
+        professorwords.setPreferredSize(new Dimension(1,1));
         professorwords.setOpaque(false);
         professorwords.setColumns(1);
         professorwords.setLineWrap(true);
@@ -219,13 +220,13 @@ public class EndGameGUI extends JFrame{
         mGridBagConst.gridx = 3;
         mGridBagConst.ipadx = 150;
         mGridBagConst.ipady = 150;
-        mGridBagConst.insets = new Insets(0,0,100,100);
+        mGridBagConst.insets = new Insets(0,100,100,100);
         add(professorwords,mGridBagConst);
         
         mGridBagConst.gridy = 8;
         mGridBagConst.gridx = 3;
-        mGridBagConst.ipadx = 100;
-        mGridBagConst.ipady = 100;
+        mGridBagConst.ipadx = 0;
+        mGridBagConst.ipady = 0;
         mGridBagConst.insets = new Insets(0,0,0,300);
         add(favCP,mGridBagConst);
         
@@ -302,4 +303,8 @@ public class EndGameGUI extends JFrame{
         System.exit(0);
     }
     
+    public static void main(String[] args){
+    	ArrayList<GameScore> topFiveScores = new ArrayList<GameScore>();
+    	new EndGameGUI(2,new JimmyChen(2),topFiveScores,true,null).setVisible(true);
+    }
 }

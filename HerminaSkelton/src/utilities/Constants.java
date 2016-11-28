@@ -43,18 +43,18 @@ public class Constants {
     public static final String serverbkgimg = "serverbkgimg.png";
     
     //
-    public static final String win = "did a great job and found true friendships with your CPs. Good luck on the final exam";
-    public static final String lose = " have lost the battle, make sure to try it again";
+    public static final String win = "did a great job \n and found true friendships with your CPs. Good luck on the final exam";
+    public static final String lose = "\n have lost the \n battle, make sure to try it again";
     
     //
-    public static final String generateWord(boolean win, String name1, String name2, int gamemode){
+    public static final String generateWord(boolean win, int gamemode){
     	String temp;
     	if(win){
     		if(gamemode == 2){
-				temp = "Congratulate " +  name1 + " " + name2 + " " + " you guys ";
+				temp = "Congratulate you guys ";
 			}
 			else{
-				temp = "Congratulate " +  name1 + " you ";
+				temp = "Congratulate you ";
 			}
 			temp+=Constants.win;
 			if(gamemode == 2){
@@ -67,10 +67,10 @@ public class Constants {
     	}
     	else{
 			if(gamemode == 2){
-				temp = "WAHAHAHAHA " +  name1 + " " + name2 + " " + " you guys";
+				temp = "WAHAHAHAHA you guys";
 			}
 			else{
-				temp = "WAHAHAHAHA " +  name1 + " you";
+				temp = "WAHAHAHAHA you";
 			}
 			temp+=Constants.lose;
 			return temp;
