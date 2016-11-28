@@ -23,7 +23,7 @@ public class GameServerGUI extends JFrame {
 	private JPanel gamesPanel, usersPanel;
 	
 	public GameServerGUI() {
-		super("Game waiting room");
+		super("Game Lobby");
 		initializeVariables();
 		createGUI();
 		setVisible(true);

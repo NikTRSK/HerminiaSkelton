@@ -18,7 +18,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import AllCPs.BlankCP;
 import AllCPs.CP;
 import AllMoves.DummyMove;
 import utilities.BackGroundPanel;
@@ -84,7 +83,6 @@ public class FinalBattleScreen extends JPanel{
 		
 		this.player = fbs.players[me];
 		this.CPs = new CP[4];
-		if(fbs.cp1==null)System.out.println("FinalBattleScreen Constructor, cp1 is null");
 		this.CPs[0] = fbs.cp1;
 		this.CPs[1] = fbs.cp2;
 		this.CPs[2] = fbs.cp3;
@@ -276,7 +274,6 @@ public class FinalBattleScreen extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Player Action sent from player "+me);
 				sendMessage(new PlayerAction(me, 1, Constants.attackMoves[myAttack], me, 2));
 				myAttack = null;
 				CardLayout layout = (CardLayout)cardHolder.getLayout();
@@ -312,7 +309,6 @@ public class FinalBattleScreen extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Player Action sent from player "+me);
 				sendMessage(new PlayerAction(me, 1, Constants.attackMoves[myAttack], me, 3));
 				myAttack = null;
 				CardLayout layout = (CardLayout)cardHolder.getLayout();
@@ -438,44 +434,12 @@ public class FinalBattleScreen extends JPanel{
 		this.CPs[3] = fbs.cp4;
 		Integer temp = new Integer(fbs.gameStates[me]);
 		this.state = temp;
-		System.out.println("me: "+me);
 		
 		for(int i = 0; i< CPs.length; i++){
-			System.out.println("CP"+i+"'s health: "+fbs.CPHealth[i]);
 			CPs[i].changeHealth(fbs.CPHealth[i]-CPs[i].getHealth());
 		}
 		
 		update();
-		
-		/*if(CPs[me].getHealth()<=0){
-			boolean allDead=true;
-			for(int i = 0; i < player.getCP().size(); i++){
-				if(player.getCP().get(i).getHealth()>0)allDead=false;
-			}
-			if(allDead)return;
-			else{
-				replaceDead();
-				CardLayout layout = (CardLayout)cardHolder.getLayout();
-				layout.show(cardHolder, "card 5");
-				waitMessage.setText("Choose a new CP to switch in");
-				return;
-			}
-		}
-		
-		int otherPlayer = 0;
-		if(otherPlayer==me)otherPlayer = 1;
-		Player other = fbs.players[otherPlayer];
-		if(CPs[otherPlayer].getHealth()==0){
-			boolean allDead=true;
-			for(int i = 0; i < other.getCP().size(); i++){
-				if(other.getCP().get(i).getHealth()>0)allDead=false;
-			}
-			if(allDead)return;
-			CardLayout layout = (CardLayout)cardHolder.getLayout();
-			layout.show(cardHolder, "card 5");
-			waitMessage.setText("Waiting for other player to replace their CP");
-		}*/
-		
 	}
 	
 	public void replaceDead(){
@@ -521,9 +485,7 @@ public class FinalBattleScreen extends JPanel{
 		  dialog.setVisible(true);
 	}
 	
-	private void update(){
-		System.out.println(state);
-		
+	private void update(){		
 		// Checking State.
 		if(state==3){
 			endGame(false);

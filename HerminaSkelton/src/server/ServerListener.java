@@ -111,11 +111,9 @@ public class ServerListener {
   }
   
   protected synchronized void logOutUser(String userName) {
-    System.out.println("IN LOGOUT");
     // Find instance of the player
     ArrayList<String> instanceUsernames = null;
     
-//    for (GameInstance gi : gameInstances) {
     int instanceID = -1;
     for (int k = 0; k < gameInstances.size(); ++k) {
       ArrayList<String> players = gameInstances.get(k).getPlayerUsernames();
@@ -128,24 +126,15 @@ public class ServerListener {
     
     // Logout all users from instance
     if (instanceUsernames != null) {
-      System.out.println("Instance " + instanceUsernames.size());
-//      for (int i = playerThreads.size() - 1; i >= 0; i--) {
       ArrayList<Integer> playerKeys = new ArrayList<Integer>();
       for (Integer key : playerThreads.keySet()) {
         if (playerThreads.get(key).getUserName().equalsIgnoreCase(instanceUsernames.get(0))) {
-          System.out.println("Logging out " + key + " user: " + playerThreads.get(key).getUserName());
           playerKeys.add(key);
-//          playerThreads.get(key).sendData(new DataPacket<String>(utilities.Commands.LOGOUT_USER, playerThreads.get(key).getUserName()));
-//          playerThreads.remove(key);
         }
         else if (instanceUsernames.size() > 1 && playerThreads.get(key).getUserName().equalsIgnoreCase(instanceUsernames.get(1))) {
-          System.out.println("Logging out " + key + " user: " + playerThreads.get(key).getUserName());
           playerKeys.add(key);
-//          playerThreads.get(key).sendData(new DataPacket<String>(utilities.Commands.LOGOUT_USER, playerThreads.get(key).getUserName()));
-//          playerThreads.remove(key);
         }
       }
-      System.out.println("KEYS SIZE: " + playerKeys.size());
       // remove the game instance
       if (instanceID >= 0) {
         gameInstances.get(instanceID).stopTimer();
@@ -158,10 +147,7 @@ public class ServerListener {
         playerThreads.remove(key);
       }
     } else { // if the user is not part of an instance yet
-//      for (int i = 0; i < playerThreads.size(); ++i) {
       for (Integer key : playerThreads.keySet()) {
-//      for (int i = playerThreads.size() - 1; i >= 0; i--) {
-        System.out.println("Logging out " + key);
         if (playerThreads.get(key).getUserName().equals(userName)) {
           playerThreads.get(key).sendData(new DataPacket<String>(utilities.Commands.LOGOUT_USER, playerThreads.get(key).getUserName()));
           playerThreads.remove(key);
@@ -172,14 +158,11 @@ public class ServerListener {
   
   public void startGame(GameInstance gameInstance) {
     ArrayList<String> players = gameInstance.getPlayerUsernames();
-//  for (ServerClientCommunicator pt : playerThreads) {
-//    for (Integer i = 0; i < playerThreads.size(); i++) {
     int i = 0;
     GameTimer timer = gameInstance.getTimer();
     for (ServerClientCommunicator player : playerThreads.values()) {
       if (players.contains(player.getUserName()))
         player.startGame(i++);
-//        player.sendData(new DataPacket<GameTimer>(utilities.Commands.TIME_UPDATE, timer));
     }
     timer.start();
   }
@@ -232,7 +215,7 @@ public class ServerListener {
         playerThreads.put(clientID, player);
         player.start();
       } catch (IOException e) {
-        e.printStackTrace();
+        utilities.Util.printExceptionToCommand(e);
       }
     }
     
@@ -245,7 +228,7 @@ public class ServerListener {
           pt.oos.close();
           pt.socket.close();
         } catch(IOException ioe) {
-          ioe.printStackTrace();
+        	utilities.Util.printExceptionToCommand(ioe);
         }
       }
     }

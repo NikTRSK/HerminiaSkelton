@@ -28,7 +28,6 @@ public class GameClientListener extends Thread implements Serializable {
   private loginGUI loginGUI;
   private Boolean ans = null;
   private Boolean win = false;
-  private String otherUser;
   
   private Integer me;
   private FinalBattleScreen fbs;
@@ -44,17 +43,12 @@ public class GameClientListener extends Thread implements Serializable {
     }
   }
   
-  /*
-   * send data to gameClientListener, receives response from server 
-   * and subsequently allows gui to behave accordingly
-   */
   public void sendData(DataPacket<?> data){
-    System.out.println("Sending data");
     try {
       oos.writeObject(data);
       oos.flush();
     } catch (IOException e) {
-      e.printStackTrace();
+      utilities.Util.printExceptionToCommand(e);
     } 
   }
   
@@ -73,9 +67,7 @@ public class GameClientListener extends Thread implements Serializable {
   }
   
   public void sendAction(PlayerAction pa){
-    if(pa==null)System.out.println("pa is null in GCL");
     sendData(new DataPacket<PlayerAction>(utilities.Commands.PLAYER_ACTION, pa));
-    System.out.println("pa sent from GCL");
   }
 
   public void sendDeadSwitch(DeadSwitch ds){
@@ -114,14 +106,7 @@ public class GameClientListener extends Thread implements Serializable {
   }
   
   public void logout() {
-//    try {
-    System.out.println("sending logoug " + userName);
-      sendData(new DataPacket<String>(utilities.Commands.LOGOUT_USER, userName));
-//      ois.close();
-//      oos.close();
-//      mSocket.close();
-//      System.exit(0);
-//    } catch (IOException ioe) { utilities.Util.printExceptionToCommand(ioe); }
+    sendData(new DataPacket<String>(utilities.Commands.LOGOUT_USER, userName));
   }
   
   public void sendGameMode(Integer type) {
@@ -134,7 +119,6 @@ public class GameClientListener extends Thread implements Serializable {
         // get the data packet
         DataPacket<?> input = (DataPacket<?>)ois.readObject();      
         String streamContent = input.getCommand();
-//        System.out.println("COMMAND::: " + streamContent);
         
         if(streamContent.equals(utilities.Commands.TIMER_OUT)){
           mGameGUI.timerOut();
@@ -144,22 +128,8 @@ public class GameClientListener extends Thread implements Serializable {
           if(input.getData() instanceof FinalBattleState){
             if(fbs==null){
               mGameGUI.StartMultiPlayerFinalBattle(me, (FinalBattleState)input.getData());
-              Player[] temp = ((FinalBattleState)input.getData()).players;
-              if(temp.length != 1){
-                for(int i = 0; i < temp.length; i++){
-                    if(!temp[i].getName().equals(userName)){
-                        otherUser = temp[i].getName();
-                    }
-                } 
-              }
             }else{
-              //TODO remove
-              FinalBattleState newFBS = (FinalBattleState)input.getData();
-              System.out.println("Health in GCL");
-              System.out.println("CP 1 health: "+newFBS.cp1.getHealth());
-              System.out.println("CP 2 health: "+newFBS.cp2.getHealth());
-              System.out.println("CP 3 health: "+newFBS.cp3.getHealth());
-              System.out.println("CP 4 health: "+newFBS.cp4.getHealth());
+//              FinalBattleState newFBS = (FinalBattleState)input.getData();
               fbs.recieveMessage((FinalBattleState)input.getData());
             }
           }else if(input.getData() instanceof Integer){
@@ -171,24 +141,18 @@ public class GameClientListener extends Thread implements Serializable {
                 fbs.replaceDead();
             }
           }
-          
         }
-        if(streamContent.equals(utilities.Commands.SINGLE_FINAL_BATTLE)) { //TODO change to command
+        if(streamContent.equals(utilities.Commands.SINGLE_FINAL_BATTLE)) {
           mGameGUI.StartSinglePlayerFinalBattle();
         }
-        
         if (streamContent.equals(utilities.Commands.END_GAME)){
-          //mainGUI.endOfGame();
-                    win = (Boolean)input.getData();
+          win = (Boolean)input.getData();
           sendData(new DataPacket<Integer>(utilities.Commands.SEND_SCORE, mGameGUI.getPlayerScore()));
-//          EndGameGUI endGUI = new EndGameGUI(0, userName, "Name2", client.Constants.generateCP(1), 200, 300, true, this);
-//          endGUI.setVisible(true);
         } else if (streamContent.equals(utilities.Commands.TOP_SCORES)){
-          //mainGUI.endOfGame();
-                    @SuppressWarnings("unchecked")
-                    ArrayList<GameScore> gs = (ArrayList<GameScore>)input.getData();
-                    EndGameGUI endGUI = new EndGameGUI(2, mGameGUI.getBestCP(), gs, win, this);
-                    endGUI.setVisible(true);
+          @SuppressWarnings("unchecked")
+          ArrayList<GameScore> gs = (ArrayList<GameScore>)input.getData();
+          EndGameGUI endGUI = new EndGameGUI(2, mGameGUI.getBestCP(), gs, win, this);
+          endGUI.setVisible(true);
         }
         else if(streamContent.equals(utilities.Commands.LOGOUT_USER)){
           System.exit(0);
@@ -210,7 +174,6 @@ public class GameClientListener extends Thread implements Serializable {
             mGameGUI.updateTimer((Integer)input.getData());
           }
         } else if(streamContent.equals(utilities.Commands.CHAT_MESSAGE)) {
-          System.out.println("CHAAAAT RECEIVEDDDDD");
           ChatMessage message = (ChatMessage)input.getData();
           mGameGUI.appendToChat(message.getUsername(), message.getMessage());
         }
@@ -225,8 +188,6 @@ public class GameClientListener extends Thread implements Serializable {
   private boolean initializeVariables(){
     try{
       ois = new ObjectInputStream(mSocket.getInputStream());
-      //get socket's output stream and open PrintWriter
-      //pw = new PrintWriter(mSocket.getOutputStream());
       oos = new ObjectOutputStream(mSocket.getOutputStream());
     }catch (IOException ioe){
       return false;
