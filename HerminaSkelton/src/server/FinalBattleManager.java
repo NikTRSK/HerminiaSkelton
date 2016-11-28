@@ -58,13 +58,13 @@ public class FinalBattleManager {
 	public void recieveAction(PlayerAction pa) {
 		if (pa1 == null) {
 			pa1 = pa;
-			if (pa.getPlayerNum() == 0) {
+			/*if (pa.getPlayerNum() == 0) {
 				if (state[1] == 2)
 					runTurn();
 			} else {
 				if (state[0] == 2)
 					runTurn();
-			}
+			}*/
 		} else {
 			pa2 = pa;
 			runTurn();
@@ -119,6 +119,7 @@ public class FinalBattleManager {
 					index = j;
 				}
 			}
+			if(index==-1)continue;
 			int temp = order[i];
 			order[i] = order[index];
 			order[index] = temp;
@@ -134,7 +135,14 @@ public class FinalBattleManager {
 			} else if (actor == p2) {
 				pa2.getMove().move(CPs[p2], CPs[pa2.getTarget()], new JTextArea());
 			} else {
+				// Choosing a target.
 				int target = client.Constants.rand.nextInt(2);
+				if(CPs[target].getHealth()<=0){
+					if(target==0)target=1;
+					else target=0;
+				}if(CPs[target].getHealth()<=0)continue;
+				
+				// Executing Move.
 				AttackMove aMove = client.Constants.attackMoves[CPs[actor].getAttackMoves()[client.Constants.rand
 						.nextInt(2)]];
 				aMove.move(CPs[actor], CPs[target], new JTextArea());
@@ -183,10 +191,15 @@ public class FinalBattleManager {
 			endGame(won);
 			return;
 		}
-		if (p1lost)
+		if (p1lost){
+			System.out.println("player 1 is out");
 			state[0] = 2;
-		if (p2lost)
+		}
+		if (p2lost){
+			System.out.println("player 2 is out");
 			state[1] = 2;
+		}
+			
 		if (p1lost && p2lost) {
 			state[0] = 3;
 			state[1] = 3;
@@ -236,6 +249,10 @@ public class FinalBattleManager {
 	}
 
 	private void sendUpdate() {
+		System.out.println("states");
+		for(int i = 0; i < state.length; i++){
+			System.out.println("State "+i+": "+state[i]);
+		}
 		FinalBattleState toSend = new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players, state);
 		gi.sendFinalBattleUpdate(toSend);
 	}

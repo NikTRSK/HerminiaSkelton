@@ -18,7 +18,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import AllCPs.BlankCP;
 import AllCPs.CP;
+import AllMoves.DummyMove;
 import utilities.BackGroundPanel;
 import utilities.DeadSwitch;
 import utilities.FinalBattleState;
@@ -329,6 +331,7 @@ public class FinalBattleScreen extends JPanel{
 				
 		targetPanel = new JPanel();
 		targetPanel.setLayout(new GridLayout(1, 3));
+		targetPanel.setBackground(Constants.BACKGROUND_COLOR);
 		targetPanel.add(backButton);
 		targetPanel.add(holder1);
 		targetPanel.add(holder2);
@@ -433,7 +436,9 @@ public class FinalBattleScreen extends JPanel{
 		this.CPs[1] = fbs.cp2;
 		this.CPs[2] = fbs.cp3;
 		this.CPs[3] = fbs.cp4;
-		this.state = fbs.gameStates[me];
+		Integer temp = new Integer(fbs.gameStates[me]);
+		this.state = temp;
+		System.out.println("me: "+me);
 		
 		for(int i = 0; i< CPs.length; i++){
 			System.out.println("CP"+i+"'s health: "+fbs.CPHealth[i]);
@@ -517,6 +522,8 @@ public class FinalBattleScreen extends JPanel{
 	}
 	
 	private void update(){
+		System.out.println(state);
+		
 		// Checking State.
 		if(state==3){
 			endGame(false);
@@ -545,6 +552,8 @@ public class FinalBattleScreen extends JPanel{
 			//healthLabels[me].setText("");
 			CardLayout layout = (CardLayout)cardHolder.getLayout();
 			layout.show(cardHolder, "card 6");
+			sendMessage(new PlayerAction(me, 1, new DummyMove(), me, 2));
+			return;
 		}
 		
 		// Choose Attack Panel.
