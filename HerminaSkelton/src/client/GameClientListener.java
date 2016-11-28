@@ -5,12 +5,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import utilities.ChatMessage;
 //import utilities.CPRequest;
 import utilities.DataPacket;
 import utilities.DeadSwitch;
 import utilities.FinalBattleState;
+import utilities.GameScore;
 import utilities.PlayerAction;
 import utilities.User;
 
@@ -182,7 +184,7 @@ public class GameClientListener extends Thread implements Serializable {
 					//mainGUI.endOfGame();
                     @SuppressWarnings("unchecked")
                     ArrayList<GameScore> gs = (ArrayList<GameScore>)input.getData();
-                    EndGameGUI endGUI = new EndGameGUI(2, userName, otherUser, mGameGUI.getBestCP(), gs, win, this);
+                    EndGameGUI endGUI = new EndGameGUI(2, mGameGUI.getBestCP(), gs, win, this);
                     endGUI.setVisible(true);
 				}
 				else if(streamContent.equals(utilities.Commands.LOGOUT_USER)){
