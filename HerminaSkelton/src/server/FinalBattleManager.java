@@ -192,11 +192,9 @@ public class FinalBattleManager {
 			return;
 		}
 		if (p1lost){
-			System.out.println("player 1 is out");
 			state[0] = 2;
 		}
 		if (p2lost){
-			System.out.println("player 2 is out");
 			state[1] = 2;
 		}
 			
@@ -249,10 +247,6 @@ public class FinalBattleManager {
 	}
 
 	private void sendUpdate() {
-		System.out.println("states");
-		for(int i = 0; i < state.length; i++){
-			System.out.println("State "+i+": "+state[i]);
-		}
 		FinalBattleState toSend = new FinalBattleState(CPs[0], CPs[1], CPs[2], CPs[3], players, state);
 		gi.sendFinalBattleUpdate(toSend);
 	}

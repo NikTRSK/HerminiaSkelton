@@ -38,16 +38,12 @@ public class ServerClientCommunicator extends Thread implements Serializable {
     try {
       oos.writeObject(dp);
       oos.flush();
-    } catch (IOException ioe) { utilities.Util.printExceptionToCommand(ioe);ioe.printStackTrace(); }
+    } catch (IOException ioe) { utilities.Util.printExceptionToCommand(ioe); }
   }
   
 //  protected void startGame(GameInstance gameInstance) {
   protected void startGame(Integer turn) {
     sendData(new DataPacket<Integer>(utilities.Commands.START_GAME, turn));
-  }
-  
-  protected void endGame() {
-    
   }
   
   protected void setUserName(String userName) {
@@ -95,7 +91,7 @@ public class ServerClientCommunicator extends Thread implements Serializable {
       if (socket != null)
         socket.close();
     } catch (IOException e) {
-      e.printStackTrace();
+    	utilities.Util.printExceptionToCommand(e);
     }
   }
   
@@ -104,21 +100,17 @@ public class ServerClientCommunicator extends Thread implements Serializable {
     while (listenForConnections) {
       try {
         DataPacket<?> input = (DataPacket<?>)ois.readObject();
-        System.out.println("Command: " + input.getCommand());
         switch (input.getCommand()) {
           case utilities.Commands.LOGIN_USER :
-            System.out.println("Logging in user id" + socket.getPort());
             User userInfo = (User)input.getData();
             if (serverListener.loginUser(userInfo, connectionID)) {
               // Send a response to user
               userName = userInfo.getUsername();
-              System.out.println("username in login " + this.userName + " userpacket " + userInfo.getUsername());
               sendData(new DataPacket<Boolean>(utilities.Commands.AUTH_RESPONSE, true));
             } else sendData(new DataPacket<Boolean>(utilities.Commands.AUTH_RESPONSE, false));
             break;
           
           case utilities.Commands.LOGOUT_USER :
-            System.out.println("Sending logout " + this.userName);
             serverListener.logOutUser(this.userName);
             break;
             
@@ -142,17 +134,13 @@ public class ServerClientCommunicator extends Thread implements Serializable {
             
           case utilities.Commands.GAME_MODE :
             Integer gameMode = (Integer)input.getData();
-            System.out.println("Setting Game Mode");
             gameType = gameMode;
             serverListener.addPlayerToQueue(connectionID);
             break;
             
           case utilities.Commands.PLAYER_ACTION :
             if (input.getData() instanceof PlayerAction){
-              System.out.println("SCL got PlayerAction");
-              if(input.getData()==null)System.out.println("PlayerAction is null in SCL");
               serverListener.receiveActionToFinalBattleManager((PlayerAction)input.getData(), userName);
-              System.out.println("SCL sent PA to SL");
             }
             else if (input.getData() instanceof DeadSwitch)
               serverListener.receiveDeadSwitchToFinalBattleManager((DeadSwitch)input.getData(), userName);
@@ -167,9 +155,7 @@ public class ServerClientCommunicator extends Thread implements Serializable {
             break;
         }
       } catch (IOException ioe) {
-        ioe.printStackTrace();
         System.out.println("ioe in run(): " + ioe.getMessage());
-//        serverListener.logOutUser(userName);
         break;
       } catch (ClassNotFoundException cnfe) {
         System.out.println("cnfe in run(): " + cnfe.getMessage()); break;

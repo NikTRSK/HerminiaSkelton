@@ -450,7 +450,6 @@ public class loginGUI extends JFrame{
 		login.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("LOGIN CLICKED");
 				String name = username.getText().trim();
 				String password = String.valueOf(userpassword.getPassword());
 				User loginUser = new User(name, password);

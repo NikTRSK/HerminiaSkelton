@@ -86,7 +86,6 @@ public class BattleScreen extends JPanel{
 	
 	private void initializeVariables(){
 		playerCPs = player.getCP();
-		System.out.println("CP SIZES " + player.getCP().size());
 		activeCP = playerCPs.get(Constants.rand.nextInt(playerCPs.size()));
 		while(activeCP.getHealth()<=0){
 			activeCP = playerCPs.get(Constants.rand.nextInt(playerCPs.size()));
@@ -234,7 +233,6 @@ public class BattleScreen extends JPanel{
 		for(int i = 0; i < 2; i++){
 			int a[] = activeCP.getAttackMoves();
 			int b = i;
-			System.out.println(activeCP.getName());
 			JButton attackButton = new JButton(Constants.attackMoves[a[i]].getName());
 			attackButton.setBackground(Constants.BACKGROUND_COLOR2);
 			attackButton.setForeground(Constants.FONT_COLOR);
@@ -545,9 +543,7 @@ public class BattleScreen extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dialog.dispose();
-				System.out.println("a"+activeCP.getXP());
 				activeCP.addXP(wildCP.getLevel());
-				System.out.println("b"+activeCP.getXP());
 				battleOver(false);
 			}
 			
