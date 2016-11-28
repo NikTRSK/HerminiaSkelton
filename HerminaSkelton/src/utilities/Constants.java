@@ -43,22 +43,22 @@ public class Constants {
     public static final String serverbkgimg = "serverbkgimg.png";
     
     //
-    public static final String win = "did a great job \n and found true friendships with your CPs. Good luck on the final exam";
-    public static final String lose = "\n have lost the \n battle, make sure to try it again";
+    public static final String win = "did a great job and founded true friendships with your CPs. Be sure to play again!";
+    public static final String lose = " have lost the battle, make sure to try it again";
     
     //
     public static final String generateWord(boolean win, int gamemode){
     	String temp;
     	if(win){
     		if(gamemode == 2){
-				temp = "Congratulate you guys ";
+				temp = "Congratulations! You ";
 			}
 			else{
 				temp = "Congratulate you ";
 			}
 			temp+=Constants.win;
 			if(gamemode == 2){
-				temp += " you guys ";
+				//temp += " you guys ";
 			}
 			else{
 				temp += " you ";
