@@ -333,6 +333,18 @@ public class GameGUI extends JFrame implements MouseListener {
 	public int getPlayerScore() {
 		return beta.generateScore();
 	}
+    
+    public CP getBestCP() {
+        int maxLevel = 0;
+        int index = 0;
+        for(int i = 0; i < beta.getCP().size(); i++){
+            if(beta.getCP().get(i).getLevel()>maxLevel){
+                maxLevel = beta.getCP().get(i).getLevel();
+                index = i;
+            }
+        }
+        return beta.getCP().get(index);
+    }
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
