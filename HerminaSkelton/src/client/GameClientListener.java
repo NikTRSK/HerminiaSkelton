@@ -25,6 +25,8 @@ public class GameClientListener extends Thread implements Serializable {
 	private waitGUI waitgui;
 	private loginGUI loginGUI;
 	private Boolean ans = null;
+	private Boolean win = false;
+	private String otherUser;
 	
 	private Integer me;
 	private FinalBattleScreen fbs;
@@ -137,6 +139,14 @@ public class GameClientListener extends Thread implements Serializable {
 					if(input.getData() instanceof FinalBattleState){
 						if(fbs==null){
 							mGameGUI.StartMultiPlayerFinalBattle(me, (FinalBattleState)input.getData());
+                            Player[] temp = ((FinalBattleState)input.getData()).players;
+                            if(temp.length != 1){
+                                for(int i = 0; i < temp.length; i++){
+                                    if(!temp[i].getName().equals(userName)){
+                                        otherUser = temp[i].getName();
+                                    }
+                                }	
+                            }
 						}else{
 							//TODO remove
 							FinalBattleState newFBS = (FinalBattleState)input.getData();
@@ -164,13 +174,16 @@ public class GameClientListener extends Thread implements Serializable {
 				
 				if (streamContent.equals(utilities.Commands.END_GAME)){
 					//mainGUI.endOfGame();
+                    win = (Boolean)input.getData();
 					sendData(new DataPacket<Integer>(utilities.Commands.SEND_SCORE, mGameGUI.getPlayerScore()));
 //					EndGameGUI endGUI = new EndGameGUI(0, userName, "Name2", client.Constants.generateCP(1), 200, 300, true, this);
 //					endGUI.setVisible(true);
 				} else if (streamContent.equals(utilities.Commands.TOP_SCORES)){
 					//mainGUI.endOfGame();
-					EndGameGUI endGUI = new EndGameGUI(0, userName, "Name2", client.Constants.generateCP(1), 200, 300, true, this);
-					endGUI.setVisible(true);
+                    @SuppressWarnings("unchecked")
+                    ArrayList<GameScore> gs = (ArrayList<GameScore>)input.getData();
+                    EndGameGUI endGUI = new EndGameGUI(2, userName, otherUser, mGameGUI.getBestCP(), gs, win, this);
+                    endGUI.setVisible(true);
 				}
 				else if(streamContent.equals(utilities.Commands.LOGOUT_USER)){
 					System.exit(0);
