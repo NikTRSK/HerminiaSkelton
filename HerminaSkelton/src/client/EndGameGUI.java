@@ -1,12 +1,12 @@
 package client;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -14,9 +14,10 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Vector;
 
 import javax.imageio.ImageIO;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,8 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import AllCPs.CP;
-import AllCPs.EdgarLugo;
-import AllCPs.EmmaLautz;
 import AllCPs.JimmyChen;
 import utilities.Constants;
 import utilities.GameScore;
@@ -35,7 +34,6 @@ import utilities.GameScore;
 public class EndGameGUI extends JFrame{
     private static final long serialVersionUID = 1L;
     private String temp;
-    private JLabel message;
     private JButton favCP;
     private boolean win;
     private boolean pause = false;
@@ -90,11 +88,10 @@ public class EndGameGUI extends JFrame{
     
     private void initializeComponents(){
         music = new BackgroundMusic();
-        message = new JLabel("");
         name1 = new JLabel("");
-        name1.setFont(new Font("Serif", Font.BOLD, 20));
+        name1.setFont(new Font("Courier", Font.BOLD, 20));
         name2 = new JLabel("");
-        name2.setFont(new Font("Serif", Font.BOLD, 20));
+        name2.setFont(new Font("Courier", Font.BOLD, 20));
         name1.setText("Top Five Scores:");
         if(gamemode ==2){
             name2.setText("");
@@ -109,6 +106,8 @@ public class EndGameGUI extends JFrame{
         professorwords.setEditable(false);
         professorwords.setPreferredSize(new Dimension(1,1));
         professorwords.setOpaque(false);
+        professorwords.setBackground(Color.LIGHT_GRAY);
+        professorwords.setForeground(Color.DARK_GRAY);
         professorwords.setColumns(1);
         professorwords.setLineWrap(true);
         professorwords.setRows(1);
@@ -146,96 +145,55 @@ public class EndGameGUI extends JFrame{
     }
     
     private void createGUI(){
-        setSize(1280,720);
+        setSize(1280,750);
         setTitle("Herminia Skelton");
-        setLocation(750,100);
-        setLayout(new GridBagLayout());
-        mGridBagConst = new GridBagConstraints();
-        mGridBagConst.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-        mGridBagConst.fill = GridBagConstraints.BOTH;
+        setLocation(500,25);
+        setLayout(new GridLayout(3,5));
         
-        mGridBagConst.gridx = 0;
-        mGridBagConst.gridy = 0;
-        mGridBagConst.insets = new Insets(100,0,0,0);
-        add(name1,mGridBagConst);
-        mGridBagConst.gridx = 1;
-        mGridBagConst.insets = new Insets(100,100,0,300);
-        add(name2,mGridBagConst);
+        JPanel holder = new JPanel();
+        holder.setOpaque(false);
+        holder.setLayout(new BoxLayout(holder, BoxLayout.Y_AXIS));
+        holder.add(Box.createGlue());
+        holder.add(Box.createGlue());
+        holder.add(Box.createGlue());
         
-        mGridBagConst.insets = new Insets(0,0,0,0);
-        mGridBagConst.gridx = 0;
-        mGridBagConst.gridy = 1;
-        add(score1_,mGridBagConst);
-        mGridBagConst.gridx = 1;
-        mGridBagConst.insets = new Insets(0,100,0,300);
-        add(score2_,mGridBagConst);
-        
-        int count = 0;
         for(int i = 0 ; i < topFiveScores.size(); i++){
-            JLabel numLabel = new JLabel("");
-            JLabel namLabel = new JLabel("");
-            numLabel.setText(topFiveScores.get(i).getUsername());
-            namLabel.setText(Integer.toString(topFiveScores.get(i).getScore()));
-            mGridBagConst.gridx = 0;
-            mGridBagConst.gridy = i+2;
-            mGridBagConst.insets = new Insets(0,0,0,0);
-            if(i == 4){
-                mGridBagConst.insets = new Insets(0,0,0,0);
-            }
-            numLabel.setHorizontalAlignment(JLabel.CENTER);
-            numLabel.setVerticalAlignment(JLabel.CENTER);
-            mGridBagConst.gridx = 0;
-            mGridBagConst.gridy = i+2;
-            add(namLabel,mGridBagConst);
-            mGridBagConst.gridx = 1;
-            mGridBagConst.insets = new Insets(0,50,0,300);
-            if(i == 4){
-                mGridBagConst.insets = new Insets(0,50,0,300);
-            }
-            namLabel.setHorizontalAlignment(JLabel.CENTER);
-            namLabel.setVerticalAlignment(JLabel.CENTER);
-            add(numLabel,mGridBagConst);
-            count ++;
+            JLabel numLabel = new JLabel(topFiveScores.get(i).getUsername());
+            System.out.println(""+topFiveScores.get(i).getUsername());
+            numLabel.setForeground(Color.DARK_GRAY);
+            numLabel.setFont(new Font("Serif", Font.BOLD, 20));
+            JLabel namLabel = new JLabel(""+topFiveScores.get(i).getScore());
+            System.out.println(""+topFiveScores.get(i).getScore());
+            namLabel.setForeground(Color.DARK_GRAY);
+            namLabel.setFont(new Font("Serif", Font.BOLD, 20));
+            
+            JPanel subHolder = new JPanel();
+            subHolder.setOpaque(false);
+            subHolder.setLayout(new BoxLayout(subHolder, BoxLayout.X_AXIS));
+            subHolder.add(numLabel);
+            subHolder.add(Box.createGlue());
+            subHolder.add(namLabel);
+            
+            holder.add(subHolder);
         }
-        while(count != 5){
-            JLabel numLabel = new JLabel("    ");
-            JLabel namLabel = new JLabel("    ");
-            mGridBagConst.gridx = 0;
-            mGridBagConst.gridy = count+2;
-            mGridBagConst.insets = new Insets(0,0,0,0);
-            add(numLabel,mGridBagConst);
-            mGridBagConst.gridx = 1;
-            mGridBagConst.insets = new Insets(0,50,0,400);
-            if(count == 4){
-                mGridBagConst.insets = new Insets(0,50,0,400);
-            }
-            numLabel.setHorizontalAlignment(JLabel.CENTER);
-            numLabel.setVerticalAlignment(JLabel.CENTER);
-            namLabel.setHorizontalAlignment(JLabel.CENTER);
-            namLabel.setVerticalAlignment(JLabel.CENTER);
-            add(namLabel,mGridBagConst);
-            count ++;
-        }
-        mGridBagConst.gridy = 7;
-        mGridBagConst.gridx = 3;
-        mGridBagConst.ipadx = 150;
-        mGridBagConst.ipady = 150;
-        mGridBagConst.insets = new Insets(0,100,100,100);
-        add(professorwords,mGridBagConst);
         
-        mGridBagConst.gridy = 8;
-        mGridBagConst.gridx = 3;
-        mGridBagConst.ipadx = 0;
-        mGridBagConst.ipady = 0;
-        mGridBagConst.insets = new Insets(0,0,0,300);
-        add(favCP,mGridBagConst);
+        add(holder);
+        add(new JLabel(""));
+        add(new JLabel(""));
+        add(new JLabel(""));
+        add(new JLabel(""));
         
-        mGridBagConst.gridy = 8;
-        mGridBagConst.gridx = 1;
-        mGridBagConst.ipadx = 32;
-        mGridBagConst.ipady = 32;
-        mGridBagConst.insets = new Insets(0,0,0,0);
-        add(mute,mGridBagConst);
+        add(new JLabel(""));
+        add(new JLabel(""));
+        add(new JLabel(""));
+        add(professorwords);
+        add(new JLabel(""));
+        
+        add(new JLabel(""));
+        add(mute);
+        add(new JLabel(""));
+        add(favCP);
+        add(new JLabel(""));
     }
     
     private void addEvents(){
@@ -305,6 +263,9 @@ public class EndGameGUI extends JFrame{
     
     public static void main(String[] args){
     	ArrayList<GameScore> topFiveScores = new ArrayList<GameScore>();
+    	topFiveScores.add(new GameScore("matt", 5));
+    	topFiveScores.add(new GameScore("matt", 8));
+    	topFiveScores.add(new GameScore("matt", 10));
     	new EndGameGUI(2,new JimmyChen(2),topFiveScores,true,null).setVisible(true);
     }
 }
