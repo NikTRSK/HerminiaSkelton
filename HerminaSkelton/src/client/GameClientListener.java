@@ -187,7 +187,7 @@ public class GameClientListener extends Thread implements Serializable {
           //mainGUI.endOfGame();
                     @SuppressWarnings("unchecked")
                     ArrayList<GameScore> gs = (ArrayList<GameScore>)input.getData();
-                    EndGameGUI endGUI = new EndGameGUI(2, userName, otherUser, mGameGUI.getBestCP(), gs, win, this);
+                    EndGameGUI endGUI = new EndGameGUI(2, mGameGUI.getBestCP(), gs, win, this);
                     endGUI.setVisible(true);
         }
         else if(streamContent.equals(utilities.Commands.LOGOUT_USER)){
